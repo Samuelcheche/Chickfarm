@@ -1,0 +1,555 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    {% load static %}
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>About - Nyandiwa Smart Poultry Connect</title>
+    
+    <!-- Favicon -->
+    <link rel="icon" type="image/x-icon" href="{% static 'assets/images/image.png' %}">
+    
+    <!-- Bootstrap CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <!-- Font Awesome -->
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
+    <!-- Custom CSS -->
+    <link href="{% static 'css/custom.css' %}" rel="stylesheet">
+</head>
+<body class="page-transition">
+    <!-- Navigation -->
+    <nav class="navbar navbar-expand-lg bg-farm-green navbar-dark navbar-farm sticky-top shadow-lg">
+        <div class="container">
+            <a class="navbar-brand d-flex align-items-center" href="{% url 'index' %}">
+                <i class="fas fa-egg text-farm-yellow fs-4 me-2"></i>
+                <span class="fw-bold">Nyandiwa MOH Smart Poultry</span>
+            </a>
+            
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav mx-auto">
+                    <li class="nav-item">
+                        <a class="nav-link px-3 fw-medium" href="{% url 'index' %}">Home</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link px-3 fw-medium" href="{% url 'products' %}">Products</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link px-3 fw-medium" href="{% url 'delivery' %}">Delivery</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link px-3 fw-medium" href="{% url 'dashboard' %}">Dashboard</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link px-3 fw-medium active" href="{% url 'about' %}">About</a>
+                    </li>
+                </ul>
+                
+                <div class="d-flex gap-2">
+                    <button class="btn btn-farm-green" data-bs-toggle="modal" data-bs-target="#loginModal">
+                        <i class="fas fa-sign-in-alt me-2"></i>Login
+                    </button>
+                    <button class="btn btn-farm-yellow" data-bs-toggle="modal" data-bs-target="#registerModal">
+                        <i class="fas fa-user-plus me-2"></i>Register
+                    </button>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Breadcrumb -->
+    <div class="breadcrumb-section py-3">
+        <div class="container">
+            <nav aria-label="breadcrumb">
+                <ol class="breadcrumb mb-0">
+                    <li class="breadcrumb-item"><a href="index.html" class="text-farm-green">Home</a></li>
+                    <li class="breadcrumb-item active" aria-current="page">About Us</li>
+                </ol>
+            </nav>
+        </div>
+    </div>
+
+    <!-- Main Content -->
+    <main class="py-5">
+        <div class="container">
+            <!-- About Header -->
+            <div class="text-center mb-5">
+                <h1 class="display-5 fw-bold text-dark mb-3">Our Story</h1>
+                <p class="text-secondary mx-auto" style="max-width: 42rem;">
+                    Nyandiwa Smart Poultry Connect is more than just a poultry farm. We're a 
+                    community-driven initiative committed to providing fresh, quality eggs while 
+                    supporting local agriculture.
+                </p>
+            </div>
+
+            <!-- Mission & Vision -->
+            <div class="row g-4 mb-5">
+                <div class="col-md-6">
+                    <div class="card h-100 border-0 shadow-sm">
+                        <div class="card-body p-4">
+                            <div class="d-flex align-items-center mb-4">
+                                <div class="rounded-circle bg-farm-green text-white p-3 me-3">
+                                    <i class="fas fa-bullseye"></i>
+                                </div>
+                                <h2 class="h4 fw-bold mb-0">Our Mission</h2>
+                            </div>
+                            <p class="text-secondary mb-0">
+                                To revolutionize poultry farming in Siaya County through smart technology 
+                                and sustainable practices, while providing fresh, high-quality eggs to our 
+                                community at fair prices.
+                            </p>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-6">
+                    <div class="card h-100 border-0 shadow-sm">
+                        <div class="card-body p-4">
+                            <div class="d-flex align-items-center mb-4">
+                                <div class="rounded-circle bg-farm-yellow text-dark p-3 me-3">
+                                    <i class="fas fa-eye"></i>
+                                </div>
+                                <h2 class="h4 fw-bold mb-0">Our Vision</h2>
+                            </div>
+                            <p class="text-secondary mb-0">
+                                To become the leading smart poultry farm in Kenya, setting industry 
+                                standards for quality, efficiency, and customer service while promoting 
+                                sustainable agricultural practices.
+                            </p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Our Journey -->
+            <section class="mb-5">
+                <h2 class="h3 fw-bold text-center mb-5">Our Journey</h2>
+                <div class="row">
+                    <div class="col-lg-6">
+                        <div class="timeline position-relative ps-4 border-start border-farm-green">
+                            <!-- 2020 -->
+                            <div class="timeline-item mb-4">
+                                <span class="timeline-date bg-farm-green text-white px-3 py-1 rounded position-absolute start-0 translate-middle-x">
+                                    2020
+                                </span>
+                                <div class="card border-0 shadow-sm">
+                                    <div class="card-body">
+                                        <h3 class="h5 fw-bold mb-3">Foundation</h3>
+                                        <p class="text-secondary mb-0">
+                                            Started as a small family-owned poultry farm with just 100 chickens 
+                                            in Siaya County.
+                                        </p>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- 2021 -->
+                            <div class="timeline-item mb-4">
+                                <span class="timeline-date bg-farm-green text-white px-3 py-1 rounded position-absolute start-0 translate-middle-x">
+                                    2021
+                                </span>
+                                <div class="card border-0 shadow-sm">
+                                    <div class="card-body">
+                                        <h3 class="h5 fw-bold mb-3">Expansion</h3>
+                                        <p class="text-secondary mb-0">
+                                            Expanded operations to 500 chickens and introduced modern 
+                                            poultry management systems.
+                                        </p>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- 2022 -->
+                            <div class="timeline-item mb-4">
+                                <span class="timeline-date bg-farm-green text-white px-3 py-1 rounded position-absolute start-0 translate-middle-x">
+                                    2022
+                                </span>
+                                <div class="card border-0 shadow-sm">
+                                    <div class="card-body">
+                                        <h3 class="h5 fw-bold mb-3">Technology Integration</h3>
+                                        <p class="text-secondary mb-0">
+                                            Implemented smart monitoring systems and launched our online 
+                                            ordering platform.
+                                        </p>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- 2023 -->
+                            <div class="timeline-item">
+                                <span class="timeline-date bg-farm-green text-white px-3 py-1 rounded position-absolute start-0 translate-middle-x">
+                                    2023
+                                </span>
+                                <div class="card border-0 shadow-sm">
+                                    <div class="card-body">
+                                        <h3 class="h5 fw-bold mb-3">Community Impact</h3>
+                                        <p class="text-secondary mb-0">
+                                            Established partnerships with local businesses and started 
+                                            our community outreach programs.
+                                        </p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-lg-6">
+                        <img src="https://images.unsplash.com/photo-1548550023-2bdb3c5beed7?ixlib=rb-1.2.1&auto=format&fit=crop&w=800&q=60" 
+                             alt="Our Farm" class="img-fluid rounded-4 shadow-sm">
+                    </div>
+                </div>
+            </section>
+
+            <!-- Our Team -->
+            <section class="mb-5">
+                <h2 class="h3 fw-bold text-center mb-5">Meet Our Team</h2>
+                <div class="row g-4">
+                    <!-- Team Member 1 -->
+                    <div class="col-md-3">
+                        <div class="team-member">
+                            <img src="https://randomuser.me/api/portraits/men/1.jpg" alt="John Doe">
+                            <h3 class="h5 fw-bold mb-1">sam cheche</h3>
+                            <p class="text-secondary mb-2">Founder & CEO</p>
+                            <div class="d-flex justify-content-center gap-2">
+                                <a href="#" class="btn btn-sm btn-outline-farm-green rounded-circle">
+                                    <i class="fab fa-linkedin-in"></i>
+                                </a>
+                                <a href="#" class="btn btn-sm btn-outline-farm-green rounded-circle">
+                                    <i class="fab fa-twitter"></i>
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Team Member 2 -->
+                    <div class="col-md-3">
+                        <div class="team-member">
+                            <img src="https://randomuser.me/api/portraits/women/1.jpg" alt="Jane Smith">
+                            <h3 class="h5 fw-bold mb-1">Maureen Achieng'</h3>
+                            <p class="text-secondary mb-2">Operations Manager</p>
+                            <div class="d-flex justify-content-center gap-2">
+                                <a href="#" class="btn btn-sm btn-outline-farm-green rounded-circle">
+                                    <i class="fab fa-linkedin-in"></i>
+                                </a>
+                                <a href="#" class="btn btn-sm btn-outline-farm-green rounded-circle">
+                                    <i class="fab fa-twitter"></i>
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Team Member 3 -->
+                    <div class="col-md-3">
+                        <div class="team-member">
+                            <img src="https://randomuser.me/api/portraits/men/2.jpg" alt="Mike Johnson">
+                            <h3 class="h5 fw-bold mb-1">omush</h3>
+                            <p class="text-secondary mb-2">Farm Manager</p>
+                            <div class="d-flex justify-content-center gap-2">
+                                <a href="#" class="btn btn-sm btn-outline-farm-green rounded-circle">
+                                    <i class="fab fa-linkedin-in"></i>
+                                </a>
+                                <a href="#" class="btn btn-sm btn-outline-farm-green rounded-circle">
+                                    <i class="fab fa-twitter"></i>
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Team Member 4 -->
+                    <div class="col-md-3">
+                        <div class="team-member">
+                            <img src="https://randomuser.me/api/portraits/women/2.jpg" alt="Sarah Brown">
+                            <h3 class="h5 fw-bold mb-1">Sarah Brown</h3>
+                            <p class="text-secondary mb-2">Customer Relations</p>
+                            <div class="d-flex justify-content-center gap-2">
+                                <a href="#" class="btn btn-sm btn-outline-farm-green rounded-circle">
+                                    <i class="fab fa-linkedin-in"></i>
+                                </a>
+                                <a href="#" class="btn btn-sm btn-outline-farm-green rounded-circle">
+                                    <i class="fab fa-twitter"></i>
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Testimonials -->
+            <section class="mb-5">
+                <h2 class="h3 fw-bold text-center mb-5">What Our Customers Say</h2>
+                <div class="row g-4">
+                    <!-- Testimonial 1 -->
+                    <div class="col-md-4">
+                        <div class="card testimonial-card h-100 border-0 shadow-sm">
+                            <div class="card-body">
+                                <div class="d-flex align-items-center mb-4">
+                                    <img src="https://randomuser.me/api/portraits/women/3.jpg" 
+                                         alt="Alice Wanjiru"
+                                         class="rounded-circle"
+                                         width="60"
+                                         height="60">
+                                    <div class="ms-3">
+                                        <h3 class="h6 fw-bold mb-1">Alice Wanjiru</h3>
+                                        <div class="text-warning mb-1">
+                                            <i class="fas fa-star"></i>
+                                            <i class="fas fa-star"></i>
+                                            <i class="fas fa-star"></i>
+                                            <i class="fas fa-star"></i>
+                                            <i class="fas fa-star"></i>
+                                        </div>
+                                        <small class="text-secondary">Local Restaurant Owner</small>
+                                    </div>
+                                </div>
+                                <p class="text-secondary mb-0">
+                                    "The quality of eggs from Nyandiwa Smart Poultry is consistently excellent. 
+                                    Their delivery service is reliable and the staff is always professional."
+                                </p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Testimonial 2 -->
+                    <div class="col-md-4">
+                        <div class="card testimonial-card h-100 border-0 shadow-sm">
+                            <div class="card-body">
+                                <div class="d-flex align-items-center mb-4">
+                                    <img src="https://randomuser.me/api/portraits/men/3.jpg" 
+                                         alt="James Omondi"
+                                         class="rounded-circle"
+                                         width="60"
+                                         height="60">
+                                    <div class="ms-3">
+                                        <h3 class="h6 fw-bold mb-1">James Omondi</h3>
+                                        <div class="text-warning mb-1">
+                                            <i class="fas fa-star"></i>
+                                            <i class="fas fa-star"></i>
+                                            <i class="fas fa-star"></i>
+                                            <i class="fas fa-star"></i>
+                                            <i class="fas fa-star-half-alt"></i>
+                                        </div>
+                                        <small class="text-secondary">Regular Customer</small>
+                                    </div>
+                                </div>
+                                <p class="text-secondary mb-0">
+                                    "I appreciate their commitment to quality and sustainability. The online 
+                                    ordering system makes it so convenient to get fresh eggs delivered."
+                                </p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Testimonial 3 -->
+                    <div class="col-md-4">
+                        <div class="card testimonial-card h-100 border-0 shadow-sm">
+                            <div class="card-body">
+                                <div class="d-flex align-items-center mb-4">
+                                    <img src="https://randomuser.me/api/portraits/women/4.jpg" 
+                                         alt="Mary Akinyi"
+                                         class="rounded-circle"
+                                         width="60"
+                                         height="60">
+                                    <div class="ms-3">
+                                        <h3 class="h6 fw-bold mb-1">Mary Akinyi</h3>
+                                        <div class="text-warning mb-1">
+                                            <i class="fas fa-star"></i>
+                                            <i class="fas fa-star"></i>
+                                            <i class="fas fa-star"></i>
+                                            <i class="fas fa-star"></i>
+                                            <i class="fas fa-star"></i>
+                                        </div>
+                                        <small class="text-secondary">Hotel Manager</small>
+                                    </div>
+                                </div>
+                                <p class="text-secondary mb-0">
+                                    "As a hotel manager, I need reliable suppliers. Nyandiwa Smart Poultry 
+                                    has never disappointed with their quality and service."
+                                </p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Contact CTA -->
+            <section class="text-center">
+                <h2 class="h3 fw-bold mb-4">Ready to Work Together?</h2>
+                <p class="text-secondary mb-4">
+                    Whether you're a business looking for a reliable supplier or an individual 
+                    customer, we'd love to hear from you.
+                </p>
+                <button class="btn btn-farm-green btn-lg">
+                    <i class="fas fa-envelope me-2"></i>Contact Us
+                </button>
+            </section>
+        </div>
+    </main>
+
+    <!-- Footer -->
+    <footer class="bg-dark text-white py-5 mt-5">
+        <div class="container">
+            <div class="row gy-4">
+                <div class="col-md-3">
+                    <h3 class="h5 fw-bold mb-3 d-flex align-items-center">
+                        <i class="fas fa-egg text-farm-yellow me-2"></i>
+                        Nyandiwa Smart Poultry
+                    </h3>
+                    <p class="text-secondary">Fresh eggs directly from our farm in Siaya County.</p>
+                    <div class="d-flex gap-3">
+                        <a href="#" class="social-icon text-decoration-none">
+                            <i class="fab fa-facebook-f"></i>
+                        </a>
+                        <a href="#" class="social-icon text-decoration-none">
+                            <i class="fab fa-twitter"></i>
+                        </a>
+                        <a href="#" class="social-icon text-decoration-none">
+                            <i class="fab fa-instagram"></i>
+                        </a>
+                        <a href="#" class="social-icon text-decoration-none">
+                            <i class="fab fa-whatsapp"></i>
+                        </a>
+                    </div>
+                </div>
+                
+                <div class="col-md-3">
+                    <h4 class="h6 fw-bold mb-3">Quick Links</h4>
+                    <ul class="list-unstyled mb-0">
+                        <li class="mb-2">
+                            <a href="index.html" class="text-secondary text-decoration-none hover-yellow d-inline-flex align-items-center">
+                                <i class="fas fa-chevron-right small me-2"></i>Home
+                            </a>
+                        </li>
+                        <li class="mb-2">
+                            <a href="products.html" class="text-secondary text-decoration-none hover-yellow d-inline-flex align-items-center">
+                                <i class="fas fa-chevron-right small me-2"></i>Products
+                            </a>
+                        </li>
+                        <li class="mb-2">
+                            <a href="delivery.html" class="text-secondary text-decoration-none hover-yellow d-inline-flex align-items-center">
+                                <i class="fas fa-chevron-right small me-2"></i>Delivery
+                            </a>
+                        </li>
+                        <li>
+                            <a href="dashboard.html" class="text-secondary text-decoration-none hover-yellow d-inline-flex align-items-center">
+                                <i class="fas fa-chevron-right small me-2"></i>Dashboard
+                            </a>
+                        </li>
+                    </ul>
+                </div>
+                
+                <div class="col-md-3">
+                    <h4 class="h6 fw-bold mb-3">Contact Info</h4>
+                    <ul class="list-unstyled mb-0">
+                        <li class="d-flex mb-2">
+                            <i class="fas fa-map-marker-alt text-farm-yellow me-2 mt-1"></i>
+                            <span class="text-secondary">Siaya Nyandiwa, Kenya</span>
+                        </li>
+                        <li class="d-flex mb-2">
+                            <i class="fas fa-phone text-farm-yellow me-2 mt-1"></i>
+                            <span class="text-secondary">+254 725551199</span>
+                        </li>
+                        <li class="d-flex">
+                            <i class="fas fa-envelope text-farm-yellow me-2 mt-1"></i>
+                            <span class="text-secondary">samuelonyango932@gmail.com</span>
+                        </li>
+                    </ul>
+                </div>
+                
+                <div class="col-md-3">
+                    <h4 class="h6 fw-bold mb-3">Payment Methods</h4>
+                    <div class="d-flex flex-wrap gap-2 mb-3">
+                        <span class="badge bg-white text-farm-green fw-bold">M-Pesa</span>
+                        <span class="badge bg-white text-farm-green fw-bold">Airtel Money</span>
+                        <span class="badge bg-white text-farm-green fw-bold">Cash</span>
+                    </div>
+                    
+                    <h4 class="h6 fw-bold mb-3">Subscribe to Newsletter</h4>
+                    <form class="needs-validation" novalidate>
+                        <div class="input-group">
+                            <input type="email" class="form-control" placeholder="Your email" required>
+                            <button class="btn btn-farm-yellow" type="submit">
+                                <i class="fas fa-paper-plane"></i>
+                            </button>
+                            <div class="invalid-feedback">
+                                Please enter a valid email address
+                            </div>
+                        </div>
+                    </form>
+                </div>
+            </div>
+            
+            <div class="border-top border-secondary mt-4 pt-4 text-center text-secondary">
+                <p class="mb-0">&copy; 2025 Nyandiwa Smart Poultry Connect. All rights reserved.</p>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Back to Top Button -->
+    <button id="backToTop" class="btn btn-farm-green rounded-circle shadow">
+        <i class="fas fa-arrow-up"></i>
+    </button>
+
+    <!-- Login Modal -->
+    <div class="modal fade" id="loginModal" tabindex="-1">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">Login to Your Account</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                </div>
+                <div class="modal-body">
+                    <form class="needs-validation" novalidate>
+                        <div class="mb-3">
+                            <label class="form-label">Email address</label>
+                            <input type="email" class="form-control" required>
+                        </div>
+                        <div class="mb-3">
+                            <label class="form-label">Password</label>
+                            <input type="password" class="form-control" required>
+                        </div>
+                        <button type="submit" class="btn btn-farm-green w-100">Login</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Register Modal -->
+    <div class="modal fade" id="registerModal" tabindex="-1">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">Create an Account</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                </div>
+                <div class="modal-body">
+                    <form class="needs-validation" novalidate>
+                        <div class="mb-3">
+                            <label class="form-label">Full Name</label>
+                            <input type="text" class="form-control" required>
+                        </div>
+                        <div class="mb-3">
+                            <label class="form-label">Email address</label>
+                            <input type="email" class="form-control" required>
+                        </div>
+                        <div class="mb-3">
+                            <label class="form-label">Password</label>
+                            <input type="password" class="form-control" required>
+                        </div>
+                        <div class="mb-3">
+                            <label class="form-label">Confirm Password</label>
+                            <input type="password" class="form-control" required>
+                        </div>
+                        <button type="submit" class="btn btn-farm-yellow w-100">Register</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Bootstrap Bundle JS -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <!-- Custom JavaScript -->
+    <script src="{% static 'js/main.js' %}"></script>
+</body>
+</html>

@@ -1,0 +1,397 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    {% load static %}
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dashboard - Nyandiwa Smart Poultry Connect</title>
+    
+    <!-- Favicon -->
+    <link rel="icon" type="image/x-icon" href="{% static 'assets/images/image.png' %}">
+    
+    <!-- Bootstrap CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <!-- Font Awesome -->
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
+    <!-- Custom CSS -->
+    <link href="{% static 'css/custom.css' %}" rel="stylesheet">
+</head>
+<body class="page-transition">
+    <!-- Navigation -->
+    <nav class="navbar navbar-expand-lg bg-farm-green navbar-dark navbar-farm sticky-top shadow-lg">
+        <div class="container">
+            <a class="navbar-brand d-flex align-items-center" href="index.html">
+                <i class="fas fa-egg text-farm-yellow fs-4 me-2"></i>
+                <span class="fw-bold">Nyandiwa MOH Smart Poultry</span>
+            </a>
+            
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav mx-auto">
+                    <li class="nav-item">
+                        <a class="nav-link px-3 fw-medium" href="{% url 'index' %}">Home</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link px-3 fw-medium" href="{% url 'products' %}">Products</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link px-3 fw-medium" href="{% url 'delivery' %}">Delivery</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link px-3 fw-medium active" href="{% url 'dashboard' %}">Dashboard</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link px-3 fw-medium" href="{% url 'about' %}">About</a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Main Content -->
+    <main class="py-4">
+             <div class="container">
+            <!-- Dashboard Header -->
+            <div class="d-flex justify-content-between align-items-center mb-4">
+                <div>
+                    <h1 class="h3 fw-bold mb-1">Dashboard</h1>
+                    <p class="text-secondary mb-0">Welcome back to Nyandiwa Smart Poultry</p>
+                </div>
+                <div>
+                    <button class="btn btn-farm-green me-2">
+                        <i class="fas fa-download me-2"></i>Export Data
+                    </button>
+                    <button class="btn btn-farm-yellow">
+                        <i class="fas fa-plus me-2"></i>New Order
+                    </button>
+                </div>
+            </div>
+
+            <!-- Stats Cards -->
+            <div class="row g-4 mb-4">
+                <!-- Total Orders -->
+                <div class="col-md-3">
+                    <div class="card stat-card">
+                        <div class="card-body">
+                            <div class="d-flex justify-content-between align-items-center mb-3">
+                                <div class="rounded-circle bg-farm-green bg-opacity-10 p-3">
+                                    <i class="fas fa-shopping-cart text-farm-green"></i>
+                                </div>
+                                <span class="badge bg-success">+12.5%</span>
+                            </div>
+                            <h6 class="fw-bold mb-1">Total Orders</h6>
+                            <h3 class="fw-bold mb-0">156</h3>
+                            <small class="text-secondary">Last 30 days</small>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Revenue -->
+                <div class="col-md-3">
+                    <div class="card stat-card">
+                        <div class="card-body">
+                            <div class="d-flex justify-content-between align-items-center mb-3">
+                                <div class="rounded-circle bg-farm-yellow bg-opacity-10 p-3">
+                                    <i class="fas fa-money-bill-wave text-farm-yellow"></i>
+                                </div>
+                                <span class="badge bg-success">+8.4%</span>
+                            </div>
+                            <h6 class="fw-bold mb-1">Revenue</h6>
+                            <h3 class="fw-bold mb-0">KSh 45,290</h3>
+                            <small class="text-secondary">Last 30 days</small>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Active Orders -->
+                <div class="col-md-3">
+                    <div class="card stat-card">
+                        <div class="card-body">
+                            <div class="d-flex justify-content-between align-items-center mb-3">
+                                <div class="rounded-circle bg-primary bg-opacity-10 p-3">
+                                    <i class="fas fa-clock text-primary"></i>
+                                </div>
+                                <span class="badge bg-warning">5 Pending</span>
+                            </div>
+                            <h6 class="fw-bold mb-1">Active Orders</h6>
+                            <h3 class="fw-bold mb-0">12</h3>
+                            <small class="text-secondary">Currently processing</small>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Customer Rating -->
+                <div class="col-md-3">
+                    <div class="card stat-card">
+                        <div class="card-body">
+                            <div class="d-flex justify-content-between align-items-center mb-3">
+                                <div class="rounded-circle bg-warning bg-opacity-10 p-3">
+                                    <i class="fas fa-star text-warning"></i>
+                                </div>
+                                <span class="badge bg-success">+0.2</span>
+                            </div>
+                            <h6 class="fw-bold mb-1">Customer Rating</h6>
+                            <h3 class="fw-bold mb-0">4.8/5.0</h3>
+                            <small class="text-secondary">Based on 98 reviews</small>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Recent Orders and Activity -->
+            <div class="row g-4">
+                <!-- Recent Orders -->
+                <div class="col-lg-8">
+                    <div class="card">
+                        <div class="card-header bg-transparent py-3">
+                            <div class="d-flex justify-content-between align-items-center">
+                                <h5 class="fw-bold mb-0">Recent Orders</h5>
+                                <button class="btn btn-sm btn-farm-green">View All</button>
+                            </div>
+                        </div>
+                        <div class="table-responsive">
+                            <table class="table align-middle mb-0">
+                                <thead class="bg-light">
+                                    <tr>
+                                        <th>Order ID</th>
+                                        <th>Customer</th>
+                                        <th>Product</th>
+                                        <th>Amount</th>
+                                        <th>Status</th>
+                                        <th>Actions</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr>
+                                        <td>#ORD-2589</td>
+                                        <td>Alice Wanjiru</td>
+                                        <td>Medium Egg Tray</td>
+                                        <td>KSh 350</td>
+                                        <td><span class="badge bg-success">Delivered</span></td>
+                                        <td><button class="btn btn-sm btn-farm-green">Details</button></td>
+                                    </tr>
+                                    <tr>
+                                        <td>#ORD-2588</td>
+                                        <td>James Omondi</td>
+                                        <td>Large Egg Tray</td>
+                                        <td>KSh 420</td>
+                                        <td><span class="badge bg-warning">Processing</span></td>
+                                        <td><button class="btn btn-sm btn-farm-green">Details</button></td>
+                                    </tr>
+                                    <tr>
+                                        <td>#ORD-2587</td>
+                                        <td>Sarah Muthoni</td>
+                                        <td>Small Egg Tray</td>
+                                        <td>KSh 180</td>
+                                        <td><span class="badge bg-info">In Transit</span></td>
+                                        <td><button class="btn btn-sm btn-farm-green">Details</button></td>
+                                    </tr>
+                                    <tr>
+                                        <td>#ORD-2586</td>
+                                        <td>Peter Kimani</td>
+                                        <td>Medium Egg Tray</td>
+                                        <td>KSh 350</td>
+                                        <td><span class="badge bg-success">Delivered</span></td>
+                                        <td><button class="btn btn-sm btn-farm-green">Details</button></td>
+                                    </tr>
+                                    <tr>
+                                        <td>#ORD-2585</td>
+                                        <td>Mary Akinyi</td>
+                                        <td>Large Egg Tray</td>
+                                        <td>KSh 420</td>
+                                        <td><span class="badge bg-success">Delivered</span></td>
+                                        <td><button class="btn btn-sm btn-farm-green">Details</button></td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Recent Activity -->
+                <div class="col-lg-4">
+                    <div class="card">
+                        <div class="card-header bg-transparent py-3">
+                            <div class="d-flex justify-content-between align-items-center">
+                                <h5 class="fw-bold mb-0">Recent Activity</h5>
+                                <button class="btn btn-sm btn-farm-green">View All</button>
+                            </div>
+                        </div>
+                        <div class="card-body">
+                            <div class="timeline">
+                                <div class="timeline-item mb-4 pb-4 border-bottom">
+                                    <div class="d-flex align-items-center mb-2">
+                                        <div class="rounded-circle bg-success bg-opacity-10 p-2 me-3">
+                                            <i class="fas fa-check text-success"></i>
+                                        </div>
+                                        <div>
+                                            <h6 class="fw-bold mb-0">Order Delivered</h6>
+                                            <small class="text-secondary">2 minutes ago</small>
+                                        </div>
+                                    </div>
+                                    <p class="text-secondary mb-0">Order #ORD-2589 has been successfully delivered to Alice Wanjiru</p>
+                                </div>
+
+                                <div class="timeline-item mb-4 pb-4 border-bottom">
+                                    <div class="d-flex align-items-center mb-2">
+                                        <div class="rounded-circle bg-warning bg-opacity-10 p-2 me-3">
+                                            <i class="fas fa-truck text-warning"></i>
+                                        </div>
+                                        <div>
+                                            <h6 class="fw-bold mb-0">Order Shipped</h6>
+                                            <small class="text-secondary">1 hour ago</small>
+                                        </div>
+                                    </div>
+                                    <p class="text-secondary mb-0">Order #ORD-2587 has been picked up by delivery partner</p>
+                                </div>
+
+                                <div class="timeline-item mb-4 pb-4 border-bottom">
+                                    <div class="d-flex align-items-center mb-2">
+                                        <div class="rounded-circle bg-primary bg-opacity-10 p-2 me-3">
+                                            <i class="fas fa-shopping-cart text-primary"></i>
+                                        </div>
+                                        <div>
+                                            <h6 class="fw-bold mb-0">New Order</h6>
+                                            <small class="text-secondary">2 hours ago</small>
+                                        </div>
+                                    </div>
+                                    <p class="text-secondary mb-0">James Omondi placed an order for Large Egg Tray</p>
+                                </div>
+
+                                <div class="timeline-item">
+                                    <div class="d-flex align-items-center mb-2">
+                                        <div class="rounded-circle bg-info bg-opacity-10 p-2 me-3">
+                                            <i class="fas fa-star text-info"></i>
+                                        </div>
+                                        <div>
+                                            <h6 class="fw-bold mb-0">New Review</h6>
+                                            <small class="text-secondary">3 hours ago</small>
+                                        </div>
+                                    </div>
+                                    <p class="text-secondary mb-0">Sarah Muthoni left a 5-star review on Small Egg Tray</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+    </main>
+    <!-- Footer -->
+    <footer class="bg-dark text-white py-5 mt-5">
+        <div class="container">
+            <div class="row gy-4">
+                <div class="col-md-3">
+                    <h3 class="h5 fw-bold mb-3 d-flex align-items-center">
+                        <i class="fas fa-egg text-farm-yellow me-2"></i>
+                        Nyandiwa Smart Poultry
+                    </h3>
+                    <p class="text-secondary">Fresh eggs directly from our farm in Siaya County.</p>
+                    <div class="d-flex gap-3">
+                        <a href="#" class="social-icon text-decoration-none">
+                            <i class="fab fa-facebook-f"></i>
+                        </a>
+                        <a href="#" class="social-icon text-decoration-none">
+                            <i class="fab fa-twitter"></i>
+                        </a>
+                        <a href="#" class="social-icon text-decoration-none">
+                            <i class="fab fa-instagram"></i>
+                        </a>
+                        <a href="#" class="social-icon text-decoration-none">
+                            <i class="fab fa-whatsapp"></i>
+                        </a>
+                    </div>
+                </div>
+                
+                <div class="col-md-3">
+                    <h4 class="h6 fw-bold mb-3">Quick Links</h4>
+                    <ul class="list-unstyled mb-0">
+                        <li class="mb-2">
+                            <a href="index.html" class="text-secondary text-decoration-none hover-yellow d-inline-flex align-items-center">
+                                <i class="fas fa-chevron-right small me-2"></i>Home
+                            </a>
+                        </li>
+                        <li class="mb-2">
+                            <a href="products.html" class="text-secondary text-decoration-none hover-yellow d-inline-flex align-items-center">
+                                <i class="fas fa-chevron-right small me-2"></i>Products
+                            </a>
+                        </li>
+                        <li class="mb-2">
+                            <a href="delivery.html" class="text-secondary text-decoration-none hover-yellow d-inline-flex align-items-center">
+                                <i class="fas fa-chevron-right small me-2"></i>Delivery
+                            </a>
+                        </li>
+                        <li>
+                            <a href="dashboard.html" class="text-secondary text-decoration-none hover-yellow d-inline-flex align-items-center">
+                                <i class="fas fa-chevron-right small me-2"></i>Dashboard
+                            </a>
+                        </li>
+                    </ul>
+                </div>
+                
+                <div class="col-md-3">
+                    <h4 class="h6 fw-bold mb-3">Contact Info</h4>
+                    <ul class="list-unstyled mb-0">
+                        <li class="d-flex mb-2">
+                            <i class="fas fa-map-marker-alt text-farm-yellow me-2 mt-1"></i>
+                            <span class="text-secondary">Siaya Nyandiwa, Kenya</span>
+                        </li>
+                        <li class="d-flex mb-2">
+                            <i class="fas fa-phone text-farm-yellow me-2 mt-1"></i>
+                            <span class="text-secondary">+254 725551199</span>
+                        </li>
+                        <li class="d-flex">
+                            <i class="fas fa-envelope text-farm-yellow me-2 mt-1"></i>
+                            <span class="text-secondary">samuelonyango932@gmail.com</span>
+                        </li>
+                    </ul>
+                </div>
+                
+                <div class="col-md-3">
+                    <h4 class="h6 fw-bold mb-3">Payment Methods</h4>
+                    <div class="d-flex flex-wrap gap-2 mb-3">
+                        <span class="badge bg-white text-farm-green fw-bold">M-Pesa</span>
+                        <span class="badge bg-white text-farm-green fw-bold">Airtel Money</span>
+                        <span class="badge bg-white text-farm-green fw-bold">Cash</span>
+                    </div>
+                    
+                    <h4 class="h6 fw-bold mb-3">Subscribe to Newsletter</h4>
+                    <form class="needs-validation" novalidate>
+                        <div class="input-group">
+                            <input type="email" class="form-control" placeholder="Your email" required>
+                            <button class="btn btn-farm-yellow" type="submit">
+                                <i class="fas fa-paper-plane"></i>
+                            </button>
+                            <div class="invalid-feedback">
+                                Please enter a valid email address
+                            </div>
+                        </div>
+                    </form>
+                </div>
+            </div>
+            
+            <div class="border-top border-secondary mt-4 pt-4 text-center text-secondary">
+                <p class="mb-0">&copy; 2025 Nyandiwa Smart Poultry Connect. All rights reserved.</p>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Back to Top Button -->
+    <button id="backToTop" class="btn btn-farm-green rounded-circle shadow">
+        <i class="fas fa-arrow-up"></i>
+    </button>
+
+    <!-- Bootstrap Bundle JS -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <!-- Dashboard JavaScript -->
+    <script src="{% static 'js/dashboard.js' %}"></script>
+    <!-- Custom JavaScript -->
+    <script src="{% static 'js/main.js' %}"></script>
+    <script src="{% static 'js/auth.js' %}"></script>
+    <script src="{% static 'js/dashboard-auth.js' %}"></script>
+</body>
+</html>

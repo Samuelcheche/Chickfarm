@@ -1,0 +1,272 @@
+// Import Bootstrap
+@import "../node_modules/bootstrap/scss/bootstrap";
+
+// Page Transitions
+.page-transition {
+    opacity: 0;
+    animation: fadeIn 0.3s ease-in forwards;
+}
+
+@keyframes fadeIn {
+    from { opacity: 0; }
+    to { opacity: 1; }
+}
+
+// Breadcrumb Styling
+.breadcrumb-section {
+    background: rgba(26, 86, 50, 0.05);
+    border-bottom: 1px solid rgba(26, 86, 50, 0.1);
+}
+
+// Back to Top Button
+#backToTop {
+    position: fixed;
+    bottom: 20px;
+    right: 20px;
+    display: none;
+    z-index: 1000;
+    
+    &.show {
+        display: block;
+        animation: fadeIn 0.3s ease-in;
+    }
+}
+
+// Loading States
+.loading {
+    position: relative;
+    pointer-events: none;
+    
+    &::after {
+        content: "";
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background: rgba(255, 255, 255, 0.7) url("../assets/icons/loading.gif") center no-repeat;
+        background-size: 24px;
+    }
+}
+
+// Dashboard Specific Styles
+.dashboard-card {
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+    
+    &:hover {
+        transform: translateY(-5px);
+        box-shadow: 0 0.5rem 1rem rgba(0, 0, 0, 0.15);
+    }
+}
+
+.stat-card {
+    border-radius: 0.5rem;
+    border: none;
+    box-shadow: 0 0.125rem 0.25rem rgba(0, 0, 0, 0.075);
+}
+
+// Products Page Specific Styles
+.product-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+    gap: 1.5rem;
+}
+
+.product-card {
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    
+    .card-body {
+        flex: 1;
+    }
+}
+
+// About Page Specific Styles
+.team-member {
+    text-align: center;
+    margin-bottom: 2rem;
+    
+    img {
+        width: 150px;
+        height: 150px;
+        border-radius: 50%;
+        object-fit: cover;
+        margin-bottom: 1rem;
+        border: 3px solid var(--farm-green);
+    }
+}
+
+.testimonial-card {
+    background: #f8f9fa;
+    border-radius: 1rem;
+    padding: 2rem;
+    margin-bottom: 1.5rem;
+    
+    .quote {
+        font-size: 1.25rem;
+        font-style: italic;
+        color: #495057;
+    }
+    &::before {
+        content: "“";
+        font-size: 4rem;
+        color: var(--farm-yellow);
+        line-height: 0;
+        vertical-align: bottom;
+    }
+}
+    
+
+
+// Responsive Table Styles
+.table-responsive {
+    @include media-breakpoint-down(md) {
+        font-size: 0.875rem;
+    }
+}
+
+// Chart Container Styles
+.chart-container {
+    position: relative;
+    margin: auto;
+    height: 300px;
+    width: 100%;
+}
+
+// Custom Variables
+:root {
+  --farm-green: #1a5632;
+  --farm-yellow: #f5b434;
+  --farm-brown: #8b5a2b;
+}
+
+// Custom Color Utilities
+.bg-farm-green { background-color: var(--farm-green) !important; }
+.bg-farm-yellow { background-color: var(--farm-yellow) !important; }
+.bg-farm-brown { background-color: var(--farm-brown) !important; }
+.text-farm-green { color: var(--farm-green) !important; }
+.text-farm-yellow { color: var(--farm-yellow) !important; }
+.text-farm-brown { color: var(--farm-brown) !important; }
+.border-farm-yellow { border-color: var(--farm-yellow) !important; }
+
+// Gradient Backgrounds
+.hero-gradient {
+    background: linear-gradient(135deg, var(--farm-green) 0%, #0f4d24 100%);
+}
+
+// Hover Effects and Transitions
+.hover-lift {
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+
+    &:hover {
+        transform: translateY(-4px);
+        box-shadow: 0 10px 20px rgba(0, 0, 0, 0.1);
+    }
+}
+
+.hover-yellow {
+    transition: color 0.3s ease;
+
+    &:hover {
+        color: var(--farm-yellow) !important;
+    }
+}
+
+// Custom Button Styles
+.btn-farm-green {
+    background-color: var(--farm-green);
+    color: white;
+    border: 1px solid var(--farm-yellow);
+    transition: background-color 0.3s ease;
+
+    &:hover {
+        background-color: #134226;
+        color: white;
+    }
+}
+
+.btn-farm-yellow {
+    background-color: var(--farm-yellow);
+    color: #212529;
+    transition: background-color 0.3s ease;
+
+    &:hover {
+        background-color: #e5a420;
+        color: #212529;
+    }
+}
+
+// Custom Card Styles
+.pricing-card {
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+
+    &:hover {
+        transform: translateY(-8px);
+        box-shadow: 0 15px 30px rgba(0, 0, 0, 0.1);
+    }
+}
+
+// Icon Circle
+.icon-circle {
+    width: 64px;
+    height: 64px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin: 0 auto 1rem;
+}
+
+// Custom Form Styles
+.form-control {
+    &:focus {
+        border-color: var(--farm-green);
+        box-shadow: 0 0 0 0.25rem rgba(26, 86, 50, 0.25);
+    }
+}
+
+// Social Icons
+.social-icon {
+    color: #6c757d;
+    transition: color 0.3s ease;
+
+    &:hover {
+        color: white;
+    }
+}
+
+// Navbar Styles
+.navbar-farm {
+    .navbar-nav .nav-link {
+        color: rgba(255, 255, 255, 0.9);
+        transition: color 0.3s ease;
+
+        &:hover {
+            color: var(--farm-yellow);
+        }
+    }
+}
+
+// Custom Badge
+.badge-farm {
+    padding: 0.5em 1em;
+    border-radius: 50rem;
+}
+
+// Responsive Adjustments
+@include media-breakpoint-down(md) {
+    .icon-circle {
+        width: 48px;
+        height: 48px;
+    }
+}
+
+// Section Spacing
+.section-padding {
+    padding: 5rem 0;
+
+    @include media-breakpoint-down(md) {
+        padding: 3rem 0;
+    }
+}

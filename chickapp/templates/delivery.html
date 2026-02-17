@@ -1,0 +1,492 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    {% load static %}
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Delivery - Nyandiwa Smart Poultry Connect</title>
+    
+    <!-- Favicon -->
+    <link rel="icon" type="image/x-icon" href="{% static 'assets/images/image.png' %}">
+    
+    <!-- Bootstrap CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <!-- Font Awesome -->
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
+    <!-- Custom CSS -->
+    <link href="{% static 'css/custom.css' %}" rel="stylesheet">
+</head>
+<body class="page-transition">
+    <!-- Navigation -->
+    <nav class="navbar navbar-expand-lg bg-farm-green navbar-dark navbar-farm sticky-top shadow-lg">
+        <div class="container">
+            <a class="navbar-brand d-flex align-items-center" href="index.html">
+                <i class="fas fa-egg text-farm-yellow fs-4 me-2"></i>
+                <span class="fw-bold">Nyandiwa MOH Smart Poultry</span>
+            </a>
+            
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav mx-auto">
+                    <li class="nav-item">
+                        <a class="nav-link px-3 fw-medium" href="{% url 'index' %}">Home</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link px-3 fw-medium" href="{% url 'products' %}">Products</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link px-3 fw-medium active" href="{% url 'delivery' %}">Delivery</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link px-3 fw-medium" href="{% url 'dashboard' %}">Dashboard</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link px-3 fw-medium" href="{% url 'about' %}">About</a>
+                    </li>
+                </ul>
+                
+                <div class="d-flex gap-2">
+                    <button class="btn btn-farm-green" data-bs-toggle="modal" data-bs-target="#loginModal">
+                        <i class="fas fa-sign-in-alt me-2"></i>Login
+                    </button>
+                    <button class="btn btn-farm-yellow" data-bs-toggle="modal" data-bs-target="#registerModal">
+                        <i class="fas fa-user-plus me-2"></i>Register
+                    </button>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Breadcrumb -->
+    <div class="breadcrumb-section py-3">
+        <div class="container">
+            <nav aria-label="breadcrumb">
+                <ol class="breadcrumb mb-0">
+                    <li class="breadcrumb-item"><a href="index.html" class="text-farm-green">Home</a></li>
+                    <li class="breadcrumb-item active" aria-current="page">Delivery</li>
+                </ol>
+            </nav>
+        </div>
+    </div>
+
+    <!-- Main Content -->
+    <main class="py-5">
+        <div class="container">
+            <!-- Delivery Header -->
+            <div class="text-center mb-5">
+                <h1 class="display-5 fw-bold text-dark mb-3">Fast & Reliable Delivery</h1>
+                <p class="text-secondary mx-auto" style="max-width: 42rem;">
+                    We ensure your eggs reach you fresh and intact. Track your delivery in real-time
+                    and enjoy our convenient delivery options.
+                </p>
+            </div>
+
+            <!-- Delivery Options -->
+            <div class="row g-4 mb-5">
+                <!-- Standard Delivery -->
+                <div class="col-md-4">
+                    <div class="card h-100 hover-lift">
+                        <div class="card-body text-center p-4">
+                            <div class="rounded-circle bg-farm-green text-white mx-auto mb-4" 
+                                 style="width: 80px; height: 80px; display: flex; align-items: center; justify-content: center;">
+                                <i class="fas fa-truck fs-2"></i>
+                            </div>
+                            <h3 class="h4 fw-bold mb-3">Standard Delivery</h3>
+                            <p class="text-secondary mb-4">
+                                Next-day delivery for orders placed before 4 PM.
+                                Available within Siaya County.
+                            </p>
+                            <div class="price-tag mb-3">
+                                <span class="fs-4 fw-bold text-farm-green">KSh 100</span>
+                                <small class="d-block text-secondary">Per delivery</small>
+                            </div>
+                            <button class="btn btn-farm-green">Select Option</button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Express Delivery -->
+                <div class="col-md-4">
+                    <div class="card h-100 hover-lift border-farm-yellow border-2">
+                        <div class="card-body text-center p-4">
+                            <div class="rounded-circle bg-farm-yellow text-dark mx-auto mb-4" 
+                                 style="width: 80px; height: 80px; display: flex; align-items: center; justify-content: center;">
+                                <i class="fas fa-bolt fs-2"></i>
+                            </div>
+                            <h3 class="h4 fw-bold mb-3">Express Delivery</h3>
+                            <p class="text-secondary mb-4">
+                                Same-day delivery for orders placed before 12 PM.
+                                Available within 10km radius.
+                            </p>
+                            <div class="price-tag mb-3">
+                                <span class="fs-4 fw-bold text-farm-green">KSh 200</span>
+                                <small class="d-block text-secondary">Per delivery</small>
+                            </div>
+                            <button class="btn btn-farm-yellow">Select Option</button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Pickup Option -->
+                <div class="col-md-4">
+                    <div class="card h-100 hover-lift">
+                        <div class="card-body text-center p-4">
+                            <div class="rounded-circle bg-farm-brown text-white mx-auto mb-4" 
+                                 style="width: 80px; height: 80px; display: flex; align-items: center; justify-content: center;">
+                                <i class="fas fa-store fs-2"></i>
+                            </div>
+                            <h3 class="h4 fw-bold mb-3">Self Pickup</h3>
+                            <p class="text-secondary mb-4">
+                                Collect your order from our farm location.
+                                Available during business hours.
+                            </p>
+                            <div class="price-tag mb-3">
+                                <span class="fs-4 fw-bold text-farm-green">Free</span>
+                                <small class="d-block text-secondary">No extra charge</small>
+                            </div>
+                            <button class="btn btn-farm-green">Select Option</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Coverage Map -->
+            <div class="row align-items-center g-5 mb-5">
+                <div class="col-lg-6">
+                    <h2 class="h3 fw-bold mb-4">Delivery Coverage Area</h2>
+                    <p class="text-secondary mb-4">
+                        We currently deliver to the following areas in Siaya County:
+                    </p>
+                    <div class="row g-4">
+                        <div class="col-sm-6">
+                            <div class="d-flex align-items-center mb-3">
+                                <i class="fas fa-check-circle text-farm-green fs-5 me-2"></i>
+                                <span>Siaya Town</span>
+                            </div>
+                            <div class="d-flex align-items-center mb-3">
+                                <i class="fas fa-check-circle text-farm-green fs-5 me-2"></i>
+                                <span>Ugunja</span>
+                            </div>
+                            <div class="d-flex align-items-center mb-3">
+                                <i class="fas fa-check-circle text-farm-green fs-5 me-2"></i>
+                                <span>Ukwala</span>
+                            </div>
+                        </div>
+                        <div class="col-sm-6">
+                            <div class="d-flex align-items-center mb-3">
+                                <i class="fas fa-check-circle text-farm-green fs-5 me-2"></i>
+                                <span>Yala</span>
+                            </div>
+                            <div class="d-flex align-items-center mb-3">
+                                <i class="fas fa-check-circle text-farm-green fs-5 me-2"></i>
+                                <span>Bondo</span>
+                            </div>
+                            <div class="d-flex align-items-center mb-3">
+                                <i class="fas fa-check-circle text-farm-green fs-5 me-2"></i>
+                                <span>Rarieda</span>
+                            </div>
+                        </div>
+                    </div>
+                    <p class="text-secondary mt-3">
+                        Don't see your area listed? Contact us to check if we can arrange special delivery.
+                    </p>
+                </div>
+                <div class="col-lg-6">
+                    <div class="card shadow-sm">
+                        <div class="card-body p-0">
+                            <img src="https://maps.googleapis.com/maps/api/staticmap?center=Siaya,Kenya&zoom=11&size=600x400&maptype=roadmap" 
+                                 class="img-fluid w-100" alt="Delivery coverage map"
+                                 style="border-radius: 0.375rem;">
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Delivery Process -->
+            <section class="mb-5">
+                <h2 class="h3 fw-bold text-center mb-5">How Our Delivery Works</h2>
+                <div class="row g-4">
+                    <div class="col-md-3">
+                        <div class="text-center">
+                            <div class="rounded-circle bg-farm-green text-white mx-auto mb-4"
+                                 style="width: 60px; height: 60px; display: flex; align-items: center; justify-content: center;">
+                                <i class="fas fa-shopping-cart"></i>
+                            </div>
+                            <h4 class="h5 fw-bold mb-3">1. Place Order</h4>
+                            <p class="text-secondary">Select your products and choose delivery option</p>
+                        </div>
+                    </div>
+                    <div class="col-md-3">
+                        <div class="text-center">
+                            <div class="rounded-circle bg-farm-yellow text-dark mx-auto mb-4"
+                                 style="width: 60px; height: 60px; display: flex; align-items: center; justify-content: center;">
+                                <i class="fas fa-credit-card"></i>
+                            </div>
+                            <h4 class="h5 fw-bold mb-3">2. Payment</h4>
+                            <p class="text-secondary">Secure payment via M-Pesa or other methods</p>
+                        </div>
+                    </div>
+                    <div class="col-md-3">
+                        <div class="text-center">
+                            <div class="rounded-circle bg-farm-green text-white mx-auto mb-4"
+                                 style="width: 60px; height: 60px; display: flex; align-items: center; justify-content: center;">
+                                <i class="fas fa-box"></i>
+                            </div>
+                            <h4 class="h5 fw-bold mb-3">3. Packaging</h4>
+                            <p class="text-secondary">Careful packaging to ensure egg safety</p>
+                        </div>
+                    </div>
+                    <div class="col-md-3">
+                        <div class="text-center">
+                            <div class="rounded-circle bg-farm-yellow text-dark mx-auto mb-4"
+                                 style="width: 60px; height: 60px; display: flex; align-items: center; justify-content: center;">
+                                <i class="fas fa-truck"></i>
+                            </div>
+                            <h4 class="h5 fw-bold mb-3">4. Delivery</h4>
+                            <p class="text-secondary">Track your order in real-time until delivery</p>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- FAQ Section -->
+            <section class="bg-light rounded-4 p-4 p-lg-5">
+                <h2 class="h3 fw-bold text-center mb-5">Frequently Asked Questions</h2>
+                <div class="accordion" id="deliveryFAQ">
+                    <div class="accordion-item">
+                        <h3 class="accordion-header">
+                            <button class="accordion-button" type="button" data-bs-toggle="collapse" 
+                                    data-bs-target="#faq1">
+                                How long does delivery take?
+                            </button>
+                        </h3>
+                        <div id="faq1" class="accordion-collapse collapse show" data-bs-parent="#deliveryFAQ">
+                            <div class="accordion-body text-secondary">
+                                Standard delivery takes 1 business day, while express delivery is same-day 
+                                if ordered before 12 PM. Delivery times may vary based on your location 
+                                and order volume.
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="accordion-item">
+                        <h3 class="accordion-header">
+                            <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" 
+                                    data-bs-target="#faq2">
+                                What if I'm not home during delivery?
+                            </button>
+                        </h3>
+                        <div id="faq2" class="accordion-collapse collapse" data-bs-parent="#deliveryFAQ">
+                            <div class="accordion-body text-secondary">
+                                Our delivery team will contact you before arrival. You can either 
+                                reschedule or designate someone to receive the delivery on your behalf.
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="accordion-item">
+                        <h3 class="accordion-header">
+                            <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" 
+                                    data-bs-target="#faq3">
+                                How do you ensure egg safety during transport?
+                            </button>
+                        </h3>
+                        <div id="faq3" class="accordion-collapse collapse" data-bs-parent="#deliveryFAQ">
+                            <div class="accordion-body text-secondary">
+                                We use specially designed egg cartons and protective packaging. Our 
+                                delivery vehicles are equipped with shock-absorbing features to 
+                                minimize breakage.
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="accordion-item">
+                        <h3 class="accordion-header">
+                            <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" 
+                                    data-bs-target="#faq4">
+                                Do you offer bulk delivery discounts?
+                            </button>
+                        </h3>
+                        <div id="faq4" class="accordion-collapse collapse" data-bs-parent="#deliveryFAQ">
+                            <div class="accordion-body text-secondary">
+                                Yes! Orders above KSh 2,000 qualify for free delivery. We also offer 
+                                special rates for regular bulk orders and business customers.
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+        </div>
+    </main>
+
+    <!-- Footer -->
+    <footer class="bg-dark text-white py-5">
+        <div class="container">
+            <div class="row gy-4">
+                <div class="col-md-3">
+                    <h3 class="h5 fw-bold mb-3 d-flex align-items-center">
+                        <i class="fas fa-egg text-farm-yellow me-2"></i>
+                        Nyandiwa Smart Poultry
+                    </h3>
+                    <p class="text-secondary">Fresh eggs directly from our farm in Siaya County.</p>
+                    <div class="d-flex gap-3">
+                        <a href="#" class="social-icon text-decoration-none">
+                            <i class="fab fa-facebook-f"></i>
+                        </a>
+                        <a href="#" class="social-icon text-decoration-none">
+                            <i class="fab fa-twitter"></i>
+                        </a>
+                        <a href="#" class="social-icon text-decoration-none">
+                            <i class="fab fa-instagram"></i>
+                        </a>
+                        <a href="#" class="social-icon text-decoration-none">
+                            <i class="fab fa-whatsapp"></i>
+                        </a>
+                    </div>
+                </div>
+                
+                <div class="col-md-3">
+                    <h4 class="h6 fw-bold mb-3">Quick Links</h4>
+                    <ul class="list-unstyled mb-0">
+                        <li class="mb-2">
+                            <a href="index.html" class="text-secondary text-decoration-none hover-yellow d-inline-flex align-items-center">
+                                <i class="fas fa-chevron-right small me-2"></i>Home
+                            </a>
+                        </li>
+                        <li class="mb-2">
+                            <a href="products.html" class="text-secondary text-decoration-none hover-yellow d-inline-flex align-items-center">
+                                <i class="fas fa-chevron-right small me-2"></i>Products
+                            </a>
+                        </li>
+                        <li class="mb-2">
+                            <a href="delivery.html" class="text-secondary text-decoration-none hover-yellow d-inline-flex align-items-center">
+                                <i class="fas fa-chevron-right small me-2"></i>Delivery
+                            </a>
+                        </li>
+                        <li>
+                            <a href="dashboard.html" class="text-secondary text-decoration-none hover-yellow d-inline-flex align-items-center">
+                                <i class="fas fa-chevron-right small me-2"></i>Dashboard
+                            </a>
+                        </li>
+                    </ul>
+                </div>
+                
+                <div class="col-md-3">
+                    <h4 class="h6 fw-bold mb-3">Contact Info</h4>
+                    <ul class="list-unstyled mb-0">
+                        <li class="d-flex mb-2">
+                            <i class="fas fa-map-marker-alt text-farm-yellow me-2 mt-1"></i>
+                            <span class="text-secondary">Siaya Nyandiwa, Kenya</span>
+                        </li>
+                        <li class="d-flex mb-2">
+                            <i class="fas fa-phone text-farm-yellow me-2 mt-1"></i>
+                            <span class="text-secondary">+254 725551199</span>
+                        </li>
+                        <li class="d-flex">
+                            <i class="fas fa-envelope text-farm-yellow me-2 mt-1"></i>
+                            <span class="text-secondary">samuelonyango932@gmail.com</span>
+                        </li>
+                    </ul>
+                </div>
+                
+                <div class="col-md-3">
+                    <h4 class="h6 fw-bold mb-3">Payment Methods</h4>
+                    <div class="d-flex flex-wrap gap-2 mb-3">
+                        <span class="badge bg-white text-farm-green fw-bold">M-Pesa</span>
+                        <span class="badge bg-white text-farm-green fw-bold">Airtel Money</span>
+                        <span class="badge bg-white text-farm-green fw-bold">Cash</span>
+                    </div>
+                    
+                    <h4 class="h6 fw-bold mb-3">Subscribe to Newsletter</h4>
+                    <form class="needs-validation" novalidate>
+                        <div class="input-group">
+                            <input type="email" class="form-control" placeholder="Your email" required>
+                            <button class="btn btn-farm-yellow" type="submit">
+                                <i class="fas fa-paper-plane"></i>
+                            </button>
+                            <div class="invalid-feedback">
+                                Please enter a valid email address
+                            </div>
+                        </div>
+                    </form>
+                </div>
+            </div>
+            
+            <div class="border-top border-secondary mt-4 pt-4 text-center text-secondary">
+                <p class="mb-0">&copy; 2025 Nyandiwa Smart Poultry Connect. All rights reserved.</p>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Back to Top Button -->
+    <button id="backToTop" class="btn btn-farm-green rounded-circle shadow">
+        <i class="fas fa-arrow-up"></i>
+    </button>
+
+   <!-- Login Modal -->
+    <div class="modal fade" id="loginModal" tabindex="-1">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">Login to Your Account</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                </div>
+                <div class="modal-body">
+                    <form class="needs-validation" novalidate>
+                        <div class="mb-3">
+                            <label class="form-label">Email address</label>
+                            <input type="email" class="form-control" required>
+                        </div>
+                        <div class="mb-3">
+                            <label class="form-label">Password</label>
+                            <input type="password" class="form-control" required>
+                        </div>
+                        <button type="submit" class="btn btn-farm-green w-100">Login</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Register Modal -->
+    <div class="modal fade" id="registerModal" tabindex="-1">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">Create an Account</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                </div>
+                <div class="modal-body">
+                    <form class="needs-validation" novalidate>
+                        <div class="mb-3">
+                            <label class="form-label">Full Name</label>
+                            <input type="text" class="form-control" required>
+                        </div>
+                        <div class="mb-3">
+                            <label class="form-label">Email address</label>
+                            <input type="email" class="form-control" required>
+                        </div>
+                        <div class="mb-3">
+                            <label class="form-label">Password</label>
+                            <input type="password" class="form-control" required>
+                        </div>
+                        <div class="mb-3">
+                            <label class="form-label">Confirm Password</label>
+                            <input type="password" class="form-control" required>
+                        </div>
+                        <button type="submit" class="btn btn-farm-yellow w-100">Register</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Bootstrap Bundle JS -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <!-- Custom JavaScript -->
+    <script src="{% static 'js/main.js' %}"></script>
+</body>
+</html>

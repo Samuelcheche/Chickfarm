@@ -1,0 +1,155 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    {% load static %}
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>MOH FARM | Login</title>
+
+    <!-- Bootstrap 5 -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+
+    <!-- Bootstrap Icons -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css" rel="stylesheet">
+
+    <style>
+        body {
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: linear-gradient(135deg, #198754, #20c997);
+            font-family: "Segoe UI", sans-serif;
+        }
+
+        .login-card {
+            width: 100%;
+            max-width: 420px;
+            padding: 40px;
+            border-radius: 20px;
+            background: rgba(255,255,255,0.95);
+            backdrop-filter: blur(10px);
+            box-shadow: 0 20px 45px rgba(0,0,0,0.25);
+            transition: 0.3s;
+        }
+
+        .login-card:hover {
+            transform: translateY(-5px);
+        }
+
+        .logo {
+            width: 90px;
+            height: 90px;
+            object-fit: cover;
+            border-radius: 50%;
+            margin-bottom: 15px;
+        }
+
+        .form-control {
+            border-radius: 12px;
+        }
+
+        .input-group-text {
+            border-radius: 12px 0 0 12px;
+            background: #f8f9fa;
+        }
+
+        .login_btn {
+            border-radius: 12px;
+            padding: 12px;
+            font-weight: 600;
+        }
+
+        .title {
+            font-weight: 700;
+            color: #198754;
+        }
+    </style>
+</head>
+
+<body>
+
+<div class="login-card">
+
+    <!-- Logo -->
+    <div class="text-center">
+        <img src="{% static 'assets/images/image.png' %}" class="logo" alt="Logo">
+        <h4 class="title">Welcome Back</h4>
+        <p class="text-muted small">Login to your MOH Farm account</p>
+    </div>
+
+    <!-- Messages -->
+    {% if messages %}
+        {% for message in messages %}
+            {% if message.tags == 'error' %}
+                <div class="alert alert-danger alert-dismissible fade show" role="alert">
+                    {{ message }}
+                    <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+                </div>
+            {% else %}
+                <div class="alert alert-success alert-dismissible fade show" role="alert">
+                    {{ message }}
+                    <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+                </div>
+            {% endif %}
+        {% endfor %}
+    {% endif %}
+
+    <!-- FORM -->
+    <form method="post">
+        {% csrf_token %}
+
+        <!-- Username -->
+        <div class="input-group mb-3">
+            <span class="input-group-text"><i class="bi bi-person"></i></span>
+            <input type="text" name="username" class="form-control" placeholder="Username" required>
+        </div>
+
+        <!-- Password -->
+        <div class="input-group mb-3">
+            <span class="input-group-text"><i class="bi bi-lock"></i></span>
+            <input type="password" id="password" name="password" class="form-control" placeholder="Password" required>
+            <button class="btn btn-outline-secondary" type="button" onclick="togglePass()">
+                <i class="bi bi-eye"></i>
+            </button>
+        </div>
+
+        <!-- Remember -->
+        <div class="form-check mb-3">
+            <input type="checkbox" class="form-check-input" id="remember">
+            <label class="form-check-label" for="remember">Remember me</label>
+        </div>
+
+        <!-- Submit -->
+        <div class="d-grid">
+            <button type="submit" class="btn btn-success login_btn">
+                Login
+            </button>
+        </div>
+
+    </form>
+
+    <!-- Links -->
+    <div class="text-center mt-4 small">
+        Don't have an account?
+        <a href="{% url 'register' %}" class="text-success fw-semibold">Sign Up</a>
+        <br>
+        <a href="#" class="text-muted">Forgot your password?</a>
+    </div>
+
+</div>
+
+
+<!-- Bootstrap JS -->
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+
+<script>
+    function togglePass() {
+        const pass = document.getElementById("password");
+        pass.type = pass.type === "password" ? "text" : "password";
+    }
+</script>
+
+</body>
+</html>

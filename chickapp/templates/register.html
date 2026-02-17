@@ -1,0 +1,156 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    {% load static %}
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Register | MOH FARM</title>
+
+    <!-- Favicon -->
+    <link rel="icon" type="image/x-icon" href="{% static 'assets/images/image.png' %}">
+
+    <!-- Bootstrap 5 -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+
+    <!-- Bootstrap Icons -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css" rel="stylesheet">
+
+    <style>
+        body {
+            background: linear-gradient(135deg, #198754, #0d6efd);
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-family: "Segoe UI", sans-serif;
+        }
+
+        .register-card {
+            width: 100%;
+            max-width: 750px;
+            border-radius: 18px;
+            backdrop-filter: blur(12px);
+            background: rgba(255,255,255,0.95);
+            box-shadow: 0 20px 45px rgba(0,0,0,0.2);
+            padding: 40px;
+            transition: 0.3s;
+        }
+
+        .register-card:hover {
+            transform: translateY(-5px);
+        }
+
+        .form-control {
+            border-radius: 10px;
+            padding-left: 40px;
+        }
+
+        .input-group-text {
+            border-radius: 10px 0 0 10px;
+            background: #f8f9fa;
+        }
+
+        .btnSubmit {
+            border-radius: 10px;
+            font-weight: 600;
+            padding: 12px;
+        }
+
+        .title {
+            font-weight: 700;
+            color: #198754;
+        }
+    </style>
+</head>
+
+<body>
+
+<div class="register-card">
+
+    <h3 class="text-center mb-4 title">
+        <i class="bi bi-person-plus-fill"></i> Create Account
+    </h3>
+
+
+     
+
+    
+    <!-- FORM -->
+    <form method="post">
+        {% csrf_token %}
+
+        <div class="row g-3">
+
+            <!-- Username -->
+            <div class="col-md-6">
+                <div class="input-group">
+                    <span class="input-group-text"><i class="bi bi-person"></i></span>
+                    <input type="text" name="username" class="form-control" placeholder="Username" required>
+                </div>
+            </div>
+
+            <!-- Phone -->
+            <div class="col-md-6">
+                <div class="input-group">
+                    <span class="input-group-text"><i class="bi bi-telephone"></i></span>
+                    <input type="text" name="phone_number" class="form-control" placeholder="Phone Number" required>
+                </div>
+            </div>
+
+            <!-- Password -->
+            <div class="col-md-6">
+                <div class="input-group">
+                    <span class="input-group-text"><i class="bi bi-lock"></i></span>
+                    <input type="password" id="password" name="password" class="form-control" placeholder="Password" required>
+                    <button class="btn btn-outline-secondary" type="button" onclick="togglePass('password')">
+                        <i class="bi bi-eye"></i>
+                    </button>
+                </div>
+            </div>
+
+            <!-- Confirm Password -->
+            <div class="col-md-6">
+                <div class="input-group">
+                    <span class="input-group-text"><i class="bi bi-shield-lock"></i></span>
+                    <input type="password" id="confirm_password" name="confirm_password" class="form-control" placeholder="Confirm Password" required>
+                    <button class="btn btn-outline-secondary" type="button" onclick="togglePass('confirm_password')">
+                        <i class="bi bi-eye"></i>
+                    </button>
+                </div>
+            </div>
+
+        </div>
+
+        <div class="d-grid mt-4">
+            <button type="submit" class="btn btn-success btnSubmit">
+                Register
+            </button>
+        </div>
+
+           {% for message in messages %}
+
+       <p class="alert alert-success" >{{ message }}</p>
+       
+    {% endfor %}
+
+        <p class="text-center mt-3 text-muted small">
+            Already have an account? <a href="{% url 'login' %}">Login</a>
+        </p>
+
+    </form>
+</div>
+
+
+<!-- Bootstrap JS -->
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+
+<script>
+    function togglePass(id) {
+        const input = document.getElementById(id);
+        input.type = input.type === "password" ? "text" : "password";
+    }
+</script>
+
+</body>
+</html>
