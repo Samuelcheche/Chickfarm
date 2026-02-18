@@ -132,16 +132,13 @@ USE_TZ = True
 STATIC_URL = '/static/'
 STATIC_ROOT = BASE_DIR / 'staticfiles'
 
-# Only include STATICFILES_DIRS in development, not production
-# WhiteNoise will serve from STATIC_ROOT in production
-if DEBUG:
-    STATICFILES_DIRS = [
-        BASE_DIR / 'static',
-    ]
-else:
-    STATICFILES_DIRS = []
+# STATICFILES_DIRS must be defined for collectstatic to work with WhiteNoise
+# WhiteNoise needs to know where source static files are located
+STATICFILES_DIRS = [
+    BASE_DIR / 'static',
+]
 
-# WhiteNoise configuration for serving static files
+# WhiteNoise configuration for serving static files in production
 STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage'
 
 
@@ -197,10 +194,9 @@ if not DEBUG:
     SECURE_HSTS_INCLUDE_SUBDOMAINS = True
     SECURE_HSTS_PRELOAD = True
     
-    # Allow Render domain and callback URLs
+    # CSRF trusted origins for Render deployment
     CSRF_TRUSTED_ORIGINS = [
         'https://chickfarm-4.onrender.com',
-        'https://*.onrender.com',
     ]
 
 
