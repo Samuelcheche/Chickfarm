@@ -4,7 +4,13 @@ from django.contrib.auth.models import User
 from django.shortcuts import render, redirect, get_object_or_404
 from chickapp.models import *
 from django.contrib import messages
+from django.db.utils import OperationalError
+from django.http import JsonResponse
+from django.views.decorators.http import require_http_methods
+from django.views.decorators.csrf import csrf_exempt
+import json
 import logging
+from chickapp.mpesa import initiate_mpesa_payment
 
 logger = logging.getLogger(__name__)
 
@@ -19,15 +25,31 @@ def delivery(request):
     return render(request, 'delivery.html')
 
 def dashboard(request):
-    recent_orders = order.objects.select_related('customer', 'product').order_by('-order_date')[:5]
+    recent_orders = []
+    db_error = None
+
+    try:
+        recent_orders = list(
+            order.objects.select_related('customer', 'product').order_by('-order_date')[:5]
+        )
+    except OperationalError:
+        db_error = 'Order data is unavailable. Run migrations to create required tables.'
+
     return render(request, 'dashboard.html', {
         'recent_orders': recent_orders,
+        'db_error': db_error,
     })
 
 def products(request):
     return render(request, 'products.html')
 
 def orders(request):
+    db_error = None
+    all_orders = []
+    all_customers = []
+    all_products = []
+    status_choices = []
+
     if request.method == 'POST':
         action = request.POST.get('action', 'create_order')
 
@@ -44,20 +66,23 @@ def orders(request):
                 messages.error(request, 'Please fill in all required customer fields.')
                 return redirect('orders')
 
-            if customer.objects.filter(email=email).exists():
-                messages.error(request, 'A customer with that email already exists.')
-                return redirect('orders')
+            try:
+                if customer.objects.filter(email=email).exists():
+                    messages.error(request, 'A customer with that email already exists.')
+                    return redirect('orders')
 
-            customer.objects.create(
-                name=name,
-                surname=surname,
-                email=email,
-                password=make_password(password),
-                phone=phone,
-                location=location,
-                message=message,
-            )
-            messages.success(request, 'Customer created successfully.')
+                customer.objects.create(
+                    name=name,
+                    surname=surname,
+                    email=email,
+                    password=make_password(password),
+                    phone=phone,
+                    location=location,
+                    message=message,
+                )
+                messages.success(request, 'Customer created successfully.')
+            except OperationalError:
+                messages.error(request, 'Cannot create customer. Database tables are missing.')
             return redirect('orders')
 
         if action != 'create_order':
@@ -78,26 +103,35 @@ def orders(request):
             messages.error(request, 'Please enter a valid number of trays.')
             return redirect('orders')
 
-        selected_customer = get_object_or_404(customer, pk=customer_id)
-        selected_product = get_object_or_404(product, pk=product_id)
+        try:
+            selected_customer = get_object_or_404(customer, pk=customer_id)
+            selected_product = get_object_or_404(product, pk=product_id)
 
-        order.objects.create(
-            customer=selected_customer,
-            product=selected_product,
-            number_of_trays=trays,
-            status=status,
-        )
-        messages.success(request, 'Order created successfully.')
+            order.objects.create(
+                customer=selected_customer,
+                product=selected_product,
+                number_of_trays=trays,
+                status=status,
+            )
+            messages.success(request, 'Order created successfully.')
+        except OperationalError:
+            messages.error(request, 'Cannot create order. Database tables are missing.')
         return redirect('orders')
 
-    all_orders = order.objects.select_related('customer', 'product').order_by('-order_date')
-    all_customers = customer.objects.order_by('name', 'surname')
-    all_products = product.objects.filter(is_active=True).order_by('name')
+    try:
+        all_orders = list(order.objects.select_related('customer', 'product').order_by('-order_date'))
+        all_customers = list(customer.objects.order_by('name', 'surname'))
+        all_products = list(product.objects.filter(is_active=True).order_by('name'))
+        status_choices = order.STATUS_CHOICES
+    except OperationalError:
+        db_error = 'Order system is unavailable. Run migrations to create required tables.'
+
     return render(request, 'order.html', {
         'orders': all_orders,
         'customers': all_customers,
         'products': all_products,
-        'status_choices': order.STATUS_CHOICES,
+        'status_choices': status_choices,
+        'db_error': db_error,
     })
 
 def register(request):
@@ -159,3 +193,333 @@ def login_user(request):
             messages.error(request, "Invalid email or password. Please try again.")
 
     return render(request, 'login.html')
+
+
+@require_http_methods(["POST"])
+def process_payment(request):
+    """
+    Process payment from the payment modal.
+    Creates customer and order(s) with payment information.
+    """
+    try:
+        # Get customer information
+        customer_name = request.POST.get('customer_name', '').strip()
+        customer_email = request.POST.get('customer_email', '').strip()
+        customer_phone = request.POST.get('customer_phone', '').strip()
+        customer_location = request.POST.get('customer_location', '').strip()
+        
+        # Get payment information
+        payment_method = request.POST.get('payment_method', '')
+        order_notes = request.POST.get('order_notes', '').strip()
+        
+        # Get payment phone based on method
+        payment_phone = ''
+        if payment_method == 'mpesa':
+            payment_phone = request.POST.get('mpesa_phone', '').strip()
+        elif payment_method == 'airtel_money':
+            payment_phone = request.POST.get('airtel_phone', '').strip()
+        else:  # cash
+            payment_phone = customer_phone
+        
+        # Get cart data
+        cart_data_str = request.POST.get('cart_data', '[]')
+        cart_data = json.loads(cart_data_str)
+        
+        # Validate inputs
+        if not customer_name or not customer_email or not customer_phone or not customer_location:
+            return JsonResponse({
+                'success': False,
+                'message': 'Please fill in all customer information fields.'
+            }, status=400)
+        
+        if not payment_method:
+            return JsonResponse({
+                'success': False,
+                'message': 'Please select a payment method.'
+            }, status=400)
+        
+        if len(cart_data) == 0:
+            return JsonResponse({
+                'success': False,
+                'message': 'Cart is empty. Please add items before checkout.'
+            }, status=400)
+        
+        # Split customer name into name and surname
+        name_parts = customer_name.split(' ', 1)
+        name = name_parts[0]
+        surname = name_parts[1] if len(name_parts) > 1 else ''
+        
+        # Find or create customer
+        try:
+            cust = customer.objects.filter(email=customer_email).first()
+            if not cust:
+                # Create new customer with a default password
+                cust = customer.objects.create(
+                    name=name,
+                    surname=surname,
+                    email=customer_email,
+                    password=make_password('default123'),  # Default password
+                    phone=customer_phone,
+                    location=customer_location,
+                    message=order_notes
+                )
+            else:
+                # Update existing customer info
+                cust.phone = customer_phone
+                cust.location = customer_location
+                if order_notes:
+                    cust.message = order_notes
+                cust.save()
+        except Exception as e:
+            logger.error(f"Error creating/updating customer: {str(e)}")
+            return JsonResponse({
+                'success': False,
+                'message': 'Failed to process customer information.'
+            }, status=500)
+        
+        # Create orders for each cart item
+        created_orders = []
+        first_order = None
+        total_amount = 0
+        
+        for item in cart_data:
+            try:
+                # Find the product
+                prod = product.objects.filter(name__icontains=item['product']).first()
+                
+                if not prod:
+                    # Create a generic product if not found
+                    prod = product.objects.create(
+                        name=item['product'],
+                        price=item['price'],
+                        description=f"Product from cart: {item['product']}"
+                    )
+                
+                # Calculate order amount
+                item_amount = float(item['price']) * int(item['count'])
+                total_amount += item_amount
+                
+                # Create order
+                new_order = order.objects.create(
+                    customer=cust,
+                    product=prod,
+                    number_of_trays=int(item['count']),
+                    amount=item_amount,
+                    payment_method=payment_method,
+                    payment_status=order.PAYMENT_STATUS_PENDING if payment_method != 'cash' else order.PAYMENT_STATUS_COMPLETED,
+                    payment_phone=payment_phone,
+                    message=order_notes,
+                    status=order.STATUS_PROCESSING
+                )
+                
+                if first_order is None:
+                    first_order = new_order
+                
+                created_orders.append(new_order.order_code)
+                
+            except Exception as e:
+                logger.error(f"Error creating order for item {item['product']}: {str(e)}")
+                continue
+        
+        if len(created_orders) == 0:
+            return JsonResponse({
+                'success': False,
+                'message': 'Failed to create orders. Please try again.'
+            }, status=500)
+        
+        # If payment method is M-Pesa, initiate STK Push
+        if payment_method == 'mpesa' and payment_phone and first_order:
+            try:
+                mpesa_result = initiate_mpesa_payment(
+                    phone_number=payment_phone,
+                    amount=total_amount,
+                    order_code=first_order.order_code,
+                    description=f'Payment for {len(created_orders)} order(s)'
+                )
+                
+                if mpesa_result.get('success'):
+                    # Save M-Pesa transaction details
+                    first_order.mpesa_checkout_request_id = mpesa_result.get('checkout_request_id', '')
+                    first_order.mpesa_merchant_request_id = mpesa_result.get('merchant_request_id', '')
+                    first_order.payment_reference = mpesa_result.get('checkout_request_id', '')
+                    first_order.save()
+                    
+                    return JsonResponse({
+                        'success': True,
+                        'message': 'STK Push sent to your phone. Please enter your M-Pesa PIN to complete payment.',
+                        'order_code': first_order.order_code,
+                        'total_amount': total_amount,
+                        'payment_method': payment_method,
+                        'mpesa_sent': True
+                    })
+                else:
+                    # M-Pesa failed, but order is created
+                    logger.warning(f"M-Pesa STK Push failed: {mpesa_result.get('message')}")
+                    return JsonResponse({
+                        'success': True,
+                        'message': f"Order created but M-Pesa payment failed: {mpesa_result.get('message')}. Please contact us to complete payment.",
+                        'order_code': first_order.order_code,
+                        'total_amount': total_amount,
+                        'payment_method': payment_method,
+                        'mpesa_sent': False
+                    })
+                    
+            except Exception as e:
+                logger.error(f"M-Pesa initiation error: {str(e)}")
+                return JsonResponse({
+                    'success': True,
+                    'message': f'Order created but M-Pesa payment could not be initiated. Please contact us at +254 725551199.',
+                    'order_code': first_order.order_code,
+                    'total_amount': total_amount,
+                    'payment_method': payment_method,
+                    'mpesa_sent': False
+                })
+        
+        # Return success response for non-M-Pesa payments
+        return JsonResponse({
+            'success': True,
+            'message': 'Order(s) placed successfully!',
+            'order_code': created_orders[0] if len(created_orders) == 1 else f"{len(created_orders)} orders",
+            'total_amount': total_amount,
+            'payment_method': payment_method
+        })
+        
+    except json.JSONDecodeError:
+        return JsonResponse({
+            'success': False,
+            'message': 'Invalid cart data format.'
+        }, status=400)
+    except Exception as e:
+        logger.error(f"Payment processing error: {str(e)}")
+        return JsonResponse({
+            'success': False,
+            'message': 'An unexpected error occurred. Please try again.'
+        }, status=500)
+
+
+@csrf_exempt
+@require_http_methods(["POST"])
+def mpesa_callback(request):
+    """
+    M-Pesa callback endpoint to receive payment confirmation
+    This endpoint receives STK Push payment results from Safaricom
+    """
+    try:
+        # Parse callback data
+        callback_data = json.loads(request.body.decode('utf-8'))
+        
+        logger.info(f'M-Pesa callback received: {json.dumps(callback_data, indent=2)}')
+        
+        # Extract data from callback
+        stk_callback = callback_data.get('Body', {}).get('stkCallback', {})
+        
+        merchant_request_id = stk_callback.get('MerchantRequestID')
+        checkout_request_id = stk_callback.get('CheckoutRequestID')
+        result_code = stk_callback.get('ResultCode')
+        result_desc = stk_callback.get('ResultDesc')
+        
+        # Find the order by checkout request ID
+        try:
+            order_obj = order.objects.get(mpesa_checkout_request_id=checkout_request_id)
+        except order.DoesNotExist:
+            logger.error(f'Order not found for CheckoutRequestID: {checkout_request_id}')
+            return JsonResponse({
+                'ResultCode': 0,
+                'ResultDesc': 'Accepted'
+            })
+        
+        # Check if payment was successful
+        if result_code == 0:
+            # Payment successful
+            callback_metadata = stk_callback.get('CallbackMetadata', {}).get('Item', [])
+            
+            # Extract payment details
+            receipt_number = ''
+            amount = 0
+            phone_number = ''
+            transaction_date = ''
+            
+            for item in callback_metadata:
+                name = item.get('Name')
+                value = item.get('Value')
+                
+                if name == 'MpesaReceiptNumber':
+                    receipt_number = value
+                elif name == 'Amount':
+                    amount = value
+                elif name == 'PhoneNumber':
+                    phone_number = value
+                elif name == 'TransactionDate':
+                    transaction_date = value
+            
+            # Update order with payment details
+            order_obj.payment_status = order.PAYMENT_STATUS_COMPLETED
+            order_obj.mpesa_receipt_number = receipt_number
+            order_obj.payment_reference = receipt_number
+            order_obj.save()
+            
+            logger.info(f'Payment successful for order {order_obj.order_code}. Receipt: {receipt_number}')
+            
+        else:
+            # Payment failed or cancelled
+            order_obj.payment_status = order.PAYMENT_STATUS_FAILED
+            order_obj.message += f'\n\nM-Pesa payment failed: {result_desc}'
+            order_obj.save()
+            
+            logger.warning(f'Payment failed for order {order_obj.order_code}. Reason: {result_desc}')
+        
+        # Acknowledge receipt of callback
+        return JsonResponse({
+            'ResultCode': 0,
+            'ResultDesc': 'Accepted'
+        })
+        
+    except Exception as e:
+        logger.error(f'M-Pesa callback error: {str(e)}')
+        return JsonResponse({
+            'ResultCode': 1,
+            'ResultDesc': 'Failed to process callback'
+        })
+
+
+@require_http_methods(["POST"])
+def check_payment_status(request):
+    """
+    Check M-Pesa payment status for an order
+    """
+    try:
+        order_code = request.POST.get('order_code', '')
+        
+        if not order_code:
+            return JsonResponse({
+                'success': False,
+                'message': 'Order code is required'
+            }, status=400)
+        
+        # Find the order
+        try:
+            order_obj = order.objects.get(order_code=order_code)
+        except order.DoesNotExist:
+            return JsonResponse({
+                'success': False,
+                'message': 'Order not found'
+            }, status=404)
+        
+        # Return payment status
+        return JsonResponse({
+            'success': True,
+            'order_code': order_obj.order_code,
+            'payment_status': order_obj.payment_status,
+            'payment_method': order_obj.payment_method,
+            'amount': str(order_obj.amount),
+            'receipt_number': order_obj.mpesa_receipt_number,
+            'status_display': order_obj.get_payment_status_display()
+        })
+        
+    except Exception as e:
+        logger.error(f'Payment status check error: {str(e)}')
+        return JsonResponse({
+            'success': False,
+            'message': 'Failed to check payment status'
+        }, status=500)
+

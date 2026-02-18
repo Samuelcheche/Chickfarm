@@ -43,18 +43,45 @@ class order(models.Model):
         (STATUS_CANCELLED, "Cancelled"),
     ]
 
-    order_code = models.CharField(max_length=12, unique=True, editable=False)
+    PAYMENT_MPESA = "mpesa"
+    PAYMENT_AIRTEL = "airtel_money"
+    PAYMENT_CASH = "cash"
+
+    PAYMENT_METHOD_CHOICES = [
+        (PAYMENT_MPESA, "M-Pesa"),
+        (PAYMENT_AIRTEL, "Airtel Money"),
+        (PAYMENT_CASH, "Cash on Delivery"),
+    ]
+
+    PAYMENT_STATUS_PENDING = "pending"
+    PAYMENT_STATUS_COMPLETED = "completed"
+    PAYMENT_STATUS_FAILED = "failed"
+
+    PAYMENT_STATUS_CHOICES = [
+        (PAYMENT_STATUS_PENDING, "Pending"),
+        (PAYMENT_STATUS_COMPLETED, "Completed"),
+        (PAYMENT_STATUS_FAILED, "Failed"),
+    ]
+
+    order_code = models.CharField(max_length=12, editable=False, default='TEMP')
     customer = models.ForeignKey(customer, on_delete=models.CASCADE)
-    product = models.ForeignKey(product, on_delete=models.PROTECT)
+    product = models.ForeignKey(product, on_delete=models.PROTECT, null=True, blank=True)
     number_of_trays = models.PositiveIntegerField()
     amount = models.DecimalField(max_digits=10, decimal_places=2, default=0)
     status = models.CharField(max_length=20, choices=STATUS_CHOICES, default=STATUS_PROCESSING)
+    payment_method = models.CharField(max_length=20, choices=PAYMENT_METHOD_CHOICES, blank=True, default="")
+    payment_status = models.CharField(max_length=20, choices=PAYMENT_STATUS_CHOICES, default=PAYMENT_STATUS_PENDING)
+    payment_phone = models.CharField(max_length=15, blank=True, default="")
+    payment_reference = models.CharField(max_length=50, blank=True, default="")
+    mpesa_checkout_request_id = models.CharField(max_length=100, blank=True, default="")
+    mpesa_merchant_request_id = models.CharField(max_length=100, blank=True, default="")
+    mpesa_receipt_number = models.CharField(max_length=50, blank=True, default="")
     order_date = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
     message = models.TextField(blank=True, default="")
 
     def save(self, *args, **kwargs):
-        if not self.order_code:
+        if not self.order_code or self.order_code == 'TEMP':
             code = generate_order_code()
             while order.objects.filter(order_code=code).exists():
                 code = generate_order_code()

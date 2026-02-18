@@ -129,6 +129,40 @@ STATICFILES_DIRS = [
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
 
+# M-Pesa Daraja API Configuration
+# Get your credentials from https://developer.safaricom.co.ke/
+
+# Environment: 'sandbox' for testing, 'production' for live
+MPESA_ENVIRONMENT = 'sandbox'
+
+# Consumer Key from Daraja Portal
+MPESA_CONSUMER_KEY = 'your_consumer_key_here'
+
+# Consumer Secret from Daraja Portal
+MPESA_CONSUMER_SECRET = 'your_consumer_secret_here'
+
+# Business Shortcode (Paybill or Till Number)
+# Sandbox: 174379 (test shortcode)
+MPESA_SHORTCODE = '174379'
+
+# Lipa Na M-Pesa Online Passkey
+# Get this from Daraja Portal for your shortcode
+MPESA_PASSKEY = 'your_passkey_here'
+
+# Callback URL - M-Pesa will send payment results here
+# Must be publicly accessible (use ngrok for local testing)
+MPESA_CALLBACK_URL = 'https://yourdomain.com/mpesa/callback/'
+
+# Transaction Type
+MPESA_TRANSACTION_TYPE = 'CustomerPayBillOnline'
+
+# Initiator Name (for B2C transactions)
+MPESA_INITIATOR_NAME = ''
+
+# Security Credential (for B2C transactions)
+MPESA_SECURITY_CREDENTIAL = ''
+
+
 
 
 

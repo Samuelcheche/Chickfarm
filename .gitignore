@@ -1,0 +1,35 @@
+# Add this to your .gitignore file to protect sensitive information
+
+# Environment variables
+.env
+.env.local
+.env.production
+
+# M-Pesa credentials
+mpesa_credentials.json
+
+# Django
+*.log
+*.pot
+*.pyc
+__pycache__/
+db.sqlite3
+db.sqlite3-journal
+/static
+/media
+
+# Virtual Environment
+chick/
+venv/
+env/
+
+# IDE
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+
+# OS
+.DS_Store
+Thumbs.db

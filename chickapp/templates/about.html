@@ -65,7 +65,7 @@
         <div class="container">
             <nav aria-label="breadcrumb">
                 <ol class="breadcrumb mb-0">
-                    <li class="breadcrumb-item"><a href="index.html" class="text-farm-green">Home</a></li>
+                    <li class="breadcrumb-item"><a href="{% url 'index' %}" class="text-farm-green">Home</a></li>
                     <li class="breadcrumb-item active" aria-current="page">About Us</li>
                 </ol>
             </nav>
@@ -415,22 +415,22 @@
                     <h4 class="h6 fw-bold mb-3">Quick Links</h4>
                     <ul class="list-unstyled mb-0">
                         <li class="mb-2">
-                            <a href="index.html" class="text-secondary text-decoration-none hover-yellow d-inline-flex align-items-center">
+                            <a href="{% url 'index' %}" class="text-secondary text-decoration-none hover-yellow d-inline-flex align-items-center">
                                 <i class="fas fa-chevron-right small me-2"></i>Home
                             </a>
                         </li>
                         <li class="mb-2">
-                            <a href="products.html" class="text-secondary text-decoration-none hover-yellow d-inline-flex align-items-center">
+                            <a href="{% url 'products' %}" class="text-secondary text-decoration-none hover-yellow d-inline-flex align-items-center">
                                 <i class="fas fa-chevron-right small me-2"></i>Products
                             </a>
                         </li>
                         <li class="mb-2">
-                            <a href="delivery.html" class="text-secondary text-decoration-none hover-yellow d-inline-flex align-items-center">
+                            <a href="{% url 'delivery' %}" class="text-secondary text-decoration-none hover-yellow d-inline-flex align-items-center">
                                 <i class="fas fa-chevron-right small me-2"></i>Delivery
                             </a>
                         </li>
                         <li>
-                            <a href="dashboard.html" class="text-secondary text-decoration-none hover-yellow d-inline-flex align-items-center">
+                            <a href="{% url 'dashboard' %}" class="text-secondary text-decoration-none hover-yellow d-inline-flex align-items-center">
                                 <i class="fas fa-chevron-right small me-2"></i>Dashboard
                             </a>
                         </li>
@@ -458,9 +458,27 @@
                 <div class="col-md-3">
                     <h4 class="h6 fw-bold mb-3">Payment Methods</h4>
                     <div class="d-flex flex-wrap gap-2 mb-3">
-                        <span class="badge bg-white text-farm-green fw-bold">M-Pesa</span>
-                        <span class="badge bg-white text-farm-green fw-bold">Airtel Money</span>
-                        <span class="badge bg-white text-farm-green fw-bold">Cash</span>
+                        <button class="badge bg-white text-farm-green fw-bold border-0 payment-method-btn" 
+                                data-payment-method="mpesa" 
+                                data-bs-toggle="modal" 
+                                data-bs-target="#paymentModal" 
+                                style="cursor: pointer;">
+                            M-Pesa
+                        </button>
+                        <button class="badge bg-white text-farm-green fw-bold border-0 payment-method-btn" 
+                                data-payment-method="airtel_money" 
+                                data-bs-toggle="modal" 
+                                data-bs-target="#paymentModal" 
+                                style="cursor: pointer;">
+                            Airtel Money
+                        </button>
+                        <button class="badge bg-white text-farm-green fw-bold border-0 payment-method-btn" 
+                                data-payment-method="cash" 
+                                data-bs-toggle="modal" 
+                                data-bs-target="#paymentModal" 
+                                style="cursor: pointer;">
+                            Cash
+                        </button>
                     </div>
                     
                     <h4 class="h6 fw-bold mb-3">Subscribe to Newsletter</h4>
@@ -488,6 +506,130 @@
     <button id="backToTop" class="btn btn-farm-green rounded-circle shadow">
         <i class="fas fa-arrow-up"></i>
     </button>
+
+    <!-- Payment Modal -->
+    <div class="modal fade" id="paymentModal" tabindex="-1">
+        <div class="modal-dialog modal-lg">
+            <div class="modal-content">
+                <div class="modal-header bg-farm-green text-white">
+                    <h5 class="modal-title"><i class="fas fa-credit-card me-2"></i>Complete Payment</h5>
+                    <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
+                </div>
+                <div class="modal-body">
+                    <form id="paymentForm" method="post" action="{% url 'process_payment' %}">
+                        {% csrf_token %}
+                        
+                        <!-- Customer Information -->
+                        <div class="mb-4">
+                            <h6 class="border-bottom pb-2 mb-3"><i class="fas fa-user me-2"></i>Customer Information</h6>
+                            <div class="row">
+                                <div class="col-md-6 mb-3">
+                                    <label class="form-label">Full Name <span class="text-danger">*</span></label>
+                                    <input type="text" name="customer_name" class="form-control" required>
+                                </div>
+                                <div class="col-md-6 mb-3">
+                                    <label class="form-label">Email <span class="text-danger">*</span></label>
+                                    <input type="email" name="customer_email" class="form-control" required>
+                                </div>
+                                <div class="col-md-6 mb-3">
+                                    <label class="form-label">Phone Number <span class="text-danger">*</span></label>
+                                    <input type="tel" name="customer_phone" class="form-control" placeholder="0712345678" required>
+                                </div>
+                                <div class="col-md-6 mb-3">
+                                    <label class="form-label">Location <span class="text-danger">*</span></label>
+                                    <input type="text" name="customer_location" class="form-control" required>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Payment Method Selection -->
+                        <div class="mb-4">
+                            <h6 class="border-bottom pb-2 mb-3"><i class="fas fa-money-bill-wave me-2"></i>Select Payment Method</h6>
+                            <div class="row g-3">
+                                <div class="col-md-4">
+                                    <input type="radio" class="btn-check" name="payment_method" id="mpesa" value="mpesa" autocomplete="off" required>
+                                    <label class="btn btn-outline-success w-100 py-3" for="mpesa">
+                                        <i class="fas fa-mobile-alt fa-2x d-block mb-2"></i>
+                                        <strong>M-Pesa</strong>
+                                    </label>
+                                </div>
+                                <div class="col-md-4">
+                                    <input type="radio" class="btn-check" name="payment_method" id="airtel_money" value="airtel_money" autocomplete="off" required>
+                                    <label class="btn btn-outline-danger w-100 py-3" for="airtel_money">
+                                        <i class="fas fa-mobile-alt fa-2x d-block mb-2"></i>
+                                        <strong>Airtel Money</strong>
+                                    </label>
+                                </div>
+                                <div class="col-md-4">
+                                    <input type="radio" class="btn-check" name="payment_method" id="cash" value="cash" autocomplete="off" required>
+                                    <label class="btn btn-outline-warning w-100 py-3" for="cash">
+                                        <i class="fas fa-money-bill-wave fa-2x d-block mb-2"></i>
+                                        <strong>Cash on Delivery</strong>
+                                    </label>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- M-Pesa Payment Details -->
+                        <div id="mpesaDetails" class="payment-details d-none mb-4">
+                            <div class="alert alert-info">
+                                <i class="fas fa-info-circle me-2"></i>
+                                <strong>M-Pesa Payment Instructions:</strong>
+                                <ol class="mb-0 mt-2">
+                                    <li>Contact us to confirm your order</li>
+                                    <li>We'll provide M-Pesa payment details</li>
+                                </ol>
+                            </div>
+                            <div class="mb-3">
+                                <label class="form-label">M-Pesa Phone Number <span class="text-danger">*</span></label>
+                                <input type="tel" name="mpesa_phone" class="form-control" placeholder="254712345678">
+                            </div>
+                        </div>
+
+                        <!-- Airtel Money Payment Details -->
+                        <div id="airtelDetails" class="payment-details d-none mb-4">
+                            <div class="alert alert-info">
+                                <i class="fas fa-info-circle me-2"></i>
+                                <strong>Airtel Money Payment Instructions:</strong>
+                                <ol class="mb-0 mt-2">
+                                    <li>Contact us to confirm your order</li>
+                                    <li>We'll provide Airtel Money payment details</li>
+                                </ol>
+                            </div>
+                            <div class="mb-3">
+                                <label class="form-label">Airtel Money Phone Number <span class="text-danger">*</span></label>
+                                <input type="tel" name="airtel_phone" class="form-control" placeholder="254734567890">
+                            </div>
+                        </div>
+
+                        <!-- Cash on Delivery Details -->
+                        <div id="cashDetails" class="payment-details d-none mb-4">
+                            <div class="alert alert-warning">
+                                <i class="fas fa-info-circle me-2"></i>
+                                <strong>Cash on Delivery:</strong>
+                                <p class="mb-0 mt-2">Payment will be collected upon delivery.</p>
+                            </div>
+                        </div>
+
+                        <!-- Hidden field for cart data -->
+                        <input type="hidden" name="cart_data" id="cartDataInput" value="[]">
+
+                        <!-- Additional Notes -->
+                        <div class="mb-3">
+                            <label class="form-label">Order Details / Additional Notes <span class="text-danger">*</span></label>
+                            <textarea name="order_notes" class="form-control" rows="3" placeholder="Please specify what you want to order and quantity..." required></textarea>
+                        </div>
+                    </form>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-outline-secondary" data-bs-dismiss="modal">Cancel</button>
+                    <button type="submit" form="paymentForm" class="btn btn-farm-green">
+                        <i class="fas fa-check-circle me-2"></i>Submit Order Request
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
 
     <!-- Login Modal -->
     <div class="modal fade" id="loginModal" tabindex="-1">
@@ -551,5 +693,6 @@
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
     <!-- Custom JavaScript -->
     <script src="{% static 'js/main.js' %}"></script>
+    <script src="{% static 'js/payment.js' %}"></script>
 </body>
 </html>
