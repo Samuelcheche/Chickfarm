@@ -8,7 +8,7 @@ class customer(models.Model):
     password = models.CharField(max_length=20)
     phone = models.CharField(max_length=10)
     location = models.CharField(max_length=20)
-    message = models.TextField()
+    message = models.TextField(blank=True, default="")
 
     def __str__(self):
         return self.name + " " + self.surname
@@ -18,7 +18,7 @@ class order(models.Model):
     number_of_trays =  models.IntegerField()
     customer = models.ForeignKey(customer, on_delete=models.CASCADE)
     order_date = models.DateTimeField(auto_now_add=True)
-    message = models.TextField()
+    message = models.TextField(blank=True, default="")
 
     
     def __str__(self):
@@ -30,6 +30,9 @@ class register(models.Model):
     Email_address = models.EmailField(max_length=50)
     Password = models.CharField(max_length=20)
     Confirm_password = models.CharField(max_length=20)
+
+    def __str__(self):
+        return self.FullName
 
 
 
