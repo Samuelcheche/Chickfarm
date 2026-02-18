@@ -26,23 +26,23 @@ def products(request):
 def register(request):
     """ Show the registration form """
     if request.method == 'POST':
-        username = request.POST.get('username', '').strip()
+        email = request.POST.get('email', '').strip().lower()
         password = request.POST.get('password', '')
         confirm_password = request.POST.get('confirm_password', '')
 
         # Validate inputs
-        if not username or not password:
-            messages.error(request, "Username and password are required")
+        if not email or not password:
+            messages.error(request, "Email and password are required")
             return render(request, 'register.html')
 
         # Check the password
         if password == confirm_password:
             try:
                 # Check if user already exists
-                if User.objects.filter(username=username).exists():
-                    messages.error(request, "Username already exists")
+                if User.objects.filter(username=email).exists() or User.objects.filter(email=email).exists():
+                    messages.error(request, "Email already exists")
                 else:
-                    user = User.objects.create_user(username=username, password=password)
+                    user = User.objects.create_user(username=email, email=email, password=password)
                     messages.success(request, "Account created successfully! Please login.")
                     return redirect('/login')
             except Exception as e:
@@ -57,16 +57,16 @@ def register(request):
    
 def login_user(request):
     if request.method == "POST":
-        username = request.POST.get('username', '').strip()
+        email = request.POST.get('email', '').strip().lower()
         password = request.POST.get('password', '')
 
         # Validate inputs
-        if not username or not password:
-            messages.error(request, "Username and password are required")
+        if not email or not password:
+            messages.error(request, "Email and password are required")
             return render(request, 'login.html')
 
         # Authenticate user
-        user = authenticate(request, username=username, password=password)
+        user = authenticate(request, username=email, password=password)
 
         # Check if the user exists
         if user is not None:
@@ -79,6 +79,6 @@ def login_user(request):
             # For Normal Users
             return redirect('/index')
         else:
-            messages.error(request, "Invalid username or password. Please try again.")
+            messages.error(request, "Invalid email or password. Please try again.")
 
     return render(request, 'login.html')

@@ -498,7 +498,7 @@
                     <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
                 </div>
                 <div class="modal-body">
-                    <form method="post">
+                    <form method="post" action="{% url 'login' %}">
                         {% csrf_token %}    
                         <div class="mb-3">
                             <label class="form-label">Email address</label>
@@ -524,14 +524,10 @@
                     <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
                 </div>
                 <div class="modal-body">
-                    <form method="post">
+                    <form method="post" action="{% url 'register' %}">
                         {% csrf_token %}
 
 
-                        <div class="mb-3">
-                            <label class="form-label">Full Name</label>
-                            <input type="text" name="fullname" class="form-control" required>
-                        </div>
                         <div class="mb-3">
                             <label class="form-label">Email address</label>
                             <input type="email" name="email" class="form-control" required>
