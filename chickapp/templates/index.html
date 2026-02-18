@@ -73,13 +73,13 @@
     <!-- Hero Section with Carousel -->
     <section class="hero position-relative">
 
+
             {% if user.is_authenticated %}
               
                 <h2 class="alert alert-success">Welcome {{ user.username}}. You are logged in!</h2>
 
 
             {% endif %}
-
 
 
         <div id="heroCarousel" class="carousel slide carousel-fade position-absolute top-0 start-0 w-100 h-100" data-bs-ride="carousel" data-bs-interval="4000">

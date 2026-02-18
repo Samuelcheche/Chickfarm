@@ -74,7 +74,12 @@
 
 
      
-
+ <!-- Messages -->
+        {% for message in messages %}
+            <div class="alert alert-success mt-3 text-center">
+                {{ message }}
+            </div>
+        {% endfor %}
     
     <!-- FORM -->
     <form method="post">
