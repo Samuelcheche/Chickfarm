@@ -1,8 +1,12 @@
 from django.contrib import admin
-from chickapp.models import *
+from chickapp.models import customer, product, order, register
 
 
-# Register your models here.
-admin.site.register(customer)
+@admin.register(customer)
+class CustomerAdmin(admin.ModelAdmin):
+	exclude = ('password',)
+
+
+admin.site.register(product)
 admin.site.register(order)
 admin.site.register(register)

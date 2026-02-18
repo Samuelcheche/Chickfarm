@@ -61,12 +61,12 @@
                     <p class="text-secondary mb-0">Welcome back to Nyandiwa Smart Poultry</p>
                 </div>
                 <div>
-                    <button class="btn btn-farm-green me-2">
+                    <button class="btn btn-farm-green me-2" data-action="export" type="button">
                         <i class="fas fa-download me-2"></i>Export Data
                     </button>
-                    <button class="btn btn-farm-yellow">
+                    <a class="btn btn-farm-yellow" href="{% url 'products' %}">
                         <i class="fas fa-plus me-2"></i>New Order
-                    </button>
+                    </a>
                 </div>
             </div>
 
@@ -149,7 +149,7 @@
                         <div class="card-header bg-transparent py-3">
                             <div class="d-flex justify-content-between align-items-center">
                                 <h5 class="fw-bold mb-0">Recent Orders</h5>
-                                <button class="btn btn-sm btn-farm-green">View All</button>
+                                <a class="btn btn-sm btn-farm-green" href="{% url 'orders' %}">View All</a>
                             </div>
                         </div>
                         <div class="table-responsive">
@@ -165,46 +165,32 @@
                                     </tr>
                                 </thead>
                                 <tbody>
-                                    <tr>
-                                        <td>#ORD-2589</td>
-                                        <td>Alice Wanjiru</td>
-                                        <td>Medium Egg Tray</td>
-                                        <td>KSh 350</td>
-                                        <td><span class="badge bg-success">Delivered</span></td>
-                                        <td><button class="btn btn-sm btn-farm-green">Details</button></td>
-                                    </tr>
-                                    <tr>
-                                        <td>#ORD-2588</td>
-                                        <td>James Omondi</td>
-                                        <td>Large Egg Tray</td>
-                                        <td>KSh 420</td>
-                                        <td><span class="badge bg-warning">Processing</span></td>
-                                        <td><button class="btn btn-sm btn-farm-green">Details</button></td>
-                                    </tr>
-                                    <tr>
-                                        <td>#ORD-2587</td>
-                                        <td>Sarah Muthoni</td>
-                                        <td>Small Egg Tray</td>
-                                        <td>KSh 180</td>
-                                        <td><span class="badge bg-info">In Transit</span></td>
-                                        <td><button class="btn btn-sm btn-farm-green">Details</button></td>
-                                    </tr>
-                                    <tr>
-                                        <td>#ORD-2586</td>
-                                        <td>Peter Kimani</td>
-                                        <td>Medium Egg Tray</td>
-                                        <td>KSh 350</td>
-                                        <td><span class="badge bg-success">Delivered</span></td>
-                                        <td><button class="btn btn-sm btn-farm-green">Details</button></td>
-                                    </tr>
-                                    <tr>
-                                        <td>#ORD-2585</td>
-                                        <td>Mary Akinyi</td>
-                                        <td>Large Egg Tray</td>
-                                        <td>KSh 420</td>
-                                        <td><span class="badge bg-success">Delivered</span></td>
-                                        <td><button class="btn btn-sm btn-farm-green">Details</button></td>
-                                    </tr>
+                                    {% if recent_orders %}
+                                        {% for order in recent_orders %}
+                                            <tr>
+                                                <td>#{{ order.order_code }}</td>
+                                                <td>{{ order.customer.name }} {{ order.customer.surname }}</td>
+                                                <td>{{ order.product.name }}</td>
+                                                <td>KSh {{ order.amount }}</td>
+                                                <td>
+                                                    {% if order.status == 'delivered' %}
+                                                        <span class="badge bg-success">Delivered</span>
+                                                    {% elif order.status == 'processing' %}
+                                                        <span class="badge bg-warning">Processing</span>
+                                                    {% elif order.status == 'in_transit' %}
+                                                        <span class="badge bg-info">In Transit</span>
+                                                    {% else %}
+                                                        <span class="badge bg-danger">Cancelled</span>
+                                                    {% endif %}
+                                                </td>
+                                                <td><a class="btn btn-sm btn-farm-green" href="{% url 'orders' %}#{{ order.order_code }}">Details</a></td>
+                                            </tr>
+                                        {% endfor %}
+                                    {% else %}
+                                        <tr>
+                                            <td colspan="6" class="text-center text-secondary py-4">No orders yet.</td>
+                                        </tr>
+                                    {% endif %}
                                 </tbody>
                             </table>
                         </div>
@@ -217,7 +203,7 @@
                         <div class="card-header bg-transparent py-3">
                             <div class="d-flex justify-content-between align-items-center">
                                 <h5 class="fw-bold mb-0">Recent Activity</h5>
-                                <button class="btn btn-sm btn-farm-green">View All</button>
+                                <a class="btn btn-sm btn-farm-green" href="{% url 'orders' %}#activity">View All</a>
                             </div>
                         </div>
                         <div class="card-body">

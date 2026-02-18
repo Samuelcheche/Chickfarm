@@ -1,0 +1,405 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    {% load static %}
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Orders - Nyandiwa Smart Poultry Connect</title>
+
+    <link rel="icon" type="image/x-icon" href="{% static 'assets/images/image.png' %}">
+
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
+    <link href="{% static 'css/custom.css' %}" rel="stylesheet">
+</head>
+<body class="page-transition">
+    <nav class="navbar navbar-expand-lg bg-farm-green navbar-dark navbar-farm sticky-top shadow-lg">
+        <div class="container">
+            <a class="navbar-brand d-flex align-items-center" href="{% url 'index' %}">
+                <i class="fas fa-egg text-farm-yellow fs-4 me-2"></i>
+                <span class="fw-bold">Nyandiwa MOH Smart Poultry</span>
+            </a>
+
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav mx-auto">
+                    <li class="nav-item">
+                        <a class="nav-link px-3 fw-medium" href="{% url 'index' %}">Home</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link px-3 fw-medium" href="{% url 'products' %}">Products</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link px-3 fw-medium" href="{% url 'delivery' %}">Delivery</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link px-3 fw-medium" href="{% url 'dashboard' %}">Dashboard</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link px-3 fw-medium active" href="{% url 'orders' %}">Orders</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link px-3 fw-medium" href="{% url 'about' %}">About</a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+
+    <main class="py-4">
+        <div class="container">
+            <div class="d-flex flex-wrap justify-content-between align-items-center mb-4">
+                <div>
+                    <h1 class="h3 fw-bold mb-1">Orders</h1>
+                    <p class="text-secondary mb-0">Review and manage recent orders</p>
+                </div>
+                <div class="d-flex gap-2">
+                    <a class="btn btn-farm-green" href="{% url 'dashboard' %}">
+                        <i class="fas fa-arrow-left me-2"></i>Back to Dashboard
+                    </a>
+                    <a class="btn btn-farm-yellow" href="{% url 'products' %}">
+                        <i class="fas fa-plus me-2"></i>New Order
+                    </a>
+                    <button class="btn btn-outline-light" type="button" data-bs-toggle="modal" data-bs-target="#createCustomerModal">
+                        <i class="fas fa-user-plus me-2"></i>Add Customer
+                    </button>
+                </div>
+            </div>
+
+            {% if messages %}
+                <div class="mb-4">
+                    {% for message in messages %}
+                        <div class="alert alert-{{ message.tags }}" role="alert">
+                            {{ message }}
+                        </div>
+                    {% endfor %}
+                </div>
+            {% endif %}
+
+            <div class="card mb-4">
+                <div class="card-header bg-transparent py-3">
+                    <h5 class="fw-bold mb-0">Create Order</h5>
+                </div>
+                <div class="card-body">
+                    <form method="post" class="row g-3">
+                        {% csrf_token %}
+                        <input type="hidden" name="action" value="create_order">
+                        <div class="col-md-4">
+                            <label class="form-label">Customer</label>
+                            <select class="form-select" name="customer" required>
+                                <option value="">Select customer</option>
+                                {% for customer in customers %}
+                                    <option value="{{ customer.id }}">{{ customer.name }} {{ customer.surname }}</option>
+                                {% endfor %}
+                            </select>
+                        </div>
+                        <div class="col-md-4">
+                            <label class="form-label">Product</label>
+                            <select class="form-select" name="product" required>
+                                <option value="">Select product</option>
+                                {% for product in products %}
+                                    <option value="{{ product.id }}">{{ product.name }}</option>
+                                {% endfor %}
+                            </select>
+                        </div>
+                        <div class="col-md-2">
+                            <label class="form-label">Trays</label>
+                            <input type="number" min="1" class="form-control" name="number_of_trays" required>
+                        </div>
+                        <div class="col-md-2">
+                            <label class="form-label">Status</label>
+                            <select class="form-select" name="status">
+                                {% for value, label in status_choices %}
+                                    <option value="{{ value }}">{{ label }}</option>
+                                {% endfor %}
+                            </select>
+                        </div>
+                        <div class="col-12">
+                            <button class="btn btn-farm-green" type="submit">
+                                <i class="fas fa-plus me-2"></i>Create Order
+                            </button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+
+            <div class="card mb-4">
+                <div class="card-header bg-transparent py-3">
+                    <div class="d-flex justify-content-between align-items-center">
+                        <h5 class="fw-bold mb-0">All Orders</h5>
+                        <button class="btn btn-sm btn-farm-green" data-action="export" type="button">Export Data</button>
+                    </div>
+                </div>
+                <div class="table-responsive">
+                    <table class="table align-middle mb-0">
+                        <thead class="bg-light">
+                            <tr>
+                                <th>Order ID</th>
+                                <th>Customer</th>
+                                <th>Product</th>
+                                <th>Amount</th>
+                                <th>Status</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% if orders %}
+                                {% for order in orders %}
+                                    <tr id="{{ order.order_code }}">
+                                        <td>#{{ order.order_code }}</td>
+                                        <td>{{ order.customer.name }} {{ order.customer.surname }}</td>
+                                        <td>{{ order.product.name }}</td>
+                                        <td>KSh {{ order.amount }}</td>
+                                        <td>
+                                            {% if order.status == 'delivered' %}
+                                                <span class="badge bg-success">Delivered</span>
+                                            {% elif order.status == 'processing' %}
+                                                <span class="badge bg-warning">Processing</span>
+                                            {% elif order.status == 'in_transit' %}
+                                                <span class="badge bg-info">In Transit</span>
+                                            {% else %}
+                                                <span class="badge bg-danger">Cancelled</span>
+                                            {% endif %}
+                                        </td>
+                                    </tr>
+                                {% endfor %}
+                            {% else %}
+                                <tr>
+                                    <td colspan="5" class="text-center text-secondary py-4">No orders yet.</td>
+                                </tr>
+                            {% endif %}
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+
+            <div class="card" id="activity">
+                <div class="card-header bg-transparent py-3">
+                    <h5 class="fw-bold mb-0">Recent Activity</h5>
+                </div>
+                <div class="card-body">
+                    <div class="timeline">
+                        <div class="timeline-item mb-4 pb-4 border-bottom">
+                            <div class="d-flex align-items-center mb-2">
+                                <div class="rounded-circle bg-success bg-opacity-10 p-2 me-3">
+                                    <i class="fas fa-check text-success"></i>
+                                </div>
+                                <div>
+                                    <h6 class="fw-bold mb-0">Order Delivered</h6>
+                                    <small class="text-secondary">2 minutes ago</small>
+                                </div>
+                            </div>
+                            <p class="text-secondary mb-0">Order #ORD-2589 has been successfully delivered to Alice Wanjiru</p>
+                        </div>
+
+                        <div class="timeline-item mb-4 pb-4 border-bottom">
+                            <div class="d-flex align-items-center mb-2">
+                                <div class="rounded-circle bg-warning bg-opacity-10 p-2 me-3">
+                                    <i class="fas fa-truck text-warning"></i>
+                                </div>
+                                <div>
+                                    <h6 class="fw-bold mb-0">Order Shipped</h6>
+                                    <small class="text-secondary">1 hour ago</small>
+                                </div>
+                            </div>
+                            <p class="text-secondary mb-0">Order #ORD-2587 has been picked up by delivery partner</p>
+                        </div>
+
+                        <div class="timeline-item mb-4 pb-4 border-bottom">
+                            <div class="d-flex align-items-center mb-2">
+                                <div class="rounded-circle bg-primary bg-opacity-10 p-2 me-3">
+                                    <i class="fas fa-shopping-cart text-primary"></i>
+                                </div>
+                                <div>
+                                    <h6 class="fw-bold mb-0">New Order</h6>
+                                    <small class="text-secondary">2 hours ago</small>
+                                </div>
+                            </div>
+                            <p class="text-secondary mb-0">James Omondi placed an order for Large Egg Tray</p>
+                        </div>
+
+                        <div class="timeline-item">
+                            <div class="d-flex align-items-center mb-2">
+                                <div class="rounded-circle bg-info bg-opacity-10 p-2 me-3">
+                                    <i class="fas fa-star text-info"></i>
+                                </div>
+                                <div>
+                                    <h6 class="fw-bold mb-0">New Review</h6>
+                                    <small class="text-secondary">3 hours ago</small>
+                                </div>
+                            </div>
+                            <p class="text-secondary mb-0">Sarah Muthoni left a 5-star review on Small Egg Tray</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <div class="modal fade" id="createCustomerModal" tabindex="-1" aria-hidden="true">
+        <div class="modal-dialog modal-lg">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">Create Customer</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <form method="post" class="row g-3">
+                        {% csrf_token %}
+                        <input type="hidden" name="action" value="create_customer">
+                        <div class="col-md-6">
+                            <label class="form-label">First Name</label>
+                            <input type="text" class="form-control" name="name" required>
+                        </div>
+                        <div class="col-md-6">
+                            <label class="form-label">Surname</label>
+                            <input type="text" class="form-control" name="surname" required>
+                        </div>
+                        <div class="col-md-6">
+                            <label class="form-label">Email</label>
+                            <input type="email" class="form-control" name="email" required>
+                        </div>
+                        <div class="col-md-6">
+                            <label class="form-label">Password</label>
+                            <input type="password" class="form-control" name="password" required>
+                        </div>
+                        <div class="col-md-6">
+                            <label class="form-label">Phone</label>
+                            <input type="text" class="form-control" name="phone" required>
+                        </div>
+                        <div class="col-md-6">
+                            <label class="form-label">Location</label>
+                            <input type="text" class="form-control" name="location" required>
+                        </div>
+                        <div class="col-12">
+                            <label class="form-label">Message (optional)</label>
+                            <textarea class="form-control" name="message" rows="3"></textarea>
+                        </div>
+                        <div class="col-12 d-flex justify-content-end gap-2">
+                            <button type="button" class="btn btn-outline-secondary" data-bs-dismiss="modal">Cancel</button>
+                            <button type="submit" class="btn btn-farm-green">
+                                <i class="fas fa-user-plus me-2"></i>Create Customer
+                            </button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <footer class="bg-dark text-white py-5 mt-5">
+        <div class="container">
+            <div class="row gy-4">
+                <div class="col-md-3">
+                    <h3 class="h5 fw-bold mb-3 d-flex align-items-center">
+                        <i class="fas fa-egg text-farm-yellow me-2"></i>
+                        Nyandiwa Smart Poultry
+                    </h3>
+                    <p class="text-secondary">Fresh eggs directly from our farm in Siaya County.</p>
+                    <div class="d-flex gap-3">
+                        <a href="#" class="social-icon text-decoration-none">
+                            <i class="fab fa-facebook-f"></i>
+                        </a>
+                        <a href="#" class="social-icon text-decoration-none">
+                            <i class="fab fa-twitter"></i>
+                        </a>
+                        <a href="#" class="social-icon text-decoration-none">
+                            <i class="fab fa-instagram"></i>
+                        </a>
+                        <a href="#" class="social-icon text-decoration-none">
+                            <i class="fab fa-whatsapp"></i>
+                        </a>
+                    </div>
+                </div>
+
+                <div class="col-md-3">
+                    <h4 class="h6 fw-bold mb-3">Quick Links</h4>
+                    <ul class="list-unstyled mb-0">
+                        <li class="mb-2">
+                            <a href="{% url 'index' %}" class="text-secondary text-decoration-none hover-yellow d-inline-flex align-items-center">
+                                <i class="fas fa-chevron-right small me-2"></i>Home
+                            </a>
+                        </li>
+                        <li class="mb-2">
+                            <a href="{% url 'products' %}" class="text-secondary text-decoration-none hover-yellow d-inline-flex align-items-center">
+                                <i class="fas fa-chevron-right small me-2"></i>Products
+                            </a>
+                        </li>
+                        <li class="mb-2">
+                            <a href="{% url 'delivery' %}" class="text-secondary text-decoration-none hover-yellow d-inline-flex align-items-center">
+                                <i class="fas fa-chevron-right small me-2"></i>Delivery
+                            </a>
+                        </li>
+                        <li class="mb-2">
+                            <a href="{% url 'dashboard' %}" class="text-secondary text-decoration-none hover-yellow d-inline-flex align-items-center">
+                                <i class="fas fa-chevron-right small me-2"></i>Dashboard
+                            </a>
+                        </li>
+                        <li>
+                            <a href="{% url 'orders' %}" class="text-secondary text-decoration-none hover-yellow d-inline-flex align-items-center">
+                                <i class="fas fa-chevron-right small me-2"></i>Orders
+                            </a>
+                        </li>
+                    </ul>
+                </div>
+
+                <div class="col-md-3">
+                    <h4 class="h6 fw-bold mb-3">Contact Info</h4>
+                    <ul class="list-unstyled mb-0">
+                        <li class="d-flex mb-2">
+                            <i class="fas fa-map-marker-alt text-farm-yellow me-2 mt-1"></i>
+                            <span class="text-secondary">Siaya Nyandiwa, Kenya</span>
+                        </li>
+                        <li class="d-flex mb-2">
+                            <i class="fas fa-phone text-farm-yellow me-2 mt-1"></i>
+                            <span class="text-secondary">+254 725551199</span>
+                        </li>
+                        <li class="d-flex">
+                            <i class="fas fa-envelope text-farm-yellow me-2 mt-1"></i>
+                            <span class="text-secondary">samuelonyango932@gmail.com</span>
+                        </li>
+                    </ul>
+                </div>
+
+                <div class="col-md-3">
+                    <h4 class="h6 fw-bold mb-3">Payment Methods</h4>
+                    <div class="d-flex flex-wrap gap-2 mb-3">
+                        <span class="badge bg-white text-farm-green fw-bold">M-Pesa</span>
+                        <span class="badge bg-white text-farm-green fw-bold">Airtel Money</span>
+                        <span class="badge bg-white text-farm-green fw-bold">Cash</span>
+                    </div>
+
+                    <h4 class="h6 fw-bold mb-3">Subscribe to Newsletter</h4>
+                    <form class="needs-validation" novalidate>
+                        <div class="input-group">
+                            <input type="email" class="form-control" placeholder="Your email" required>
+                            <button class="btn btn-farm-yellow" type="submit">
+                                <i class="fas fa-paper-plane"></i>
+                            </button>
+                            <div class="invalid-feedback">
+                                Please enter a valid email address
+                            </div>
+                        </div>
+                    </form>
+                </div>
+            </div>
+
+            <div class="border-top border-secondary mt-4 pt-4 text-center text-secondary">
+                <p class="mb-0">&copy; 2025 Nyandiwa Smart Poultry Connect. All rights reserved.</p>
+            </div>
+        </div>
+    </footer>
+
+    <button id="backToTop" class="btn btn-farm-green rounded-circle shadow">
+        <i class="fas fa-arrow-up"></i>
+    </button>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="{% static 'js/dashboard.js' %}"></script>
+    <script src="{% static 'js/main.js' %}"></script>
+    <script src="{% static 'js/auth.js' %}"></script>
+    <script src="{% static 'js/dashboard-auth.js' %}"></script>
+</body>
+</html>
