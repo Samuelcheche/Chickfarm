@@ -28,7 +28,7 @@ SECRET_KEY = config('SECRET_KEY', default='django-insecure-3(*uq^b9ab&5+(%=cm1@b
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = config('DEBUG', default=True, cast=bool)
 
-ALLOWED_HOSTS = config('ALLOWED_HOSTS', default='localhost,127.0.0.1', cast=Csv())
+ALLOWED_HOSTS = ['chickfarm-4.onrender.com', 'localhost', '127.0.0.1']
 
 
 # Application definition
@@ -131,9 +131,15 @@ USE_TZ = True
 
 STATIC_URL = '/static/'
 STATIC_ROOT = BASE_DIR / 'staticfiles'
-STATICFILES_DIRS = [
-    BASE_DIR / 'static',
-]
+
+# Only include STATICFILES_DIRS in development, not production
+# WhiteNoise will serve from STATIC_ROOT in production
+if DEBUG:
+    STATICFILES_DIRS = [
+        BASE_DIR / 'static',
+    ]
+else:
+    STATICFILES_DIRS = []
 
 # WhiteNoise configuration for serving static files
 STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage'
@@ -190,6 +196,12 @@ if not DEBUG:
     SECURE_HSTS_SECONDS = 31536000
     SECURE_HSTS_INCLUDE_SUBDOMAINS = True
     SECURE_HSTS_PRELOAD = True
+    
+    # Allow Render domain and callback URLs
+    CSRF_TRUSTED_ORIGINS = [
+        'https://chickfarm-4.onrender.com',
+        'https://*.onrender.com',
+    ]
 
 
 
