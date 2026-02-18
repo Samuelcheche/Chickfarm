@@ -1,0 +1,38 @@
+services:
+  # Web Service
+  - type: web
+    name: chickenfarm
+    runtime: python
+    buildCommand: "./build.sh"
+    startCommand: "gunicorn ChickenFarm.wsgi:application"
+    envVars:
+      - key: PYTHON_VERSION
+        value: 3.11.0
+      - key: SECRET_KEY
+        generateValue: true
+      - key: DEBUG
+        value: False
+      - key: ALLOWED_HOSTS
+        sync: false
+      - key: DATABASE_URL
+        fromDatabase:
+          name: chickenfarm-db
+          property: connectionString
+      - key: MPESA_ENVIRONMENT
+        value: production
+      - key: MPESA_CONSUMER_KEY
+        sync: false
+      - key: MPESA_CONSUMER_SECRET
+        sync: false
+      - key: MPESA_SHORTCODE
+        sync: false
+      - key: MPESA_PASSKEY
+        sync: false
+      - key: MPESA_CALLBACK_URL
+        sync: false
+
+  # PostgreSQL Database
+  - type: pgsql
+    name: chickenfarm-db
+    databaseName: chickenfarm
+    plan: free
