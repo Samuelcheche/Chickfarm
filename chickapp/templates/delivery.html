@@ -18,44 +18,52 @@
 </head>
 <body class="page-transition">
     <!-- Navigation -->
-    <nav class="navbar navbar-expand-lg bg-farm-green navbar-dark navbar-farm sticky-top shadow-lg">
-        <div class="container">
-            <a class="navbar-brand d-flex align-items-center" href="{% url 'index' %}">
-                <i class="fas fa-egg text-farm-yellow fs-4 me-2"></i>
-                <span class="fw-bold">Nyandiwa MOH Smart Poultry</span>
+    <nav class="navbar navbar-expand-lg navbar-dark navbar-farm sticky-top">
+        <div class="container-fluid px-lg-5">
+            <a class="navbar-brand d-flex align-items-center fw-bold" href="{% url 'index' %}">
+                <div class="brand-icon-wrapper me-2">
+                    <i class="fas fa-egg"></i>
+                </div>
+                <span>Nyandiwa Smart Poultry</span>
             </a>
             
-            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+            <button class="navbar-toggler border-0" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
                 <span class="navbar-toggler-icon"></span>
             </button>
             
             <div class="collapse navbar-collapse" id="navbarNav">
-                <ul class="navbar-nav mx-auto">
+                <ul class="navbar-nav ms-auto align-items-center gap-3">
                     <li class="nav-item">
-                        <a class="nav-link px-3 fw-medium" href="{% url 'index' %}">Home</a>
+                        <a class="nav-link nav-link-modern" href="{% url 'index' %}">
+                            <i class="fas fa-home me-2"></i>Home
+                        </a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link px-3 fw-medium" href="{% url 'products' %}">Products</a>
+                        <a class="nav-link nav-link-modern" href="{% url 'products' %}">
+                            <i class="fas fa-box me-2"></i>Products
+                        </a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link px-3 fw-medium active" href="{% url 'delivery' %}">Delivery</a>
+                        <a class="nav-link nav-link-modern active" href="{% url 'delivery' %}">
+                            <i class="fas fa-truck me-2"></i>Delivery
+                        </a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link px-3 fw-medium" href="{% url 'dashboard' %}">Dashboard</a>
+                        <a class="nav-link nav-link-modern" href="{% url 'about' %}">
+                            <i class="fas fa-info-circle me-2"></i>About
+                        </a>
+                    </li>
+                    <li class="nav-item border-start ps-3 ms-2">
+                        <button class="btn btn-nav-primary btn-sm" data-bs-toggle="modal" data-bs-target="#loginModal">
+                            <i class="fas fa-sign-in-alt me-2"></i>Login
+                        </button>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link px-3 fw-medium" href="{% url 'about' %}">About</a>
+                        <button class="btn btn-nav-secondary btn-sm" data-bs-toggle="modal" data-bs-target="#registerModal">
+                            <i class="fas fa-user-plus me-2"></i>Register
+                        </button>
                     </li>
                 </ul>
-                
-                <div class="d-flex gap-2">
-                    <button class="btn btn-farm-green" data-bs-toggle="modal" data-bs-target="#loginModal">
-                        <i class="fas fa-sign-in-alt me-2"></i>Login
-                    </button>
-                    <button class="btn btn-farm-yellow" data-bs-toggle="modal" data-bs-target="#registerModal">
-                        <i class="fas fa-user-plus me-2"></i>Register
-                    </button>
-                </div>
             </div>
         </div>
     </nav>

@@ -5,139 +5,337 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-    <title>MOH FARM | Login</title>
+    <title>Login - Nyandiwa Smart Poultry</title>
 
     <!-- Bootstrap 5 -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
-
-    <!-- Bootstrap Icons -->
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css" rel="stylesheet">
+    <!-- Font Awesome -->
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
 
     <style>
+        :root {
+            --farm-green: #2d5016;
+            --farm-yellow: #ffc107;
+        }
+
+        * {
+            font-family: 'Poppins', sans-serif;
+        }
+
         body {
             min-height: 100vh;
             display: flex;
             align-items: center;
             justify-content: center;
-            background: linear-gradient(135deg, #198754, #20c997);
-            font-family: "Segoe UI", sans-serif;
+            background: linear-gradient(135deg, #2d5016 0%, #3d6a1f 100%);
+            position: relative;
+            overflow: hidden;
+        }
+
+        body::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            right: -10%;
+            width: 500px;
+            height: 500px;
+            background: linear-gradient(135deg, rgba(255, 193, 7, 0.1), transparent);
+            border-radius: 50%;
+            z-index: 0;
+        }
+
+        .login-container {
+            position: relative;
+            z-index: 1;
+            width: 100%;
+            max-width: 450px;
+            padding: 20px;
         }
 
         .login-card {
-            width: 100%;
-            max-width: 420px;
-            padding: 40px;
-            border-radius: 20px;
-            background: rgba(255,255,255,0.95);
-            backdrop-filter: blur(10px);
-            box-shadow: 0 20px 45px rgba(0,0,0,0.25);
-            transition: 0.3s;
+            background: white;
+            border-radius: 16px;
+            box-shadow: 0 20px 60px rgba(45, 80, 22, 0.2);
+            overflow: hidden;
+            animation: slideUp 0.6s ease;
         }
 
-        .login-card:hover {
-            transform: translateY(-5px);
+        @keyframes slideUp {
+            from {
+                opacity: 0;
+                transform: translateY(40px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .login-header {
+            background: linear-gradient(135deg, #2d5016 0%, #3d6a1f 100%);
+            color: white;
+            padding: 2.5rem 2rem;
+            text-align: center;
         }
 
         .logo {
-            width: 90px;
-            height: 90px;
+            width: 80px;
+            height: 80px;
             object-fit: cover;
-            border-radius: 50%;
-            margin-bottom: 15px;
+            border-radius: 16px;
+            background: rgba(255, 255, 255, 0.1);
+            padding: 8px;
+            margin-bottom: 1.5rem;
+            border: 2px solid rgba(255, 193, 7, 0.3);
+        }
+
+        .login-header h4 {
+            font-weight: 700;
+            margin-bottom: 0.5rem;
+            font-size: 1.8rem;
+        }
+
+        .login-header p {
+            opacity: 0.9;
+            font-size: 0.95rem;
+        }
+
+        .login-body {
+            padding: 2rem;
+        }
+
+        .form-group {
+            margin-bottom: 1.5rem;
+        }
+
+        .form-label {
+            font-weight: 600;
+            color: #2d5016;
+            font-size: 0.9rem;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            margin-bottom: 0.7rem;
+            display: block;
         }
 
         .form-control {
-            border-radius: 12px;
-        }
-
-        .input-group-text {
-            border-radius: 12px 0 0 12px;
+            border-radius: 10px;
+            border: 1.5px solid #e9ecef;
+            padding: 0.9rem 1.1rem;
+            font-size: 0.95rem;
+            transition: all 0.3s ease;
             background: #f8f9fa;
         }
 
-        .login_btn {
-            border-radius: 12px;
-            padding: 12px;
+        .form-control:focus {
+            border-color: var(--farm-green);
+            box-shadow: 0 0 0 0.3rem rgba(45, 80, 22, 0.15);
+            background: white;
+        }
+
+        .input-group-text {
+            border-radius: 10px 0 0 10px;
+            background: #f8f9fa;
+            border: 1.5px solid #e9ecef;
+            color: var(--farm-green);
             font-weight: 600;
         }
 
-        .title {
+        .toggle-password {
+            border-radius: 0 10px 10px 0;
+            background: #f8f9fa;
+            border: 1.5px solid #e9ecef;
+            border-left: none;
+            color: var(--farm-green);
+            transition: all 0.3s ease;
+            cursor: pointer;
+        }
+
+        .toggle-password:hover {
+            background: white;
+        }
+
+        .form-check {
+            margin-bottom: 1.5rem;
+        }
+
+        .form-check-input {
+            width: 18px;
+            height: 18px;
+            border-radius: 4px;
+            border: 2px solid #e9ecef;
+            cursor: pointer;
+        }
+
+        .form-check-input:checked {
+            background-color: var(--farm-green);
+            border-color: var(--farm-green);
+        }
+
+        .form-check-label {
+            margin-top: 2px;
+            font-size: 0.95rem;
+            color: #6c757d;
+            cursor: pointer;
+        }
+
+        .login-btn {
+            border-radius: 10px;
+            padding: 11px;
             font-weight: 700;
-            color: #198754;
+            font-size: 1rem;
+            letter-spacing: 0.5px;
+            background: linear-gradient(135deg, #2d5016, #3d6a1f);
+            border: none;
+            color: white;
+            transition: all 0.3s ease;
+        }
+
+        .login-btn:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 8px 20px rgba(45, 80, 22, 0.3);
+            color: white;
+        }
+
+        .login-btn:active {
+            transform: translateY(-1px);
+        }
+
+        .alert {
+            border-radius: 10px;
+            border: none;
+            margin-bottom: 1.5rem;
+        }
+
+        .alert-danger {
+            background: rgba(220, 53, 69, 0.1);
+            color: #dc3545;
+        }
+
+        .alert-success {
+            background: rgba(40, 167, 69, 0.1);
+            color: #28a745;
+        }
+
+        .login-footer {
+            text-align: center;
+            padding: 1.5rem 2rem;
+            background: #f8f9fa;
+            border-top: 1px solid #e9ecef;
+            font-size: 0.95rem;
+        }
+
+        .login-footer a {
+            color: var(--farm-green);
+            text-decoration: none;
+            font-weight: 600;
+            transition: all 0.3s ease;
+        }
+
+        .login-footer a:hover {
+            color: var(--farm-yellow);
+            text-decoration: underline;
+        }
+
+        .text-muted {
+            color: #6c757d !important;
+        }
+
+        .password-toggle-icon {
+            cursor: pointer;
+            color: var(--farm-green);
+            font-weight: 600;
+        }
+
+        @media (max-width: 768px) {
+            .login-header {
+                padding: 2rem 1.5rem;
+            }
+            .login-body {
+                padding: 1.5rem;
+            }
         }
     </style>
 </head>
 
 <body>
 
-<div class="login-card">
+<div class="login-container">
+    <div class="login-card">
+        <!-- Header -->
+        <div class="login-header">
+            <img src="{% static 'assets/images/image.png' %}" class="logo" alt="Nyandiwa Logo">
+            <h4>Welcome Back</h4>
+            <p>Login to your Nyandiwa Smart Poultry account</p>
+        </div>
 
-    <!-- Logo -->
-    <div class="text-center">
-        <img src="{% static 'assets/images/image.png' %}" class="logo" alt="Logo">
-        <h4 class="title">Welcome Back</h4>
-        <p class="text-muted small">Login to your MOH Farm account</p>
-    </div>
-
-    <!-- Messages -->
-    {% if messages %}
-        {% for message in messages %}
-            {% if message.tags == 'error' %}
-                <div class="alert alert-danger alert-dismissible fade show" role="alert">
-                    {{ message }}
-                    <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
-                </div>
-            {% else %}
-                <div class="alert alert-success alert-dismissible fade show" role="alert">
-                    {{ message }}
-                    <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
-                </div>
+        <!-- Body -->
+        <div class="login-body">
+            <!-- Messages -->
+            {% if messages %}
+                {% for message in messages %}
+                    {% if message.tags == 'error' %}
+                        <div class="alert alert-danger alert-dismissible fade show" role="alert">
+                            <i class="fas fa-exclamation-circle me-2"></i>{{ message }}
+                            <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+                        </div>
+                    {% else %}
+                        <div class="alert alert-success alert-dismissible fade show" role="alert">
+                            <i class="fas fa-check-circle me-2"></i>{{ message }}
+                            <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+                        </div>
+                    {% endif %}
+                {% endfor %}
             {% endif %}
-        {% endfor %}
-    {% endif %}
 
-    <!-- FORM -->
-    <form method="post">
-        {% csrf_token %}
+            <!-- Login Form -->
+            <form method="post" id="loginForm">
+                {% csrf_token %}
 
-        <!-- Email -->
-        <div class="input-group mb-3">
-            <span class="input-group-text"><i class="bi bi-person"></i></span>
-            <input type="email" name="email" class="form-control" placeholder="Email" required>
+                <!-- Email -->
+                <div class="form-group">
+                    <label class="form-label" for="email_input">Email Address</label>
+                    <div class="input-group">
+                        <span class="input-group-text"><i class="fas fa-envelope"></i></span>
+                        <input type="email" id="email_input" name="email" class="form-control" placeholder="your@email.com" required>
+                    </div>
+                </div>
+
+                <!-- Password -->
+                <div class="form-group">
+                    <label class="form-label" for="password_input">Password</label>
+                    <div class="input-group">
+                        <span class="input-group-text"><i class="fas fa-lock"></i></span>
+                        <input type="password" id="password_input" name="password" class="form-control" placeholder="••••••••" required>
+                        <button class="btn toggle-password" type="button" onclick="togglePassword()">
+                            <i id="toggle-icon" class="fas fa-eye"></i>
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Remember Me -->
+                <div class="form-check">
+                    <input type="checkbox" class="form-check-input" id="remember" name="remember">
+                    <label class="form-check-label" for="remember">Remember me for next time</label>
+                </div>
+
+                <!-- Login Button -->
+                <button type="submit" class="btn login-btn w-100">
+                    <i class="fas fa-sign-in-alt me-2"></i>Login Now
+                </button>
+            </form>
         </div>
 
-        <!-- Password -->
-        <div class="input-group mb-3">
-            <span class="input-group-text"><i class="bi bi-lock"></i></span>
-            <input type="password" id="password" name="password" class="form-control" placeholder="Password" required>
-            <button class="btn btn-outline-secondary" type="button" onclick="togglePass()">
-                <i class="bi bi-eye"></i>
-            </button>
+        <!-- Footer -->
+        <div class="login-footer">
+            <div class="mb-2">
+                Don't have an account? <a href="{% url 'register' %}">Create one now</a>
+            </div>
+            <small><a href="#" class="text-muted">Forgot your password?</a></small>
         </div>
-
-        <!-- Remember -->
-        <div class="form-check mb-3">
-            <input type="checkbox" class="form-check-input" id="remember">
-            <label class="form-check-label" for="remember">Remember me</label>
-        </div>
-
-        <!-- Submit -->
-        <div class="d-grid">
-            <button type="submit" class="btn btn-success login_btn">
-                Login
-            </button>
-        </div>
-
-    </form>
-
-    <!-- Links -->
-    <div class="text-center mt-4 small">
-        Don't have an account?
-        <a href="{% url 'register' %}" class="text-success fw-semibold">Sign Up</a>
-        <br>
-        <a href="#" class="text-muted">Forgot your password?</a>
     </div>
-
 </div>
 
 
@@ -145,9 +343,19 @@
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
 
 <script>
-    function togglePass() {
-        const pass = document.getElementById("password");
-        pass.type = pass.type === "password" ? "text" : "password";
+    function togglePassword() {
+        const passwordInput = document.getElementById("password_input");
+        const toggleIcon = document.getElementById("toggle-icon");
+        
+        if (passwordInput.type === "password") {
+            passwordInput.type = "text";
+            toggleIcon.classList.remove("fa-eye");
+            toggleIcon.classList.add("fa-eye-slash");
+        } else {
+            passwordInput.type = "password";
+            toggleIcon.classList.remove("fa-eye-slash");
+            toggleIcon.classList.add("fa-eye");
+        }
     }
 </script>
 

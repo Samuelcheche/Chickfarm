@@ -21,62 +21,69 @@
 </head>
 <body class="page-transition">
     <!-- Navigation -->
-    <nav class="navbar navbar-expand-lg bg-farm-green navbar-dark navbar-farm sticky-top shadow-lg">
-        <div class="container">
-            <a class="navbar-brand d-flex align-items-center" href="index.html">
-                <i class="fas fa-egg text-farm-yellow fs-4 me-2"></i>
-                <span class="fw-bold">Nyandiwa MOH Smart Poultry</span>
+    <nav class="navbar navbar-expand-lg navbar-dark navbar-farm sticky-top">
+        <div class="container-fluid px-lg-5">
+            <a class="navbar-brand d-flex align-items-center fw-bold" href="{% url 'index' %}">
+                <div class="brand-icon-wrapper me-2">
+                    <i class="fas fa-egg"></i>
+                </div>
+                <span>Nyandiwa Smart Poultry</span>
             </a>
             
-            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+            <button class="navbar-toggler border-0" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
                 <span class="navbar-toggler-icon"></span>
             </button>
             
             <div class="collapse navbar-collapse" id="navbarNav">
-                <ul class="navbar-nav mx-auto">
+                <ul class="navbar-nav ms-auto align-items-center gap-3">
                     <li class="nav-item">
-                        <a class="nav-link px-3 fw-medium active" href="{% url 'index' %}">
-                            <i class="fas fa-home me-1"></i> Home
+                        <a class="nav-link nav-link-modern active" href="{% url 'index' %}">
+                            <i class="fas fa-home me-2"></i>Home
                         </a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link px-3 fw-medium" href="{% url 'products' %}">
-                            <i class="fas fa-box me-1"></i> Products
+                        <a class="nav-link nav-link-modern" href="{% url 'products' %}">
+                            <i class="fas fa-box me-2"></i>Products
                         </a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link px-3 fw-medium" href="{% url 'delivery' %}">
-                            <i class="fas fa-truck me-1"></i> Delivery
+                        <a class="nav-link nav-link-modern" href="{% url 'delivery' %}">
+                            <i class="fas fa-truck me-2"></i>Delivery
                         </a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link px-3" href="{% url 'about' %}">
-                            <i class="fas fa-info-circle me-1"></i> About
+                        <a class="nav-link nav-link-modern" href="{% url 'about' %}">
+                            <i class="fas fa-info-circle me-2"></i>About
                         </a>
+                    </li>
+                    <li class="nav-item border-start ps-3 ms-2">
+                        <button class="btn btn-nav-primary btn-sm" data-bs-toggle="modal" data-bs-target="#loginModal">
+                            <i class="fas fa-sign-in-alt me-2"></i>Login
+                        </button>
+                    </li>
+                    <li class="nav-item">
+                        <button class="btn btn-nav-secondary btn-sm" data-bs-toggle="modal" data-bs-target="#registerModal">
+                            <i class="fas fa-user-plus me-2"></i>Register
+                        </button>
                     </li>
                 </ul>
-                
-              <div class="d-flex gap-2">
-    <button class="btn btn-farm-green" data-bs-toggle="modal" data-bs-target="#loginModal">
-        <i class="fas fa-sign-in-alt me-2"></i>Dashboard
-    </button>
-</div>
-
-                    <button class="btn btn-farm-yellow" data-bs-toggle="modal" data-bs-target="#registerModal">
-                        <i class="fas fa-user-plus me-2"></i>Register
-                    </button>
-                </div>
             </div>
         </div>
     </nav>
 
     <!-- Hero Section with Carousel -->
     <section class="hero position-relative">
-
-
             {% if user.is_authenticated %}
               
-                <h2 class="alert alert-success">Welcome {{ user.username}}. You are logged in!</h2>
+                <div class="position-absolute top-0 start-0 w-100 z-3 pt-3">
+                    <div class="container">
+                        <div class="alert alert-success alert-dismissible fade show mb-0 shadow-sm" role="alert">
+                            <i class="fas fa-check-circle me-2"></i>
+                            <strong>Welcome back!</strong> {{ user.username }}, you are logged in.
+                            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                        </div>
+                    </div>
+                </div>                <h2 class="alert alert-success">Welcome {{ user.username}}. You are logged in!</h2>
 
 
             {% endif %}
@@ -102,24 +109,26 @@
             <button class="carousel-control-prev" type="button" data-bs-target="#heroCarousel" data-bs-slide="prev">
                 <span class="carousel-control-prev-icon" aria-hidden="true"></span>
                 <span class="visually-hidden">Previous</span>
-            </button>
-            <button class="carousel-control-next" type="button" data-bs-target="#heroCarousel" data-bs-slide="next">
-                <span class="carousel-control-next-icon" aria-hidden="true"></span>
-                <span class="visually-hidden">Next</span>
-            </button>
-        </div>
-        <div class="container position-relative py-5" style="z-index: 1;">
+            </button>2;">
             <div class="row min-vh-100 align-items-center">
                 <div class="col-lg-8 text-center text-lg-start text-white">
-                    <h1 class="display-4 fw-bold mb-4">
-                        Fresh Farm Eggs Delivered 
-                        <span class="text-farm-yellow">Right to Your Door</span>
-                    </h1>
-                    <p class="lead mb-4 opacity-75">
-                        Experience the finest quality eggs from our smart poultry farm in Siaya County. 
-                        Order online and enjoy convenient delivery services.
-                    </p>
-                    <div class="d-flex flex-column flex-sm-row gap-3 justify-content-lg-start justify-content-center">
+                    <div class="hero-content">
+                        <h1 class="display-4 fw-bold mb-4 hero-title">
+                            Fresh Farm Eggs 
+                            <span class="gradient-text">Delivered to Your Door</span>
+                        </h1>
+                        <p class="hero-subtitle lead mb-5">
+                            Experience premium quality eggs from our smart poultry farm in Siaya County. 
+                            Order online with fast delivery and multiple payment options.
+                        </p>
+                        <div class="d-flex flex-column flex-sm-row gap-3 justify-content-lg-start justify-content-center">
+                            <a href="{% url 'products' %}" class="btn btn-farm-yellow btn-lg btn-modern shadow">
+                                <i class="fas fa-shopping-cart me-2"></i>Shop Now
+                            </a>
+                            <a href="#features" class="btn btn-outline-light btn-lg btn-modern">
+                                <i class="fas fa-arrow-down me-2"></i>Explore Features
+                            </a>
+                        </divass="d-flex flex-column flex-sm-row gap-3 justify-content-lg-start justify-content-center">
                         <a href="products.html" class="btn btn-farm-yellow btn-lg">
                             <i class="fas fa-shopping-cart me-2"></i>Shop Now
                         </a>
@@ -134,62 +143,51 @@
 
     <!-- Features Section -->
     <section id="features" class="py-5">
-        <div class="container">
-            <div class="text-center mb-5">
-                <h2 class="display-6 fw-bold mb-3">Why Choose Us?</h2>
-                <p class="text-secondary mx-auto" style="max-width: 42rem;">
-                    We combine traditional farming expertise with modern technology to bring you 
-                    the highest quality eggs and exceptional service.
+        <div classpan class="badge bg-farm-green bg-opacity-10 text-farm-green mb-3">Why Us?</span>
+                <h2 class="display-6 fw-bold mb-3">Why Choose Nyandiwa?</h2>
+                <p class="text-secondary mx-auto" style="max-width: 48rem;">
+                    We blend traditional farming expertise with smart technology to deliver 
+                    premium quality eggs and exceptional customer service.
                 </p>
             </div>
 
-            <div class="row g-4">
+            <div class="row g-4 mt-2">
                 <!-- Feature 1 -->
                 <div class="col-md-4">
-                    <div class="card h-100 border-0 hover-lift">
-                        <div class="card-body text-center p-4">
-                            <div class="rounded-circle bg-farm-green text-white mx-auto mb-4" 
-                                 style="width: 80px; height: 80px; display: flex; align-items: center; justify-content: center;">
-                                <i class="fas fa-egg fs-2"></i>
-                            </div>
-                            <h3 class="h4 fw-bold mb-3">Fresh & Quality</h3>
-                            <p class="text-secondary mb-0">
-                                Our eggs are collected daily and undergo strict quality checks before delivery. 
-                                Freshness guaranteed.
-                            </p>
+                    <div class="feature-card">
+                        <div class="feature-icon-wrapper bg-gradient-1">
+                            <i class="fas fa-egg"></i>
                         </div>
+                        <h3 class="h5 fw-bold mb-3">Premium Quality</h3>
+                        <p class="text-secondary small mb-0">
+                            Our eggs are collected daily and undergo strict quality checks. Guaranteed freshness with every order.
+                        </p>
                     </div>
                 </div>
 
                 <!-- Feature 2 -->
                 <div class="col-md-4">
-                    <div class="card h-100 border-0 hover-lift">
-                        <div class="card-body text-center p-4">
-                            <div class="rounded-circle bg-farm-yellow text-dark mx-auto mb-4" 
-                                 style="width: 80px; height: 80px; display: flex; align-items: center; justify-content: center;">
-                                <i class="fas fa-truck fs-2"></i>
-                            </div>
-                            <h3 class="h4 fw-bold mb-3">Fast Delivery</h3>
-                            <p class="text-secondary mb-0">
-                                Enjoy same-day delivery within Siaya County. Track your order in real-time 
-                                through our app.
-                            </p>
+                    <div class="feature-card">
+                        <div class="feature-icon-wrapper bg-gradient-2">
+                            <i class="fas fa-truck"></i>
                         </div>
+                        <h3 class="h5 fw-bold mb-3">Fast Delivery</h3>
+                        <p class="text-secondary small mb-0">
+                            Same-day delivery within Siaya County. Track your order in real-time with our mobile app.
+                        </p>
                     </div>
                 </div>
 
                 <!-- Feature 3 -->
                 <div class="col-md-4">
-                    <div class="card h-100 border-0 hover-lift">
-                        <div class="card-body text-center p-4">
-                            <div class="rounded-circle bg-farm-brown text-white mx-auto mb-4" 
-                                 style="width: 80px; height: 80px; display: flex; align-items: center; justify-content: center;">
-                                <i class="fas fa-mobile-alt fs-2"></i>
-                            </div>
-                            <h3 class="h4 fw-bold mb-3">Easy Ordering</h3>
-                            <p class="text-secondary mb-0">
-                                Order through our website or mobile app. Multiple payment options including 
-                                M-Pesa available.
+                    <div class="feature-card">
+                        <div class="feature-icon-wrapper bg-gradient-3">
+                            <i class="fas fa-mobile-alt"></i>
+                        </div>
+                        <h3 class="h5 fw-bold mb-3">Easy Ordering</h3>
+                        <p class="text-secondary small mb-0">
+                            Simple online ordering with multiple payment options including M-Pesa, Airtel Money & COD.
+                        </p   M-Pesa available.
                             </p>
                         </div>
                     </div>
@@ -208,18 +206,18 @@
                         Create an account now and get KSh 50 off your first order!
                     </p>
                 </div>
-                <div class="col-lg-4 text-center text-lg-end">
-                    <button class="btn btn-farm-yellow btn-lg" data-bs-toggle="modal" data-bs-target="#registerModal">
-                        <i class="fas fa-user-plus me-2"></i>Register Now
-                    </button>
-                </div>
-            </div>
-        </div>
-    </section>
-
-    <!-- Footer -->
-    <footer class="bg-dark text-white py-5">
+                <divcta-section text-white py-5 my-5">
         <div class="container">
+            <div class="row align-items-center">
+                <div class="col-lg-8 text-center text-lg-start mb-4 mb-lg-0">
+                    <h2 class="h2 fw-bold mb-2">Ready to Get Fresh Eggs?</h2>
+                    <p class="mb-0 lead opacity-85">
+                        <i class="fas fa-gift me-2"></i>Create an account now and get <strong>KSh 50 off</strong> your first order!
+                    </p>
+                </div>
+                <div class="col-lg-4 text-center text-lg-end">
+                    <button class="btn btn-farm-yellow btn-lg shadow" data-bs-toggle="modal" data-bs-target="#registerModal">
+                        <i class="fas fa-user-plus me-2"></i>Get Started
             <div class="row gy-4">
                 <div class="col-md-3">
                     <h3 class="h5 fw-bold mb-3 d-flex align-items-center">
@@ -229,26 +227,25 @@
                     <p class="text-secondary">Fresh eggs directly from our farm in Siaya County.</p>
                     <div class="d-flex gap-3">
                         <a href="#" class="social-icon text-decoration-none">
+                   modern-footer text-white py-5">
+        <div class="container">
+            <div class="row gy-4">
+                <div class="col-md-3">
+                    <h3 class="h6 fw-bold text-uppercase letter-spacing-2 mb-3">
+                        <i class="fas fa-egg text-farm-yellow me-2"></i>Nyandiwa
+                    </h3>
+                    <p class="text-secondary small mb-4">Premium fresh eggs from our smart farm in Siaya County. Delivered with care.</p>
+                    <div class="d-flex gap-2">
+                        <a href="#" class="social-icon-modern" title="Facebook">
                             <i class="fab fa-facebook-f"></i>
                         </a>
-                        <a href="#" class="social-icon text-decoration-none">
+                        <a href="#" class="social-icon-modern" title="Twitter">
                             <i class="fab fa-twitter"></i>
                         </a>
-                        <a href="#" class="social-icon text-decoration-none">
+                        <a href="#" class="social-icon-modern" title="Instagram">
                             <i class="fab fa-instagram"></i>
                         </a>
-                        <a href="#" class="social-icon text-decoration-none">
-                            <i class="fab fa-whatsapp"></i>
-                        </a>
-                    </div>
-                </div>
-                
-                <div class="col-md-3">
-                    <h4 class="h6 fw-bold mb-3">Quick Links</h4>
-                    <ul class="list-unstyled mb-0">
-                        <li class="mb-2">
-                            <a href="index.html" class="text-secondary text-decoration-none hover-yellow d-inline-flex align-items-center">
-                                <i class="fas fa-chevron-right small me-2"></i>Home
+                        <a href="#" class="social-icon-modern" title="WhatsApp</i>Home
                             </a>
                         </li>
                         <li class="mb-2">
@@ -256,90 +253,67 @@
                                 <i class="fas fa-chevron-right small me-2"></i>Products
                             </a>
                         </li>
+                        <li class="mb-2">text-uppercase letter-spacing-2 mb-3">Quick Links</h4>
+                    <ul class="list-unstyled mb-0">
                         <li class="mb-2">
-                            <a href="delivery.html" class="text-secondary text-decoration-none hover-yellow d-inline-flex align-items-center">
+                            <a href="{% url 'index' %}" class="footer-link">
+                                <i class="fas fa-chevron-right small me-2"></i>Home
+                            </a>
+                        </li>
+                        <li class="mb-2">
+                            <a href="{% url 'products' %}" class="footer-link">
+                                <i class="fas fa-chevron-right small me-2"></i>Products
+                            </a>
+                        </li>
+                        <li class="mb-2">
+                            <a href="{% url 'delivery' %}" class="footer-link">
                                 <i class="fas fa-chevron-right small me-2"></i>Delivery
+                            </a>text-uppercase letter-spacing-2 mb-3">Contact</h4>
+                    <ul class="list-unstyled mb-3">
+                        <li class="d-flex align-items-start mb-3">
+                            <i class="fas fa-map-marker-alt text-farm-yellow me-2 mt-1 flex-shrink-0"></i>
+                            <span class="text-secondary small">Siaya Nyandiwa, Kenya</span>
+                        </li>
+                        <li>
+                            <a href="tel:+254725551199" class="footer-link d-flex align-items-center mb-2">
+                                <i class="fas fa-phone text-farm-yellow me-2"></i>
+                                <span>+254 725551199</span>
                             </a>
                         </li>
                         <li>
-                            <a href="{% url 'dashboard' %}" class="text-secondary text-decoration-none hover-yellow d-inline-flex align-items-center">
-                                <i class="fas fa-chevron-right small me-2"></i>Dashboard
-                            </a>
-                        </li>
-                    </ul>
-                </div>
-                
-                <div class="col-md-3">
-                    <h4 class="h6 fw-bold mb-3">Contact Us</h4>
-                    <ul class="list-unstyled mb-0">
-                        <li class="d-flex mb-2">
-                            <i class="fas fa-map-marker-alt text-farm-yellow me-2 mt-1"></i>
-                            <span class="text-secondary">Siaya Nyandiwa, Kenya</span>
-                        </li>
-                        <li class="mb-3">
-                            <a href="tel:+254725551199" class="text-secondary text-decoration-none d-flex align-items-center hover-yellow">
-                                <i class="fas fa-phone text-farm-yellow me-2"></i>
-                                <span>Call Us: +254 725551199</span>
-                            </a>
-                        </li>
-                        <li class="mb-3">
-                            <a href="https://wa.me/254725551199" target="_blank" class="text-secondary text-decoration-none d-flex align-items-center hover-yellow">
+                            <a href="https://wa.me/254725551199" target="_blank" class="footer-link d-flex align-items-center">
                                 <i class="fab fa-whatsapp text-farm-yellow me-2"></i>
-                                <span>Chat on WhatsApp</span>
+                                <span>WhatsApp</span>
                             </a>
                         </li>
-                        <li class="d-flex align-items-center">
-                            <div class="d-flex gap-3">
-                                <a href="tel:+254725551199" class="btn btn-farm-yellow btn-sm">
-                                    <i class="fas fa-phone me-2"></i>Call Now
-                                </a>
-                                <a href="https://wa.me/254725551199" target="_blank" class="btn btn-farm-green btn-sm">
-                                    <i class="fab fa-whatsapp me-2"></i>WhatsApp
-                                </a>
-                            </div>
-                        </li>
                     </ul>
-                </div>
+                    <div class="d-flex gap-2">
+                        <a href="tel:+254725551199" class="btn btn-sm btn-outline-light" title="Call us">
+                            <i class="fas fa-phone"></i>
+                        </a>
+                        <a href="https://wa.me/254725551199" target="_blank" class="btn btn-sm btn-farm-yellow" title="WhatsApp">
+                            <i class="fab fa-whatsapp"></i>
+                        </a>
+                    </div
                 
                 <div class="col-md-3">
                     <h4 class="h6 fw-bold mb-3">Payment Methods</h4>
                     <div class="d-flex flex-wrap gap-2 mb-3">
                         <button class="badge bg-white text-farm-green fw-bold border-0 payment-method-btn" 
-                                data-payment-method="mpesa" 
-                                data-bs-toggle="modal" 
-                                data-bs-target="#paymentModal" 
-                                style="cursor: pointer;">
-                            M-Pesa
-                        </button>
-                        <button class="badge bg-white text-farm-green fw-bold border-0 payment-method-btn" 
-                                data-payment-method="airtel_money" 
-                                data-bs-toggle="modal" 
-                                data-bs-target="#paymentModal" 
-                                style="cursor: pointer;">
-                            Airtel Money
-                        </button>
-                        <button class="badge bg-white text-farm-green fw-bold border-0 payment-method-btn" 
-                                data-payment-method="cash" 
-                                data-bs-toggle="modal" 
-                                data-bs-target="#paymentModal" 
-                                style="cursor: pointer;">
-                            Cash
-                        </button>
+                                data-paymetext-uppercase letter-spacing-2 mb-3">Payment Methods</h4>
+                    <div class="d-flex flex-wrap gap-2 mb-4">
+                        <span class="payment-badge">M-Pesa</span>
+                        <span class="payment-badge">Airtel Money</span>
+                        <span class="payment-badge">Cash</span>
                     </div>
                     
-                    <h4 class="h6 fw-bold mb-3">Subscribe to Newsletter</h4>
-                    <form class="needs-validation" novalidate>
-                        <div class="input-group">
-                            <input type="email" class="form-control" placeholder="Your email" required>
-                            <button class="btn btn-farm-yellow" type="submit">
+                    <h4 class="h6 fw-bold text-uppercase letter-spacing-2 mb-3">Newsletter</h4>
+                    <form class="newsletter-form">
+                        <div class="input-group input-group-sm">
+                            <input type="email" class="form-control bg-opacity-10" placeholder="Your email" required>
+                            <button class="btn btn-farm-yellow" type="submit" title="Subscribe">
                                 <i class="fas fa-paper-plane"></i>
-                            </button>
-                            <div class="invalid-feedback">
-                                Please enter a valid email address
-                            </div>
-                        </div>
-                    </form>
-                </div>
+                            </button
             </div>
             
             <div class="border-top border-secondary mt-4 pt-4 text-center text-secondary">
@@ -366,7 +340,7 @@
                     <form method="post" action="{% url 'login' %}">
                         {% csrf_token %}
                             
-                        <div class="mb-3">
+                        <div class="mb-3">opacity-25 mt-4 pt-4 text-center text-secondary small
                             <label class="form-label">Email address</label>
                             <input type="email" name="email" class="form-control" required>
                         </div>
@@ -379,27 +353,27 @@
                 </div>
             </div>
         </div>
-    </div>
-
-    <!-- Payment Modal -->
-    <div class="modal fade" id="paymentModal" tabindex="-1">
-        <div class="modal-dialog modal-lg">
-            <div class="modal-content">
-                <div class="modal-header bg-farm-green text-white">
-                    <h5 class="modal-title"><i class="fas fa-credit-card me-2"></i>Complete Payment</h5>
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content border-0 shadow-lg">
+                <div class="modal-header bg-gradient border-0 text-white">
+                    <h5 class="modal-title fw-bold"><i class="fas fa-sign-in-alt me-2"></i>Login</h5>
                     <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
                 </div>
-                <div class="modal-body">
-                    <form id="paymentForm" method="post" action="{% url 'process_payment' %}">
+                <div class="modal-body p-4">
+                    <form method="post" action="{% url 'login' %}">
                         {% csrf_token %}
-                        
-                        <!-- Customer Information -->
+                            
+                        <div class="mb-3">
+                            <label class="form-label small fw-bold text-uppercase">Email Address</label>
+                            <input type="email" name="email" class="form-control form-control-modern" placeholder="you@example.com" required>
+                        </div>
                         <div class="mb-4">
-                            <h6 class="border-bottom pb-2 mb-3"><i class="fas fa-user me-2"></i>Customer Information</h6>
-                            <div class="row">
-                                <div class="col-md-6 mb-3">
-                                    <label class="form-label">Full Name <span class="text-danger">*</span></label>
-                                    <input type="text" name="customer_name" class="form-control" required>
+                            <label class="form-label small fw-bold text-uppercase">Password</label>
+                            <input type="password" name="password" class="form-control form-control-modern" placeholder="••••••••" required>
+                        </div>
+                        <button type="submit" class="btn btn-farm-green w-100 fw-bold py-2">
+                            <i class="fas fa-sign-in-alt me-2"></i>Login Now
+                        </button>              <input type="text" name="customer_name" class="form-control" required>
                                 </div>
                                 <div class="col-md-6 mb-3">
                                     <label class="form-label">Email <span class="text-danger">*</span></label>
@@ -544,49 +518,31 @@
                             <input type="password" name="confirm_password" class="form-control" required>
                         </div>
                         <button type="submit" class="btn btn-farm-yellow w-100">Register</button>
-                    </form>
+                    </form> modal-dialog-centered">
+            <div class="modal-content border-0 shadow-lg">
+                <div class="modal-header bg-gradient border-0 text-white">
+                    <h5 class="modal-title fw-bold"><i class="fas fa-user-plus me-2"></i>Create Account</h5>
+                    <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
                 </div>
-            </div>
-        </div>
-    </div>
-    <!-- Register Modal -->
-    <div class="modal fade" id="registerModal" tabindex="-1">
-        <div class="modal-dialog">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <h5 class="modal-title">Create an Account</h5>
-                    <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
-                </div>
-                <div class="modal-body">
-                    <form method="post">
+                <div class="modal-body p-4">
+                    <form method="post" action="{% url 'register' %}">
                         {% csrf_token %}
                         <div class="mb-3">
-                            <label class="form-label">Full Name</label>
-                            <input type="text" name="fullname" class="form-control" required>
+                            <label class="form-label small fw-bold text-uppercase">Full Name</label>
+                            <input type="text" name="fullname" class="form-control form-control-modern" placeholder="John Doe" required>
                         </div>
                         <div class="mb-3">
-                            <label class="form-label">Email address</label>
-                            <input type="email" name="email" class="form-control" required>
+                            <label class="form-label small fw-bold text-uppercase">Email Address</label>
+                            <input type="email" name="email" class="form-control form-control-modern" placeholder="you@example.com" required>
                         </div>
                         <div class="mb-3">
-                            <label class="form-label">Password</label>
-                            <input type="password" name="password" class="form-control" required>
+                            <label class="form-label small fw-bold text-uppercase">Password</label>
+                            <input type="password" name="password" class="form-control form-control-modern" placeholder="••••••••" required>
                         </div>
-                        <div class="mb-3">
-                            <label class="form-label">Confirm Password</label>
-                            <input type="password" name="confirm_password" class="form-control" required>
+                        <div class="mb-4">
+                            <label class="form-label small fw-bold text-uppercase">Confirm Password</label>
+                            <input type="password" name="confirm_password" class="form-control form-control-modern" placeholder="••••••••" required>
                         </div>
-                        <button type="submit" class="btn btn-farm-yellow w-100">Register</button>
-                    </form>
-                </div>
-            </div>
-        </div>
-    </div>
-
-    <!-- Bootstrap Bundle JS -->
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
-    <!-- Custom JavaScript -->
-    <script src="{% static 'js/main.js' %}"></script>
-    <script src="{% static 'js/payment.js' %}"></script>
-</body>
-</html>
+                        <button type="submit" class="btn btn-farm-yellow w-100 fw-bold py-2">
+                            <i class="fas fa-user-plus me-2"></i>Create Account
+                        

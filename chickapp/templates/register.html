@@ -5,145 +5,306 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-    <title>Register | MOH FARM</title>
+    <title>Register - Nyandiwa Smart Poultry</title>
 
     <!-- Favicon -->
     <link rel="icon" type="image/x-icon" href="{% static 'assets/images/image.png' %}">
 
     <!-- Bootstrap 5 -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
-
-    <!-- Bootstrap Icons -->
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css" rel="stylesheet">
+    <!-- Font Awesome -->
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
 
     <style>
+        :root {
+            --farm-green: #2d5016;
+            --farm-yellow: #ffc107;
+        }
+
+        * {
+            font-family: 'Poppins', sans-serif;
+        }
+
         body {
-            background: linear-gradient(135deg, #198754, #0d6efd);
+            background: linear-gradient(135deg, #2d5016 0%, #3d6a1f 100%);
             min-height: 100vh;
             display: flex;
             align-items: center;
             justify-content: center;
-            font-family: "Segoe UI", sans-serif;
+            padding: 20px;
+            position: relative;
+            overflow: hidden;
+        }
+
+        body::before {
+            content: '';
+            position: absolute;
+            bottom: -50%;
+            left: -10%;
+            width: 500px;
+            height: 500px;
+            background: linear-gradient(135deg, rgba(255, 193, 7, 0.1), transparent);
+            border-radius: 50%;
+            z-index: 0;
+        }
+
+        .register-container {
+            position: relative;
+            z-index: 1;
+            width: 100%;
+            max-width: 700px;
         }
 
         .register-card {
-            width: 100%;
-            max-width: 750px;
-            border-radius: 18px;
-            backdrop-filter: blur(12px);
-            background: rgba(255,255,255,0.95);
-            box-shadow: 0 20px 45px rgba(0,0,0,0.2);
-            padding: 40px;
-            transition: 0.3s;
+            background: white;
+            border-radius: 16px;
+            box-shadow: 0 20px 60px rgba(45, 80, 22, 0.2);
+            overflow: hidden;
+            animation: slideUp 0.6s ease;
         }
 
-        .register-card:hover {
-            transform: translateY(-5px);
+        @keyframes slideUp {
+            from {
+                opacity: 0;
+                transform: translateY(40px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .register-header {
+            background: linear-gradient(135deg, #2d5016 0%, #3d6a1f 100%);
+            color: white;
+            padding: 2.5rem 2rem;
+            text-align: center;
+        }
+
+        .register-header h3 {
+            font-weight: 700;
+            font-size: 1.8rem;
+            margin-bottom: 0.5rem;
+        }
+
+        .register-header p {
+            opacity: 0.9;
+            font-size: 0.95rem;
+        }
+
+        .register-body {
+            padding: 2rem;
+        }
+
+        .form-group {
+            margin-bottom: 1.5rem;
+        }
+
+        .form-label {
+            font-weight: 600;
+            color: #2d5016;
+            font-size: 0.9rem;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            margin-bottom: 0.7rem;
+            display: block;
         }
 
         .form-control {
             border-radius: 10px;
-            padding-left: 40px;
+            border: 1.5px solid #e9ecef;
+            padding: 0.9rem 1.1rem;
+            font-size: 0.95rem;
+            transition: all 0.3s ease;
+            background: #f8f9fa;
+        }
+
+        .form-control:focus {
+            border-color: var(--farm-green);
+            box-shadow: 0 0 0 0.3rem rgba(45, 80, 22, 0.15);
+            background: white;
         }
 
         .input-group-text {
             border-radius: 10px 0 0 10px;
             background: #f8f9fa;
-        }
-
-        .btnSubmit {
-            border-radius: 10px;
+            border: 1.5px solid #e9ecef;
+            color: var(--farm-green);
             font-weight: 600;
-            padding: 12px;
         }
 
-        .title {
+        .toggle-password {
+            border-radius: 0 10px 10px 0;
+            background: #f8f9fa;
+            border: 1.5px solid #e9ecef;
+            border-left: none;
+            color: var(--farm-green);
+            transition: all 0.3s ease;
+            cursor: pointer;
+        }
+
+        .toggle-password:hover {
+            background: white;
+        }
+
+        .register-btn {
+            border-radius: 10px;
+            padding: 11px;
             font-weight: 700;
-            color: #198754;
+            font-size: 1rem;
+            letter-spacing: 0.5px;
+            background: linear-gradient(135deg, #2d5016, #3d6a1f);
+            border: none;
+            color: white;
+            transition: all 0.3s ease;
+        }
+
+        .register-btn:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 8px 20px rgba(45, 80, 22, 0.3);
+            color: white;
+        }
+
+        .register-btn:active {
+            transform: translateY(-1px);
+        }
+
+        .alert {
+            border-radius: 10px;
+            border: none;
+            margin-bottom: 1.5rem;
+        }
+
+        .alert-danger {
+            background: rgba(220, 53, 69, 0.1);
+            color: #dc3545;
+        }
+
+        .alert-success {
+            background: rgba(40, 167, 69, 0.1);
+            color: #28a745;
+        }
+
+        .register-footer {
+            text-align: center;
+            padding: 1.5rem 2rem;
+            background: #f8f9fa;
+            border-top: 1px solid #e9ecef;
+            font-size: 0.95rem;
+        }
+
+        .register-footer a {
+            color: var(--farm-green);
+            text-decoration: none;
+            font-weight: 600;
+            transition: all 0.3s ease;
+        }
+
+        .register-footer a:hover {
+            color: var(--farm-yellow);
+            text-decoration: underline;
+        }
+
+        @media (max-width: 768px) {
+            .register-header {
+                padding: 2rem 1.5rem;
+            }
+            .register-body {
+                padding: 1.5rem;
+            }
         }
     </style>
 </head>
 
 <body>
 
-<div class="register-card">
-
-    <h3 class="text-center mb-4 title">
-        <i class="bi bi-person-plus-fill"></i> Create Account
-    </h3>
-
-
-     
- <!-- Messages -->
-        {% for message in messages %}
-            <div class="alert alert-success mt-3 text-center">
-                {{ message }}
-            </div>
-        {% endfor %}
-    
-    <!-- FORM -->
-    <form method="post">
-        {% csrf_token %}
-
-        <div class="row g-3">
-
-            <!-- Email -->
-            <div class="col-md-6">
-                <div class="input-group">
-                    <span class="input-group-text"><i class="bi bi-person"></i></span>
-                    <input type="email" name="email" class="form-control" placeholder="Email" required>
-                </div>
-            </div>
-
-            <!-- Phone -->
-            <div class="col-md-6">
-                <div class="input-group">
-                    <span class="input-group-text"><i class="bi bi-telephone"></i></span>
-                    <input type="text" name="phone_number" class="form-control" placeholder="Phone Number" required>
-                </div>
-            </div>
-
-            <!-- Password -->
-            <div class="col-md-6">
-                <div class="input-group">
-                    <span class="input-group-text"><i class="bi bi-lock"></i></span>
-                    <input type="password" id="password" name="password" class="form-control" placeholder="Password" required>
-                    <button class="btn btn-outline-secondary" type="button" onclick="togglePass('password')">
-                        <i class="bi bi-eye"></i>
-                    </button>
-                </div>
-            </div>
-
-            <!-- Confirm Password -->
-            <div class="col-md-6">
-                <div class="input-group">
-                    <span class="input-group-text"><i class="bi bi-shield-lock"></i></span>
-                    <input type="password" id="confirm_password" name="confirm_password" class="form-control" placeholder="Confirm Password" required>
-                    <button class="btn btn-outline-secondary" type="button" onclick="togglePass('confirm_password')">
-                        <i class="bi bi-eye"></i>
-                    </button>
-                </div>
-            </div>
-
+<div class="register-container">
+    <div class="register-card">
+        <!-- Header -->
+        <div class="register-header">
+            <h3><i class="fas fa-user-plus me-2"></i>Create Account</h3>
+            <p>Join Nyandiwa Smart Poultry today and get fresh eggs delivered</p>
         </div>
 
-        <div class="d-grid mt-4">
-            <button type="submit" class="btn btn-success btnSubmit">
-                Register
-            </button>
+        <!-- Body -->
+        <div class="register-body">
+            <!-- Messages -->
+            {% if messages %}
+                {% for message in messages %}
+                    {% if message.tags == 'error' %}
+                        <div class="alert alert-danger alert-dismissible fade show" role="alert">
+                            <i class="fas fa-exclamation-circle me-2"></i>{{ message }}
+                            <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+                        </div>
+                    {% else %}
+                        <div class="alert alert-success alert-dismissible fade show" role="alert">
+                            <i class="fas fa-check-circle me-2"></i>{{ message }}
+                            <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+                        </div>
+                    {% endif %}
+                {% endfor %}
+            {% endif %}
+
+            <!-- Registration Form -->
+            <form method="post">
+                {% csrf_token %}
+
+                <!-- Full Name -->
+                <div class="form-group">
+                    <label class="form-label" for="fullname">Full Name</label>
+                    <div class="input-group">
+                        <span class="input-group-text"><i class="fas fa-user"></i></span>
+                        <input type="text" id="fullname" name="fullname" class="form-control" placeholder="John Doe" required>
+                    </div>
+                </div>
+
+                <!-- Email -->
+                <div class="form-group">
+                    <label class="form-label" for="email_input">Email Address</label>
+                    <div class="input-group">
+                        <span class="input-group-text"><i class="fas fa-envelope"></i></span>
+                        <input type="email" id="email_input" name="email" class="form-control" placeholder="your@email.com" required>
+                    </div>
+                </div>
+
+                <!-- Password -->
+                <div class="form-group">
+                    <label class="form-label" for="password_input">Password</label>
+                    <div class="input-group">
+                        <span class="input-group-text"><i class="fas fa-lock"></i></span>
+                        <input type="password" id="password_input" name="password" class="form-control" placeholder="••••••••" required>
+                        <button class="btn toggle-password" type="button" onclick="togglePassword('password_input')">
+                            <i id="toggle-icon-1" class="fas fa-eye"></i>
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Confirm Password -->
+                <div class="form-group">
+                    <label class="form-label" for="confirm_password_input">Confirm Password</label>
+                    <div class="input-group">
+                        <span class="input-group-text"><i class="fas fa-shield-alt"></i></span>
+                        <input type="password" id="confirm_password_input" name="confirm_password" class="form-control" placeholder="••••••••" required>
+                        <button class="btn toggle-password" type="button" onclick="togglePassword('confirm_password_input')">
+                            <i id="toggle-icon-2" class="fas fa-eye"></i>
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Register Button -->
+                <button type="submit" class="btn register-btn w-100">
+                    <i class="fas fa-user-plus me-2"></i>Create Account
+                </button>
+            </form>
         </div>
 
-           {% for message in messages %}
-
-       <p class="alert alert-success" >{{ message }}</p>
-       
-    {% endfor %}
-
-        <p class="text-center mt-3 text-muted small">
-            Already have an account? <a href="{% url 'login' %}">Login</a>
-        </p>
-
-    </form>
+        <!-- Footer -->
+        <div class="register-footer">
+            Already have an account? <a href="{% url 'login' %}">Login here</a>
+        </div>
+    </div>
 </div>
 
 
@@ -151,11 +312,17 @@
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
 
 <script>
-    function togglePass(id) {
-        const input = document.getElementById(id);
-        input.type = input.type === "password" ? "text" : "password";
-    }
-</script>
-
-</body>
-</html>
+    function togglePassword(id) {
+        const passwordInput = document.getElementById(id);
+        const iconId = id === 'password_input' ? 'toggle-icon-1' : 'toggle-icon-2';
+        const toggleIcon = document.getElementById(iconId);
+        
+        if (passwordInput.type === "password") {
+            passwordInput.type = "text";
+            toggleIcon.classList.remove("fa-eye");
+            toggleIcon.classList.add("fa-eye-slash");
+        } else {
+            passwordInput.type = "password";
+            toggleIcon.classList.remove("fa-eye-slash");
+            toggleIcon.classList.add("fa-eye");
+        }
