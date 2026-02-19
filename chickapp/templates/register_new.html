@@ -4,7 +4,7 @@
     {% load static %}
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Login - Nyandiwa Smart Poultry</title>
+    <title>Register - Nyandiwa Smart Poultry</title>
     
     <!-- Bootstrap 5 -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
@@ -17,7 +17,6 @@
         :root {
             --farm-green: #2d5016;
             --farm-yellow: #ffc107;
-            --farm-brown: #8b5a2b;
             --text-dark: #2c3e50;
         }
 
@@ -33,6 +32,7 @@
             background: linear-gradient(135deg, #2d5016 0%, #1a3a0a 50%, #0d1f05 100%);
             position: relative;
             overflow: hidden;
+            padding: 20px;
         }
 
         body::before {
@@ -66,15 +66,14 @@
             50% { transform: translateY(-30px); }
         }
 
-        .login-wrapper {
+        .register-wrapper {
             position: relative;
             z-index: 1;
             width: 100%;
-            max-width: 480px;
-            padding: 20px;
+            max-width: 520px;
         }
 
-        .login-card {
+        .register-card {
             background: white;
             border-radius: 20px;
             box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
@@ -94,8 +93,8 @@
             }
         }
 
-        .login-header {
-            background: linear-gradient(135deg, #2d5016 0%, #3d6a1f 100%);
+        .register-header {
+            background: linear-gradient(135deg, #ffc107 0%, #ffb300 100%);
             color: white;
             padding: 3rem 2rem;
             text-align: center;
@@ -103,28 +102,28 @@
             overflow: hidden;
         }
 
-        .login-header::before {
+        .register-header::before {
             content: '';
             position: absolute;
             top: -50%;
             right: -10%;
             width: 200px;
             height: 200px;
-            background: radial-gradient(circle, rgba(255, 193, 7, 0.2), transparent);
+            background: radial-gradient(circle, rgba(255, 255, 255, 0.2), transparent);
             border-radius: 50%;
         }
 
         .brand-icon {
             width: 70px;
             height: 70px;
-            background: rgba(255, 255, 255, 0.15);
+            background: rgba(255, 255, 255, 0.2);
             border-radius: 16px;
             display: flex;
             align-items: center;
             justify-content: center;
             margin: 0 auto 1.5rem;
             font-size: 2rem;
-            border: 2px solid rgba(255, 193, 7, 0.3);
+            border: 2px solid rgba(255, 255, 255, 0.4);
             animation: popIn 0.5s ease;
         }
 
@@ -133,7 +132,7 @@
             100% { transform: scale(1); opacity: 1; }
         }
 
-        .login-header h3 {
+        .register-header h3 {
             font-weight: 700;
             margin-bottom: 0.5rem;
             font-size: 1.8rem;
@@ -141,19 +140,19 @@
             z-index: 1;
         }
 
-        .login-header p {
-            opacity: 0.9;
+        .register-header p {
+            opacity: 0.95;
             font-size: 0.95rem;
             position: relative;
             z-index: 1;
         }
 
-        .login-body {
-            padding: 3rem 2rem;
+        .register-body {
+            padding: 2.5rem 2rem;
         }
 
         .form-group {
-            margin-bottom: 1.8rem;
+            margin-bottom: 1.5rem;
         }
 
         .form-label {
@@ -169,7 +168,7 @@
         .form-control {
             border-radius: 12px;
             border: 2px solid #e9ecef;
-            padding: 1rem 1.2rem;
+            padding: 0.95rem 1.2rem;
             font-size: 0.95rem;
             transition: all 0.3s ease;
             background: #f8f9fa;
@@ -183,11 +182,6 @@
 
         .form-control::placeholder {
             color: #a0a0a0;
-        }
-
-        .input-icon {
-            color: var(--farm-green);
-            font-weight: 600;
         }
 
         .password-toggle {
@@ -206,7 +200,7 @@
         }
 
         .form-check {
-            margin-bottom: 1.8rem;
+            margin-bottom: 1.5rem;
         }
 
         .form-check-input {
@@ -224,13 +218,13 @@
         }
 
         .form-check-label {
-            font-size: 0.95rem;
+            font-size: 0.9rem;
             color: #6c757d;
             cursor: pointer;
             margin-left: 0.5rem;
         }
 
-        .login-btn {
+        .register-btn {
             border-radius: 12px;
             padding: 1rem;
             font-weight: 700;
@@ -242,31 +236,14 @@
             margin-top: 0.5rem;
         }
 
-        .login-btn:hover {
+        .register-btn:hover {
             transform: translateY(-2px);
             box-shadow: 0 10px 25px rgba(45, 80, 22, 0.3);
             color: white;
         }
 
-        .login-btn:active {
+        .register-btn:active {
             transform: translateY(0);
-        }
-
-        .forgot-password {
-            text-align: center;
-            margin-top: 1.5rem;
-        }
-
-        .forgot-password a {
-            color: var(--farm-green);
-            text-decoration: none;
-            font-size: 0.9rem;
-            transition: all 0.3s ease;
-        }
-
-        .forgot-password a:hover {
-            color: var(--farm-yellow);
-            text-decoration: underline;
         }
 
         .alert {
@@ -301,7 +278,7 @@
             padding: 1rem;
         }
 
-        .login-footer {
+        .register-footer {
             text-align: center;
             padding: 1.5rem 2rem;
             background: #f8f9fa;
@@ -309,53 +286,64 @@
             font-size: 0.9rem;
         }
 
-        .login-footer a {
+        .register-footer a {
             color: var(--farm-green);
             text-decoration: none;
             font-weight: 600;
             transition: all 0.3s ease;
         }
 
-        .login-footer a:hover {
+        .register-footer a:hover {
             color: var(--farm-yellow);
             text-decoration: underline;
         }
 
-        .divider {
-            display: flex;
-            align-items: center;
-            margin: 1.5rem 0;
-            color: #ccc;
-        }
-
-        .divider::before,
-        .divider::after {
-            content: '';
-            flex: 1;
-            height: 1px;
+        .password-strength {
+            height: 4px;
             background: #e9ecef;
+            border-radius: 2px;
+            margin-top: 0.5rem;
+            overflow: hidden;
         }
 
-        .divider span {
-            margin: 0 1rem;
-            color: #6c757d;
-            font-size: 0.85rem;
+        .password-strength-bar {
+            height: 100%;
+            width: 0;
+            transition: all 0.3s ease;
+            border-radius: 2px;
         }
 
-        @media (max-width: 768px) {
-            .login-wrapper {
-                padding: 15px;
+        .password-strength.weak .password-strength-bar {
+            width: 33%;
+            background: #dc3545;
+        }
+
+        .password-strength.fair .password-strength-bar {
+            width: 66%;
+            background: #ffc107;
+        }
+
+        .password-strength.strong .password-strength-bar {
+            width: 100%;
+            background: #28a745;
+        }
+
+        .password-strength-text {
+            font-size: 0.8rem;
+            margin-top: 0.3rem;
+            font-weight: 600;
+        }
+
+        @media (max-width: 640px) {
+            .register-wrapper {
+                width: 100%;
             }
 
-            .login-card {
-                border-radius: 16px;
-            }
-
-            .login-header {
+            .register-header {
                 padding: 2rem 1.5rem;
             }
 
-            .login-body {
+            .register-body {
                 padding: 1.5rem;
             }
 
@@ -365,7 +353,7 @@
                 font-size: 1.8rem;
             }
 
-            .login-header h3 {
+            .register-header h3 {
                 font-size: 1.5rem;
             }
         }
@@ -373,25 +361,24 @@
 </head>
 
 <body>
-    <div class="login-wrapper">
-        <div class="login-card">
+    <div class="register-wrapper">
+        <div class="register-card">
             <!-- Header -->
-            <div class="login-header">
+            <div class="register-header">
                 <div class="brand-icon">
                     <i class="fas fa-egg"></i>
                 </div>
-                <h3>Welcome Back</h3>
-                <p>Login to your Nyandiwa Smart Poultry account</p>
+                <h3>Create Account</h3>
+                <p>Join Nyandiwa Smart Poultry and enjoy fresh eggs delivered to your door</p>
             </div>
 
             <!-- Body -->
-            <div class="login-body">
-                <!-- Messages -->
+            <div class="register-body">
                 {% if messages %}
                     {% for message in messages %}
                         {% if message.tags == 'error' %}
                             <div class="alert alert-danger alert-dismissible fade show" role="alert">
-                                <i class="fas fa-exclamation-circle me-2"></i>{{ message }}
+                                <i class="fas fa-times-circle me-2"></i>{{ message }}
                                 <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
                             </div>
                         {% else %}
@@ -403,57 +390,76 @@
                     {% endfor %}
                 {% endif %}
 
-                <!-- Login Form -->
-                <form method="post" id="loginForm">
+                <form method="post" id="registerForm">
                     {% csrf_token %}
+
+                    <!-- Full Name -->
+                    <div class="form-group">
+                        <label class="form-label" for="fullname">
+                            <i class="fas fa-user me-2"></i>Full Name
+                        </label>
+                        <input type="text" id="fullname" name="fullname" class="form-control" placeholder="John Doe" required>
+                    </div>
 
                     <!-- Email -->
                     <div class="form-group">
-                        <label class="form-label" for="email_input">
+                        <label class="form-label" for="email">
                             <i class="fas fa-envelope me-2"></i>Email Address
                         </label>
-                        <input type="email" id="email_input" name="email" class="form-control" placeholder="you@example.com" required>
+                        <input type="email" id="email" name="email" class="form-control" placeholder="you@example.com" required>
                     </div>
 
                     <!-- Password -->
                     <div class="form-group">
-                        <label class="form-label" for="password_input">
+                        <label class="form-label" for="password">
                             <i class="fas fa-lock me-2"></i>Password
                         </label>
                         <div class="input-group">
-                            <input type="password" id="password_input" name="password" class="form-control" placeholder="••••••••" required>
-                            <button class="btn password-toggle" type="button" onclick="togglePassword()">
-                                <i id="toggle-icon" class="fas fa-eye"></i>
+                            <input type="password" id="password" name="password" class="form-control" placeholder="••••••••" onchange="checkPasswordStrength()" required>
+                            <button class="btn password-toggle" type="button" onclick="togglePassword('password')">
+                                <i id="toggle-icon-1" class="fas fa-eye"></i>
+                            </button>
+                        </div>
+                        <div id="password-strength" class="password-strength d-none">
+                            <div class="password-strength-bar"></div>
+                        </div>
+                        <div class="password-strength-text d-none" id="strength-text"></div>
+                    </div>
+
+                    <!-- Confirm Password -->
+                    <div class="form-group">
+                        <label class="form-label" for="confirm_password">
+                            <i class="fas fa-check-circle me-2"></i>Confirm Password
+                        </label>
+                        <div class="input-group">
+                            <input type="password" id="confirm_password" name="confirm_password" class="form-control" placeholder="••••••••" required>
+                            <button class="btn password-toggle" type="button" onclick="togglePassword('confirm_password')">
+                                <i id="toggle-icon-2" class="fas fa-eye"></i>
                             </button>
                         </div>
                     </div>
 
-                    <!-- Remember Me -->
+                    <!-- Terms & Conditions -->
                     <div class="form-check">
-                        <input class="form-check-input" type="checkbox" id="remember" name="remember">
-                        <label class="form-check-label" for="remember">
-                            Remember me for 30 days
+                        <input class="form-check-input" type="checkbox" id="terms" name="terms" required>
+                        <label class="form-check-label" for="terms">
+                            I agree to the <a href="#" style="color: var(--farm-green); text-decoration: none;">Terms & Conditions</a>
                         </label>
                     </div>
 
-                    <!-- Login Button -->
-                    <button type="submit" class="btn btn-primary login-btn w-100">
-                        <i class="fas fa-sign-in-alt me-2"></i>Login Now
+                    <!-- Register Button -->
+                    <button type="submit" class="btn btn-primary register-btn w-100">
+                        <i class="fas fa-user-plus me-2"></i>Create Account
                     </button>
-
-                    <!-- Forgot Password -->
-                    <div class="forgot-password">
-                        <a href="#">Forgot your password?</a>
-                    </div>
                 </form>
             </div>
 
             <!-- Footer -->
-            <div class="login-footer">
+            <div class="register-footer">
                 <p class="mb-0">
-                    Don't have an account? 
-                    <a href="{% url 'register' %}">
-                        <i class="fas fa-user-plus me-1"></i>Register here
+                    Already have an account? 
+                    <a href="{% url 'login' %}">
+                        <i class="fas fa-sign-in-alt me-1"></i>Login here
                     </a>
                 </p>
             </div>
@@ -463,76 +469,67 @@
     <!-- Scripts -->
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
     <script>
-        function togglePassword() {
-            const passwordInput = document.getElementById('password_input');
-            const toggleIcon = document.getElementById('toggle-icon');
+        function togglePassword(fieldId) {
+            const field = document.getElementById(fieldId);
+            const iconId = fieldId === 'password' ? 'toggle-icon-1' : 'toggle-icon-2';
+            const icon = document.getElementById(iconId);
 
-            if (passwordInput.type === 'password') {
-                passwordInput.type = 'text';
-                toggleIcon.classList.remove('fa-eye');
-                toggleIcon.classList.add('fa-eye-slash');
+            if (field.type === 'password') {
+                field.type = 'text';
+                icon.classList.remove('fa-eye');
+                icon.classList.add('fa-eye-slash');
             } else {
-                passwordInput.type = 'password';
-                toggleIcon.classList.remove('fa-eye-slash');
-                toggleIcon.classList.add('fa-eye');
+                field.type = 'password';
+                icon.classList.remove('fa-eye-slash');
+                icon.classList.add('fa-eye');
             }
         }
 
-        // Auto-hide alerts after 5 seconds
+        function checkPasswordStrength() {
+            const password = document.getElementById('password').value;
+            const strengthDiv = document.getElementById('password-strength');
+            const strengthText = document.getElementById('strength-text');
+            
+            if (password.length === 0) {
+                strengthDiv.classList.add('d-none');
+                strengthText.classList.add('d-none');
+                return;
+            }
+
+            strengthDiv.classList.remove('d-none');
+            strengthText.classList.remove('d-none');
+
+            let strength = 0;
+            if (password.length >= 8) strength++;
+            if (/[a-z]/.test(password) && /[A-Z]/.test(password)) strength++;
+            if (/[0-9]/.test(password)) strength++;
+            if (/[^a-zA-Z0-9]/.test(password)) strength++;
+
+            if (strength < 2) {
+                strengthDiv.className = 'password-strength weak';
+                strengthText.textContent = '⚠️ Weak password - Add more characters';
+                strengthText.style.color = '#dc3545';
+            } else if (strength < 3) {
+                strengthDiv.className = 'password-strength fair';
+                strengthText.textContent = '👌 Fair password - Could be stronger';
+                strengthText.style.color = '#ffc107';
+            } else {
+                strengthDiv.className = 'password-strength strong';
+                strengthText.textContent = '✓ Strong password';
+                strengthText.style.color = '#28a745';
+            }
+        }
+
+        // Auto-hide alerts
         setTimeout(() => {
             const alerts = document.querySelectorAll('.alert');
-            alerts.forEach(alert => {
+            alerts.forEach((alert, index) => {
                 setTimeout(() => {
-                    alert.style.animation = 'slideDown 0.3s ease reverse';
-                    setTimeout(() => alert.remove(), 300);
-
-                        </button>
-                    </div>
-                </div>
-
-                <!-- Remember Me -->
-                <div class="form-check">
-                    <input type="checkbox" class="form-check-input" id="remember" name="remember">
-                    <label class="form-check-label" for="remember">Remember me for next time</label>
-                </div>
-
-                <!-- Login Button -->
-                <button type="submit" class="btn login-btn w-100">
-                    <i class="fas fa-sign-in-alt me-2"></i>Login Now
-                </button>
-            </form>
-        </div>
-
-        <!-- Footer -->
-        <div class="login-footer">
-            <div class="mb-2">
-                Don't have an account? <a href="{% url 'register' %}">Create one now</a>
-            </div>
-            <small><a href="#" class="text-muted">Forgot your password?</a></small>
-        </div>
-    </div>
-</div>
-
-
-<!-- Bootstrap JS -->
-<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
-
-<script>
-    function togglePassword() {
-        const passwordInput = document.getElementById("password_input");
-        const toggleIcon = document.getElementById("toggle-icon");
-        
-        if (passwordInput.type === "password") {
-            passwordInput.type = "text";
-            toggleIcon.classList.remove("fa-eye");
-            toggleIcon.classList.add("fa-eye-slash");
-        } else {
-            passwordInput.type = "password";
-            toggleIcon.classList.remove("fa-eye-slash");
-            toggleIcon.classList.add("fa-eye");
-        }
-    }
-</script>
-
+                    const bsAlert = new bootstrap.Alert(alert);
+                    bsAlert.close();
+                }, 5000 + (index * 500));
+            });
+        }, 1000);
+    </script>
 </body>
 </html>

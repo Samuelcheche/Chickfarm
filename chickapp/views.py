@@ -16,7 +16,12 @@ logger = logging.getLogger(__name__)
 
 # Create your views here.
 def index(request):
-    return render(request, 'index.html')
+    """Home page view with modern UI"""
+    context = {
+        'page_title': 'Home - Nyandiwa Smart Poultry',
+        'user_authenticated': request.user.is_authenticated,
+    }
+    return render(request, 'index_new.html', context)
 
 def about(request):
     return render(request, 'about.html')
@@ -135,46 +140,99 @@ def orders(request):
     })
 
 def register(request):
-    """ Show the registration form """
+    """User registration view with enhanced validation and modern UI"""
+    if request.user.is_authenticated:
+        return redirect('index')
+    
     if request.method == 'POST':
+        fullname = request.POST.get('fullname', '').strip()
         email = request.POST.get('email', '').strip().lower()
         password = request.POST.get('password', '')
         confirm_password = request.POST.get('confirm_password', '')
+        terms_agreed = request.POST.get('terms', False)
 
         # Validate inputs
-        if not email or not password:
-            messages.error(request, "Email and password are required")
-            return render(request, 'register.html')
+        validation_errors = []
+        
+        if not fullname:
+            validation_errors.append('Full name is required')
+        elif len(fullname) < 2:
+            validation_errors.append('Full name must be at least 2 characters')
+        
+        if not email:
+            validation_errors.append('Email address is required')
+        elif '@' not in email or '.' not in email:
+            validation_errors.append('Please enter a valid email address')
+        
+        if not password:
+            validation_errors.append('Password is required')
+        elif len(password) < 6:
+            validation_errors.append('Password must be at least 6 characters')
+        
+        if password != confirm_password:
+            validation_errors.append('Passwords do not match')
+        
+        if not terms_agreed:
+            validation_errors.append('You must agree to the Terms & Conditions')
+        
+        if validation_errors:
+            for error in validation_errors:
+                messages.error(request, error)
+            return render(request, 'register_new.html', {'fullname': fullname, 'email': email})
 
-        # Check the password
-        if password == confirm_password:
-            try:
-                # Check if user already exists
-                if User.objects.filter(username=email).exists() or User.objects.filter(email=email).exists():
-                    messages.error(request, "Email already exists")
-                else:
-                    user = User.objects.create_user(username=email, email=email, password=password)
-                    messages.success(request, "Account created successfully! Please login.")
-                    return redirect('/login')
-            except Exception as e:
-                logger.error(f"Registration error: {str(e)}")
-                messages.error(request, "An error occurred during registration")
-        else:
-            # Display a message saying passwords don't match
-            messages.error(request, "Passwords do not match")
+        # Check if user already exists
+        if User.objects.filter(username=email).exists() or User.objects.filter(email=email).exists():
+            messages.error(request, 'An account with this email already exists. Please login or use a different email.')
+            return render(request, 'register_new.html', {'fullname': fullname, 'email': email})
 
-    return render(request, 'register.html')
+        try:
+            # Create new user
+            user = User.objects.create_user(
+                username=email,
+                email=email,
+                password=password,
+                first_name=fullname.split()[0],
+                last_name=' '.join(fullname.split()[1:]) if len(fullname.split()) > 1 else '',
+            )
+            
+            # Log the user in immediately after registration
+            user = authenticate(request, username=email, password=password)
+            if user is not None:
+                login(request, user)
+                messages.success(request, f'Welcome {fullname}! Your account has been created successfully.')
+                return redirect('products')  # Redirect to products page
+            else:
+                # If auto-login fails, ask user to login manually
+                messages.success(request, 'Account created successfully! Please login with your credentials.')
+                return redirect('login')
+                
+        except Exception as e:
+            logger.error(f'Registration error: {str(e)}')
+            messages.error(request, 'An unexpected error occurred during registration. Please try again.')
+            return render(request, 'register_new.html', {'fullname': fullname, 'email': email})
+
+    return render(request, 'register_new.html')
 
    
 def login_user(request):
+    """User login view with enhanced validation and modern UI"""
+    if request.user.is_authenticated:
+        return redirect('index')
+    
     if request.method == "POST":
         email = request.POST.get('email', '').strip().lower()
         password = request.POST.get('password', '')
+        remember_me = request.POST.get('remember', False)
 
         # Validate inputs
         if not email or not password:
-            messages.error(request, "Email and password are required")
-            return render(request, 'login.html')
+            messages.error(request, 'Email and password are required')
+            return render(request, 'login_new.html', {'email': email})
+
+        # Check email format
+        if '@' not in email:
+            messages.error(request, 'Please enter a valid email address')
+            return render(request, 'login_new.html', {'email': email})
 
         # Authenticate user
         user = authenticate(request, username=email, password=password)
@@ -182,17 +240,25 @@ def login_user(request):
         # Check if the user exists
         if user is not None:
             login(request, user)
-            messages.success(request, "You are now logged in!")
-            # Admin
-            if user.is_superuser:
-                return redirect('/appointment')
-
-            # For Normal Users
-            return redirect('/index')
+            
+            # Set session timeout based on remember_me
+            if remember_me:
+                request.session.set_expiry(30 * 24 * 60 * 60)  # 30 days
+            
+            messages.success(request, f'Welcome back, {user.first_name or email}!')
+            
+            # Redirect based on user type
+            if user.is_superuser or user.is_staff:
+                return redirect('dashboard')
+            else:
+                # Check if user has a next parameter
+                next_page = request.GET.get('next', 'products')
+                return redirect(next_page)
         else:
-            messages.error(request, "Invalid email or password. Please try again.")
+            messages.error(request, 'Invalid email or password. Please check and try again.')
+            return render(request, 'login_new.html', {'email': email})
 
-    return render(request, 'login.html')
+    return render(request, 'login_new.html')
 
 
 @require_http_methods(["POST"])

@@ -1,0 +1,782 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    {% load static %}
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Nyandiwa Smart Poultry - Fresh Eggs Delivery in Siaya</title>
+    
+    <!-- Bootstrap CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <!-- Font Awesome -->
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <!-- Custom CSS -->
+    <link href="{% static 'css/custom.css' %}" rel="stylesheet">
+    <link href="{% static 'css/carousel.css' %}" rel="stylesheet">
+    
+    <style>
+        :root {
+            --farm-green: #2d5016;
+            --farm-yellow: #ffc107;
+            --farm-brown: #8b5a2b;
+            --text-dark: #2c3e50;
+            --text-secondary: #6c757d;
+        }
+
+        * {
+            font-family: 'Poppins', sans-serif;
+        }
+
+        body {
+            color: var(--text-dark);
+            overflow-x: hidden;
+        }
+
+        /* Navbar Styling */
+        .navbar-modern {
+            background: linear-gradient(135deg, var(--farm-green) 0%, #1a3a0a 100%);
+            box-shadow: 0 2px 12px rgba(0, 0, 0, 0.15);
+            padding: 0.8rem 0;
+        }
+
+        .navbar-brand {
+            font-weight: 700;
+            font-size: 1.3rem;
+            display: flex;
+            align-items: center;
+            gap: 0.7rem;
+        }
+
+        .navbar-brand i {
+            font-size: 1.6rem;
+            animation: bounce 2s infinite;
+        }
+
+        @keyframes bounce {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-5px); }
+        }
+
+        .nav-link {
+            color: rgba(255, 255, 255, 0.85) !important;
+            font-weight: 500;
+            margin: 0 0.3rem;
+            transition: all 0.3s ease;
+            position: relative;
+        }
+
+        .nav-link:hover {
+            color: var(--farm-yellow) !important;
+        }
+
+        .nav-link::after {
+            content: '';
+            position: absolute;
+            bottom: -5px;
+            left: 0;
+            right: 0;
+            height: 2px;
+            background: var(--farm-yellow);
+            transform: scaleX(0);
+            transition: transform 0.3s ease;
+        }
+
+        .nav-link:hover::after {
+            transform: scaleX(1);
+        }
+
+        .btn-nav-login {
+            background: var(--farm-yellow);
+            color: var(--farm-green) !important;
+            font-weight: 600;
+            border-radius: 10px;
+            padding: 0.6rem 1.2rem;
+            transition: all 0.3s ease;
+            border: none;
+        }
+
+        .btn-nav-login:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(255, 193, 7, 0.3);
+            color: var(--farm-green) !important;
+        }
+
+        /* Hero Section */
+        .hero {
+            background: linear-gradient(135deg, var(--farm-green) 0%, #1a3a0a 50%, #0d1f05 100%);
+            color: white;
+            padding: 6rem 2rem;
+            position: relative;
+            overflow: hidden;
+            min-height: 600px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .hero::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            right: -10%;
+            width: 500px;
+            height: 500px;
+            background: radial-gradient(circle, rgba(255, 193, 7, 0.15) 0%, transparent 70%);
+            border-radius: 50%;
+            z-index: 1;
+            animation: float 8s ease-in-out infinite;
+        }
+
+        @keyframes float {
+            0%, 100% { transform: translateY(0px); }
+            50% { transform: translateY(-40px); }
+        }
+
+        .hero-content {
+            max-width: 700px;
+            position: relative;
+            z-index: 2;
+            animation: slideInUp 0.8s ease;
+        }
+
+        @keyframes slideInUp {
+            from {
+                opacity: 0;
+                transform: translateY(50px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .hero h1 {
+            font-weight: 700;
+            font-size: 3.5rem;
+            line-height: 1.2;
+            margin-bottom: 1.5rem;
+        }
+
+        .hero p {
+            font-size: 1.1rem;
+            opacity: 0.95;
+            margin-bottom: 2rem;
+            line-height: 1.6;
+        }
+
+        .btn-hero-primary {
+            background: var(--farm-yellow);
+            color: var(--farm-green) !important;
+            padding: 1rem 2rem;
+            font-weight: 700;
+            border-radius: 12px;
+            border: none;
+            transition: all 0.3s ease;
+            display: inline-flex;
+            align-items: center;
+            gap: 0.7rem;
+        }
+
+        .btn-hero-primary:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 10px 30px rgba(255, 193, 7, 0.4);
+            color: var(--farm-green);
+        }
+
+        .btn-hero-secondary {
+            background: transparent;
+            color: white;
+            padding: 1rem 2rem;
+            font-weight: 700;
+            border: 2px solid white;
+            border-radius: 12px;
+            transition: all 0.3s ease;
+            display: inline-flex;
+            align-items: center;
+            gap: 0.7rem;
+        }
+
+        .btn-hero-secondary:hover {
+            background: white;
+            color: var(--farm-green);
+            transform: translateY(-3px);
+        }
+
+        /* Features Section */
+        .features {
+            padding: 5rem 0;
+            background: #f8f9fa;
+        }
+
+        .section-title {
+            text-align: center;
+            margin-bottom: 3rem;
+        }
+
+        .section-title h2 {
+            font-size: 2.5rem;
+            font-weight: 700;
+            margin-bottom: 1rem;
+            position: relative;
+            display: inline-block;
+        }
+
+        .section-title h2::after {
+            content: '';
+            position: absolute;
+            bottom: -10px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 80px;
+            height: 4px;
+            background: linear-gradient(90deg, var(--farm-green), var(--farm-yellow));
+            border-radius: 2px;
+        }
+
+        .section-title p {
+            color: var(--text-secondary);
+            font-size: 1.1rem;
+        }
+
+        .feature-card {
+            background: white;
+            border-radius: 16px;
+            padding: 2rem;
+            text-align: center;
+            transition: all 0.3s ease;
+            height: 100%;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.08);
+            border: 1px solid #e9ecef;
+        }
+
+        .feature-card:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 15px 40px rgba(45, 80, 22, 0.15);
+        }
+
+        .feature-icon {
+            width: 80px;
+            height: 80px;
+            background: linear-gradient(135deg, var(--farm-green) 0%, #3d6a1f 100%);
+            border-radius: 16px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 2rem;
+            color: white;
+            margin: 0 auto 1.5rem;
+            transition: all 0.3s ease;
+        }
+
+        .feature-card:hover .feature-icon {
+            transform: scale(1.1) rotate(5deg);
+            background: linear-gradient(135deg, var(--farm-yellow) 0%, #ffb300 100%);
+        }
+
+        .feature-card h3 {
+            font-weight: 700;
+            margin-bottom: 1rem;
+            color: var(--text-dark);
+        }
+
+        .feature-card p {
+            color: var(--text-secondary);
+            line-height: 1.6;
+        }
+
+        /* CTA Section */
+        .cta {
+            background: linear-gradient(135deg, var(--farm-yellow) 0%, #ffb300 100%);
+            color: white;
+            padding: 4rem 2rem;
+            border-radius: 16px;
+            margin: 5rem 0;
+            text-align: center;
+            box-shadow: 0 15px 40px rgba(255, 193, 7, 0.3);
+        }
+
+        .cta h2 {
+            font-size: 2.2rem;
+            font-weight: 700;
+            margin-bottom: 1rem;
+        }
+
+        .cta p {
+            font-size: 1.1rem;
+            margin-bottom: 2rem;
+            opacity: 0.95;
+        }
+
+        .btn-cta {
+            background: var(--farm-green);
+            color: white;
+            padding: 1rem 2rem;
+            font-weight: 700;
+            border-radius: 12px;
+            transition: all 0.3s ease;
+            display: inline-flex;
+            align-items: center;
+            gap: 0.7rem;
+            border: none;
+        }
+
+        .btn-cta:hover {
+            background: white;
+            color: var(--farm-green);
+            transform: translateY(-3px);
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+        }
+
+        /* Footer */
+        footer {
+            background: var(--text-dark);
+            color: white;
+            padding: 4rem 0 2rem;
+            margin-top: 5rem;
+        }
+
+        .footer-section h4 {
+            font-weight: 700;
+            margin-bottom: 1.5rem;
+            font-size: 1.1rem;
+        }
+
+        .footer-link {
+            color: rgba(255, 255, 255, 0.7);
+            text-decoration: none;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            margin-bottom: 0.7rem;
+        }
+
+        .footer-link:hover {
+            color: var(--farm-yellow);
+            transform: translateX(5px);
+        }
+
+        .social-icons {
+            display: flex;
+            gap: 1rem;
+            margin-top: 1.5rem;
+        }
+
+        .social-icon {
+            width: 45px;
+            height: 45px;
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: var(--farm-yellow);
+            text-decoration: none;
+            transition: all 0.3s ease;
+            border: 2px solid transparent;
+        }
+
+        .social-icon:hover {
+            background: var(--farm-yellow);
+            color: var(--farm-green);
+            border-color: var(--farm-yellow);
+            transform: translateY(-5px);
+        }
+
+        .footer-divider {
+            background: rgba(255, 255, 255, 0.1);
+            height: 1px;
+            margin: 2rem 0;
+        }
+
+        .footer-bottom {
+            text-align: center;
+            padding-top: 2rem;
+            color: rgba(255, 255, 255, 0.6);
+            font-size: 0.95rem;
+        }
+
+        .footer-bottom a {
+            color: var(--farm-yellow);
+            text-decoration: none;
+        }
+
+        .footer-bottom a:hover {
+            text-decoration: underline;
+        }
+
+        /* Back to Top Button */
+        #backToTop {
+            position: fixed;
+            bottom: 30px;
+            right: 30px;
+            width: 50px;
+            height: 50px;
+            background: var(--farm-green);
+            color: white;
+            border-radius: 50%;
+            display: none;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            box-shadow: 0 5px 20px rgba(45, 80, 22, 0.3);
+            z-index: 999;
+            border: none;
+            font-size: 1.2rem;
+        }
+
+        #backToTop:hover {
+            background: var(--farm-yellow);
+            color: var(--farm-green);
+            transform: translateY(-5px);
+        }
+
+        #backToTop.show {
+            display: flex;
+        }
+
+        @media (max-width: 768px) {
+            .hero {
+                padding: 4rem 1rem;
+                min-height: 500px;
+            }
+
+            .hero h1 {
+                font-size: 2rem;
+            }
+
+            .hero p {
+                font-size: 1rem;
+            }
+
+            .features {
+                padding: 3rem 0;
+            }
+
+            .section-title h2 {
+                font-size: 1.8rem;
+            }
+
+            .cta {
+                margin: 3rem 0;
+                padding: 2.5rem 1rem;
+            }
+
+            .cta h2 {
+                font-size: 1.5rem;
+            }
+
+            footer {
+                padding: 2rem 0;
+            }
+
+            #backToTop {
+                bottom: 20px;
+                right: 20px;
+                width: 45px;
+                height: 45px;
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <!-- Navigation -->
+    <nav class="navbar navbar-expand-lg navbar-dark navbar-modern sticky-top">
+        <div class="container-lg">
+            <a class="navbar-brand text-white" href="{% url 'index' %}">
+                <i class="fas fa-egg"></i>
+                <span>Nyandiwa Poultry</span>
+            </a>
+            
+            <button class="navbar-toggler border-0" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav ms-auto align-items-center gap-2">
+                    <li class="nav-item">
+                        <a class="nav-link" href="{% url 'index' %}">
+                            <i class="fas fa-home me-1"></i>Home
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="{% url 'products' %}">
+                            <i class="fas fa-box me-1"></i>Products
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="{% url 'delivery' %}">
+                            <i class="fas fa-truck me-1"></i>Delivery
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="{% url 'about' %}">
+                            <i class="fas fa-info-circle me-1"></i>About
+                        </a>
+                    </li>
+                    {% if not user.is_authenticated %}
+                    <li class="nav-item ms-lg-3">
+                        <a href="{% url 'login' %}" class="btn btn-nav-login btn-sm">
+                            <i class="fas fa-sign-in-alt me-1"></i>Login
+                        </a>
+                    </li>
+                    {% else %}
+                    <li class="nav-item">
+                        <a class="nav-link" href="{% url 'dashboard' %}">
+                            <i class="fas fa-user-circle me-1"></i>{{ user.username }}
+                        </a>
+                    </li>
+                    {% endif %}
+                </ul>
+            </div>
+        </div>
+    </nav>
+
+    {% if user.is_authenticated %}
+    <div class="alert alert-success alert-dismissible fade show m-3" role="alert">
+        <i class="fas fa-check-circle me-2"></i>
+        <strong>Welcome back, {{ user.username }}!</strong> You have special offers waiting.
+        <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+    </div>
+    {% endif %}
+
+    <!-- Hero Section -->
+    <section class="hero">
+        <div class="hero-content">
+            <h1>
+                <span style="color: var(--farm-yellow);">Fresh Farm Eggs</span> Delivered to Your Door
+            </h1>
+            <p>
+                Experience premium quality eggs from our smart poultry farm in Siaya County. Order online with fast delivery and flexible payment options.
+            </p>
+            <div class="d-flex flex-wrap gap-3">
+                <a href="{% url 'products' %}" class="btn btn-hero-primary">
+                    <i class="fas fa-shopping-cart"></i>Shop Now
+                </a>
+                <a href="#features" class="btn btn-hero-secondary">
+                    <i class="fas fa-arrow-down"></i>Learn More
+                </a>
+            </div>
+        </div>
+    </section>
+
+    <!-- Features Section -->
+    <section class="features" id="features">
+        <div class="container-lg">
+            <div class="section-title">
+                <h2>Why Choose Us?</h2>
+                <p>Premium quality eggs with exceptional service</p>
+            </div>
+
+            <div class="row g-4">
+                <!-- Feature 1 -->
+                <div class="col-md-6 col-lg-4">
+                    <div class="feature-card">
+                        <div class="feature-icon">
+                            <i class="fas fa-star"></i>
+                        </div>
+                        <h3>Premium Quality</h3>
+                        <p>Eggs collected daily from healthy birds and passed through strict quality checks. Guaranteed freshness with every order.</p>
+                    </div>
+                </div>
+
+                <!-- Feature 2 -->
+                <div class="col-md-6 col-lg-4">
+                    <div class="feature-card">
+                        <div class="feature-icon">
+                            <i class="fas fa-truck"></i>
+                        </div>
+                        <h3>Fast Delivery</h3>
+                        <p>Same-day delivery within Siaya County. Track your order in real-time and receive your eggs at your convenience.</p>
+                    </div>
+                </div>
+
+                <!-- Feature 3 -->
+                <div class="col-md-6 col-lg-4">
+                    <div class="feature-card">
+                        <div class="feature-icon">
+                            <i class="fas fa-mobile-alt"></i>
+                        </div>
+                        <h3>Easy Ordering</h3>
+                        <p>Simple online ordering with multiple payment options: M-Pesa, Airtel Money, and Cash on Delivery.</p>
+                    </div>
+                </div>
+
+                <!-- Feature 4 -->
+                <div class="col-md-6 col-lg-4">
+                    <div class="feature-card">
+                        <div class="feature-icon">
+                            <i class="fas fa-headset"></i>
+                        </div>
+                        <h3>24/7 Support</h3>
+                        <p>Our friendly customer support team is available round the clock to help you with any questions or concerns.</p>
+                    </div>
+                </div>
+
+                <!-- Feature 5 -->
+                <div class="col-md-6 col-lg-4">
+                    <div class="feature-card">
+                        <div class="feature-icon">
+                            <i class="fas fa-shield-alt"></i>
+                        </div>
+                        <h3>Secure Checkout</h3>
+                        <p>Your data is safe with us. We use industry-standard encryption to protect your personal and payment information.</p>
+                    </div>
+                </div>
+
+                <!-- Feature 6 -->
+                <div class="col-md-6 col-lg-4">
+                    <div class="feature-card">
+                        <div class="feature-icon">
+                            <i class="fas fa-leaf"></i>
+                        </div>
+                        <h3>Eco-Friendly</h3>
+                        <p>Sustainable farming practices. We care for our birds and the environment with responsible poultry farming.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- CTA Section -->
+    <section class="container-lg">
+        <div class="cta">
+            <h2>Ready to Get Fresh Eggs?</h2>
+            <p>Create an account now and enjoy exclusive benefits on your first order!</p>
+            {% if not user.is_authenticated %}
+            <a href="{% url 'register' %}" class="btn btn-cta">
+                <i class="fas fa-user-plus"></i>Register Now
+            </a>
+            {% else %}
+            <a href="{% url 'products' %}" class="btn btn-cta">
+                <i class="fas fa-shopping-cart"></i>Start Shopping
+            </a>
+            {% endif %}
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer>
+        <div class="container-lg">
+            <div class="row g-4 mb-4">
+                <!-- About -->
+                <div class="col-md-3">
+                    <div class="footer-section">
+                        <h4>
+                            <i class="fas fa-egg me-2" style="color: var(--farm-yellow);"></i>Nyandiwa
+                        </h4>
+                        <p style="color: rgba(255, 255, 255, 0.7); font-size: 0.95rem;">
+                            Premium fresh eggs from our smart farm in Siaya County. Delivered with care.
+                        </p>
+                    </div>
+                </div>
+
+                <!-- Quick Links -->
+                <div class="col-md-3">
+                    <div class="footer-section">
+                        <h4>Quick Links</h4>
+                        <a href="{% url 'index' %}" class="footer-link">
+                            <i class="fas fa-chevron-right"></i>Home
+                        </a>
+                        <a href="{% url 'products' %}" class="footer-link">
+                            <i class="fas fa-chevron-right"></i>Products
+                        </a>
+                        <a href="{% url 'delivery' %}" class="footer-link">
+                            <i class="fas fa-chevron-right"></i>Delivery
+                        </a>
+                        <a href="{% url 'about' %}" class="footer-link">
+                            <i class="fas fa-chevron-right"></i>About Us
+                        </a>
+                    </div>
+                </div>
+
+                <!-- Contact -->
+                <div class="col-md-3">
+                    <div class="footer-section">
+                        <h4>Contact Us</h4>
+                        <a href="tel:+254725551199" class="footer-link">
+                            <i class="fas fa-phone"></i>+254 725 551 199
+                        </a>
+                        <a href="https://wa.me/254725551199" target="_blank" class="footer-link">
+                            <i class="fab fa-whatsapp"></i>WhatsApp
+                        </a>
+                        <p style="color: rgba(255, 255, 255, 0.7); margin-top: 1rem; margin-bottom: 0;">
+                            <i class="fas fa-map-marker-alt me-2"></i>Siaya Nyandiwa, Kenya
+                        </p>
+                    </div>
+                </div>
+
+                <!-- Newsletter -->
+                <div class="col-md-3">
+                    <div class="footer-section">
+                        <h4>Newsletter</h4>
+                        <p style="color: rgba(255, 255, 255, 0.7); font-size: 0.95rem; margin-bottom: 1rem;">
+                            Subscribe for updates and special offers
+                        </p>
+                        <div class="input-group">
+                            <input type="email" class="form-control" placeholder="Your email" style="border-radius: 8px 0 0 8px;">
+                            <button class="btn" style="background: var(--farm-yellow); color: var(--farm-green); font-weight: 700; border-radius: 0 8px 8px 0;">
+                                <i class="fas fa-paper-plane"></i>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="footer-divider"></div>
+
+            <div class="footer-bottom">
+                <p>&copy; 2025 <strong>Nyandiwa Smart Poultry Connect</strong>. All rights reserved. | 
+                <a href="#">Privacy Policy</a> | <a href="#">Terms of Service</a></p>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Back to Top Button -->
+    <button id="backToTop" title="Back to top">
+        <i class="fas fa-arrow-up"></i>
+    </button>
+
+    <!-- Bootstrap JS -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    
+    <!-- Custom JS -->
+    <script src="{% static 'js/main.js' %}"></script>
+    <script>
+        // Back to Top Button
+        const backToTopButton = document.getElementById('backToTop');
+        
+        window.addEventListener('scroll', () => {
+            if (window.pageYOffset > 300) {
+                backToTopButton.classList.add('show');
+            } else {
+                backToTopButton.classList.remove('show');
+            }
+        });
+
+        backToTopButton.addEventListener('click', () => {
+            window.scrollTo({
+                top: 0,
+                behavior: 'smooth'
+            });
+        });
+
+        // Smooth scroll for anchor links
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function (e) {
+                const href = this.getAttribute('href');
+                if (href !== '#' && document.querySelector(href)) {
+                    e.preventDefault();
+                    document.querySelector(href).scrollIntoView({
+                        behavior: 'smooth'
+                    });
+                }
+            });
+        });
+    </script>
+</body>
+</html>
