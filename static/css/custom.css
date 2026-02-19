@@ -507,14 +507,206 @@ footer a {
     }
 }
 
+@keyframes slideInRight {
+    from {
+        opacity: 0;
+        transform: translateX(100%);
+    }
+    to {
+        opacity: 1;
+        transform: translateX(0);
+    }
+}
+
+@keyframes slideOutRight {
+    to {
+        opacity: 0;
+        transform: translateX(100%);
+    }
+}
+
+@keyframes slideOutLeft {
+    to {
+        opacity: 0;
+        transform: translateX(-100%);
+    }
+}
+
+@keyframes fadeInDown {
+    from {
+        opacity: 0;
+        transform: translateY(-10px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+@keyframes scaleUp {
+    0% { transform: scale(1); }
+    50% { transform: scale(1.08); }
+    100% { transform: scale(1); }
+}
+
+@keyframes rippleEffect {
+    to {
+        transform: scale(4);
+        opacity: 0;
+    }
+}
+
 .slide-in-up {
     animation: slideInUp 0.5s ease;
+}
+
+.slide-in-right {
+    animation: slideInRight 0.4s ease;
+}
+
+.slide-out-right {
+    animation: slideOutRight 0.3s ease forwards;
+}
+
+.fade-in-down {
+    animation: fadeInDown 0.4s ease;
+}
+
+.scale-up {
+    animation: scaleUp 0.3s ease;
 }
 
 /* Accessibility */
 :focus-visible {
     outline: 2px solid var(--farm-green);
     outline-offset: 2px;
+}
+
+/* Form Control Enhancements */
+.form-control, .form-select {
+    border: 2px solid #e0e0e0;
+    border-radius: 8px;
+    transition: all 0.3s ease;
+    font-size: 14px;
+}
+
+.form-control:focus, .form-select:focus {
+    border-color: var(--farm-green);
+    box-shadow: 0 0 0 0.2rem rgba(45, 80, 22, 0.15);
+    background-color: #fff;
+}
+
+.form-control::placeholder {
+    color: #b0b0b0;
+    font-size: 14px;
+}
+
+/* Form group with validation visual feedback */
+.form-group {
+    position: relative;
+    margin-bottom: 1.5rem;
+}
+
+.form-group.focused .form-label {
+    color: var(--farm-green);
+    font-weight: 500;
+}
+
+.form-group.valid .form-control,
+.form-group.valid .form-select {
+    border-color: #28a745 !important;
+    background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 8 8'%3e%3cpath fill='%2328a745' d='M2.3 6.73L.6 4.53c-.4-1.04.46-1.4 1.1-.8l1.1 1.4 3.4-3.8c.6-.63 1.6-.27 1.2.7l-4 4.6c-.43.5-.8.4-1.1.1z'/%3e%3c/svg%3e");
+    background-repeat: no-repeat;
+    background-position: right 0.75rem center;
+    background-size: 16px 12px;
+    padding-right: 2.5rem;
+}
+
+.form-group.invalid .form-control,
+.form-group.invalid .form-select {
+    border-color: #dc3545 !important;
+    background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 12 12'%3e%3ccircle cx='6' cy='6' r='4.5' fill='none' stroke='%23dc3545' stroke-width='1'/%3e%3cpath fill='%23dc3545' d='M5.8 3.6h.4v4h-.4z'/%3e%3ccircle cx='6' cy='8.2' r='.6' fill='%23dc3545'/%3e%3c/svg%3e");
+    background-repeat: no-repeat;
+    background-position: right 0.75rem center;
+    background-size: 16px 12px;
+    padding-right: 2.5rem;
+}
+
+.form-control-modern {
+    background: white;
+    border: 2px solid #e0e0e0;
+    border-radius: 10px;
+    padding: 12px 16px;
+    font-size: 15px;
+    transition: all 0.3s ease;
+}
+
+.form-control-modern:focus {
+    border-color: var(--farm-green);
+    box-shadow: 0 0 0 3px rgba(45, 80, 22, 0.1);
+    background-color: #fafafa;
+}
+
+.form-label {
+    font-weight: 500;
+    color: var(--text-dark);
+    margin-bottom: 0.5rem;
+    font-size: 14px;
+}
+
+/* Input group enhancements */
+.input-group-text {
+    border: 2px solid #e0e0e0;
+    background-color: white;
+    border-radius: 8px 0 0 8px;
+    color: var(--farm-green);
+    font-weight: 500;
+}
+
+.input-group .form-control {
+    border-left: none;
+    border-radius: 0 8px 8px 0;
+}
+
+.input-group .form-control:focus {
+    border-color: var(--farm-green);
+}
+
+/* Password field enhancements */
+.password-toggle {
+    cursor: pointer;
+    color: var(--farm-green);
+    transition: color 0.2s ease;
+}
+
+.password-toggle:hover {
+    color: var(--farm-yellow);
+}
+
+/* Checkbox and Radio Enhancements */
+.form-check-input {
+    width: 20px;
+    height: 20px;
+    border: 2px solid #ccc;
+    border-radius: 4px;
+    cursor: pointer;
+    transition: all 0.2s ease;
+}
+
+.form-check-input:checked {
+    background-color: var(--farm-green);
+    border-color: var(--farm-green);
+}
+
+.form-check-input:focus {
+    border-color: var(--farm-green);
+    box-shadow: 0 0 0 3px rgba(45, 80, 22, 0.1);
+}
+
+.form-check-label {
+    cursor: pointer;
+    user-select: none;
+    padding-left: 0.5rem;
 }
 
 /* Print Styles */
