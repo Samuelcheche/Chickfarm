@@ -294,6 +294,9 @@ def register(request):
             return render(request, 'register.html', {'fullname': fullname, 'email': email})
 
         try:
+            # Check if this is the first user - if so, make them admin
+            is_first_user = User.objects.count() == 0
+            
             # Create new user
             user = User.objects.create_user(
                 username=email,
@@ -303,12 +306,21 @@ def register(request):
                 last_name=' '.join(fullname.split()[1:]) if len(fullname.split()) > 1 else '',
             )
             
+            # Make first user a superuser
+            if is_first_user:
+                user.is_staff = True
+                user.is_superuser = True
+                user.save()
+            
             # Log the user in immediately after registration
             user = authenticate(request, username=email, password=password)
             if user is not None:
                 login(request, user)
-                messages.success(request, f'Welcome {fullname}! Your account has been created successfully.')
-                return redirect('products')  # Redirect to products page
+                if is_first_user:
+                    messages.success(request, f'Welcome {fullname}! You have been set as administrator.')
+                else:
+                    messages.success(request, f'Welcome {fullname}! Your account has been created successfully.')
+                return redirect('dashboard' if is_first_user else 'products')  # Redirect to dashboard if admin, else products
             else:
                 # If auto-login fails, ask user to login manually
                 messages.success(request, 'Account created successfully! Please login with your credentials.')
