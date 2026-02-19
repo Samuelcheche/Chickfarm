@@ -72,11 +72,12 @@
             width: 100%;
             max-width: 360px;
             padding: 10px;
+            margin: auto;
         }
 
         .login-card {
             background: white;
-            border-radius: 20px;
+            border-radius: 16px;
             box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
             overflow: hidden;
             animation: slideUp 0.7s ease;
@@ -346,8 +347,16 @@
 
         @media (max-width: 768px) {
             .login-wrapper {
-                padding: 15px;
+                padding: 10px;
+                max-width: 360px;
             }
+            .login-header {
+                padding: 1.2rem 1rem;
+            }
+            .login-body {
+                padding: 1rem;
+            }
+        }
 
             .login-card {
                 border-radius: 16px;
