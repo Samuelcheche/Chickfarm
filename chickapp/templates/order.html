@@ -40,23 +40,34 @@
                     </li>
                     <li class="nav-item">
                         <a class="nav-link nav-link-modern active" href="{% url 'orders' %}">
-                            <i class="fas fa-shopping-bag me-2"></i>Orders
+                            <i class="fas fa-shopping-bag me-2"></i>My Orders
                         </a>
                     </li>
+                    {% if user.is_superuser or user.is_staff %}
                     <li class="nav-item">
                         <a class="nav-link nav-link-modern" href="{% url 'dashboard' %}">
                             <i class="fas fa-chart-line me-2"></i>Dashboard
                         </a>
                     </li>
+                    {% endif %}
                     <li class="nav-item">
                         <a class="nav-link nav-link-modern" href="{% url 'about' %}">
                             <i class="fas fa-info-circle me-2"></i>About
                         </a>
                     </li>
                     <li class="nav-item border-start ps-3 ms-2">
-                        <a href="{% url 'logout' %}" class="btn btn-nav-primary btn-sm">
-                            <i class="fas fa-sign-out-alt me-2"></i>Logout
-                        </a>
+                        <div class="dropdown">
+                            <button class="btn btn-nav-primary btn-sm dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false">
+                                <i class="fas fa-user-circle me-2"></i>{{ user.first_name|default:user.username }}
+                            </button>
+                            <ul class="dropdown-menu dropdown-menu-end">
+                                <li><span class="dropdown-header">{{ user.email }}</span></li>
+                                <li><hr class="dropdown-divider"></li>
+                                <li><a class="dropdown-item text-danger" href="{% url 'logout' %}">
+                                    <i class="fas fa-sign-out-alt me-2"></i>Logout
+                                </a></li>
+                            </ul>
+                        </div>
                     </li>
                 </ul>
             </div>

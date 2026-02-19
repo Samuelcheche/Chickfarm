@@ -48,20 +48,49 @@
                             <i class="fas fa-truck me-2"></i>Delivery
                         </a>
                     </li>
+                    {% if user.is_authenticated %}
+                    <li class="nav-item">
+                        <a class="nav-link nav-link-modern" href="{% url 'orders' %}">
+                            <i class="fas fa-shopping-bag me-2"></i>My Orders
+                        </a>
+                    </li>
+                    {% endif %}
                     <li class="nav-item">
                         <a class="nav-link nav-link-modern" href="{% url 'about' %}">
                             <i class="fas fa-info-circle me-2"></i>About
                         </a>
                     </li>
                     <li class="nav-item border-start ps-3 ms-2">
+                        {% if user.is_authenticated %}
+                        <div class="dropdown">
+                            <button class="btn btn-nav-primary btn-sm dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false">
+                                <i class="fas fa-user-circle me-2"></i>{{ user.first_name|default:user.username }}
+                            </button>
+                            <ul class="dropdown-menu dropdown-menu-end">
+                                <li><span class="dropdown-header">{{ user.email }}</span></li>
+                                <li><hr class="dropdown-divider"></li>
+                                <li><a class="dropdown-item" href="{% url 'orders' %}">
+                                    <i class="fas fa-shopping-bag me-2"></i>My Orders
+                                </a></li>
+                                {% if user.is_superuser or user.is_staff %}
+                                <li><a class="dropdown-item" href="{% url 'dashboard' %}">
+                                    <i class="fas fa-chart-line me-2"></i>Dashboard
+                                </a></li>
+                                {% endif %}
+                                <li><hr class="dropdown-divider"></li>
+                                <li><a class="dropdown-item text-danger" href="{% url 'logout' %}">
+                                    <i class="fas fa-sign-out-alt me-2"></i>Logout
+                                </a></li>
+                            </ul>
+                        </div>
+                        {% else %}
                         <button class="btn btn-nav-primary btn-sm" data-bs-toggle="modal" data-bs-target="#loginModal">
                             <i class="fas fa-sign-in-alt me-2"></i>Login
                         </button>
-                    </li>
-                    <li class="nav-item">
                         <button class="btn btn-nav-secondary btn-sm" data-bs-toggle="modal" data-bs-target="#registerModal">
                             <i class="fas fa-user-plus me-2"></i>Register
                         </button>
+                        {% endif %}
                     </li>
                 </ul>
             </div>
@@ -80,15 +109,47 @@
         </div>
     </div>
 
+    <!-- Hero Section with Clear Header -->
+    <div class="bg-farm-green text-white py-5 position-relative overflow-hidden">
+        <div class="position-absolute top-0 end-0 opacity-5" style="font-size: 15rem; z-index: 0; color: rgba(255,193,7,0.1);">
+            <i class="fas fa-truck"></i>
+        </div>
+        <div class="container position-relative" style="z-index: 1;">
+            <div class="row align-items-center">
+                <div class="col-lg-8">
+                    <span class="badge bg-farm-yellow text-dark mb-3" style="font-size: 0.9rem; padding: 0.6rem 1rem; font-weight: 700;">
+                        <i class="fas fa-check-circle me-2"></i>FAST & RELIABLE SERVICE
+                    </span>
+                    <h1 class="display-4 fw-bold mb-3" style="font-weight: 800; letter-spacing: -0.5px; line-height: 1.2; text-shadow: 0 2px 4px rgba(0,0,0,0.2);">
+                        Quick Delivery of Fresh Eggs to Your Door
+                    </h1>
+                    <p class="lead mb-4" style="font-size: 1.1rem; line-height: 1.6; color: #f0f0f0; font-weight: 500;">
+                        We guarantee fresh, high-quality eggs delivered safely to your location. 
+                        Choose the delivery option that works best for you and track your order in real-time.
+                    </p>
+                    <div class="d-flex flex-wrap gap-3">
+                        <div class="d-flex align-items-center" style="font-weight: 500;">
+                            <i class="fas fa-truck-fast text-farm-yellow me-2" style="font-size: 1.5rem;"></i>
+                            <span>Same-day Express Available</span>
+                        </div>
+                        <div class="d-flex align-items-center" style="font-weight: 500;">
+                            <i class="fas fa-map-location-dot text-farm-yellow me-2" style="font-size: 1.5rem;"></i>
+                            <span>Siaya County Wide Coverage</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
     <!-- Main Content -->
     <main class="py-5">
         <div class="container">
-            <!-- Delivery Header -->
-            <div class="text-center mb-5">
-                <h1 class="display-5 fw-bold text-dark mb-3">Fast & Reliable Delivery</h1>
-                <p class="text-secondary mx-auto" style="max-width: 42rem;">
-                    We ensure your eggs reach you fresh and intact. Track your delivery in real-time
-                    and enjoy our convenient delivery options.
+            <!-- Section Title -->
+            <div class="mb-5">
+                <h2 class="h2 fw-bold mb-2">Choose Your Delivery Option</h2>
+                <p class="text-secondary fs-5">
+                    Select the delivery method that best fits your schedule and location. All options include safe handling and quality assurance.
                 </p>
             </div>
 
@@ -96,105 +157,148 @@
             <div class="row g-4 mb-5">
                 <!-- Standard Delivery -->
                 <div class="col-md-4">
-                    <div class="card h-100 hover-lift">
-                        <div class="card-body text-center p-4">
-                            <div class="rounded-circle bg-farm-green text-white mx-auto mb-4" 
-                                 style="width: 80px; height: 80px; display: flex; align-items: center; justify-content: center;">
-                                <i class="fas fa-truck fs-2"></i>
+                    <div class="card h-100 hover-lift shadow-sm">
+                        <div class="card-body p-4">
+                            <div class="text-center mb-4">
+                                <div class="rounded-circle bg-farm-green bg-opacity-10 d-inline-flex align-items-center justify-content-center mb-3" 
+                                     style="width: 90px; height: 90px;">
+                                    <i class="fas fa-truck text-farm-green" style="font-size: 2.5rem;"></i>
+                                </div>
+                                <h3 class="h5 fw-bold">Standard Delivery</h3>
                             </div>
-                            <h3 class="h4 fw-bold mb-3">Standard Delivery</h3>
-                            <p class="text-secondary mb-4">
-                                Next-day delivery for orders placed before 4 PM.
-                                Available within Siaya County.
-                            </p>
-                            <div class="price-tag mb-3">
-                                <span class="fs-4 fw-bold text-farm-green">KSh 100</span>
-                                <small class="d-block text-secondary">Per delivery</small>
+                            <div class="mb-4">
+                                <p class="small text-muted mb-3"><i class="far fa-clock text-farm-green me-2"></i><strong>Delivery Time:</strong> Next Day</p>
+                                <p class="small text-muted mb-3"><i class="fas fa-map-pin text-farm-green me-2"></i><strong>Coverage:</strong> Siaya County</p>
+                                <p class="small text-muted mb-3"><i class="fas fa-calendar-check text-farm-green me-2"></i><strong>Order Cutoff:</strong> 4:00 PM Daily</p>
                             </div>
-                            <button class="btn btn-farm-green">Select Option</button>
+                            <div class="bg-light p-3 rounded mb-4 text-center">
+                                <div class="text-farm-green fs-4 fw-bold">KSh 100</div>
+                                <small class="text-secondary">One-time delivery charge</small>
+                            </div>
+                            <button class="btn btn-farm-green btn-sm w-100">
+                                <i class="fas fa-check me-2"></i>Select This Option
+                            </button>
                         </div>
                     </div>
                 </div>
 
                 <!-- Express Delivery -->
                 <div class="col-md-4">
-                    <div class="card h-100 hover-lift border-farm-yellow border-2">
-                        <div class="card-body text-center p-4">
-                            <div class="rounded-circle bg-farm-yellow text-dark mx-auto mb-4" 
-                                 style="width: 80px; height: 80px; display: flex; align-items: center; justify-content: center;">
-                                <i class="fas fa-bolt fs-2"></i>
+                    <div class="card h-100 hover-lift shadow-sm border-farm-yellow border-2 position-relative">
+                        <div class="badge bg-farm-yellow text-dark position-absolute top-0 end-0 m-3">
+                            <i class="fas fa-lightning me-1"></i>Popular
+                        </div>
+                        <div class="card-body p-4">
+                            <div class="text-center mb-4">
+                                <div class="rounded-circle bg-farm-yellow bg-opacity-15 d-inline-flex align-items-center justify-content-center mb-3" 
+                                     style="width: 90px; height: 90px;">
+                                    <i class="fas fa-bolt text-farm-yellow" style="font-size: 2.5rem;"></i>
+                                </div>
+                                <h3 class="h5 fw-bold">Express Delivery</h3>
                             </div>
-                            <h3 class="h4 fw-bold mb-3">Express Delivery</h3>
-                            <p class="text-secondary mb-4">
-                                Same-day delivery for orders placed before 12 PM.
-                                Available within 10km radius.
-                            </p>
-                            <div class="price-tag mb-3">
-                                <span class="fs-4 fw-bold text-farm-green">KSh 200</span>
-                                <small class="d-block text-secondary">Per delivery</small>
+                            <div class="mb-4">
+                                <p class="small text-muted mb-3"><i class="far fa-clock text-farm-yellow me-2"></i><strong>Delivery Time:</strong> Same Day</p>
+                                <p class="small text-muted mb-3"><i class="fas fa-map-pin text-farm-yellow me-2"></i><strong>Coverage:</strong> 10km Radius</p>
+                                <p class="small text-muted mb-3"><i class="fas fa-calendar-check text-farm-yellow me-2"></i><strong>Order Cutoff:</strong> 12:00 PM Daily</p>
                             </div>
-                            <button class="btn btn-farm-yellow">Select Option</button>
+                            <div class="bg-light p-3 rounded mb-4 text-center">
+                                <div class="text-farm-green fs-4 fw-bold">KSh 200</div>
+                                <small class="text-secondary">One-time delivery charge</small>
+                            </div>
+                            <button class="btn btn-farm-yellow btn-sm w-100">
+                                <i class="fas fa-check me-2"></i>Select This Option
+                            </button>
                         </div>
                     </div>
                 </div>
 
                 <!-- Pickup Option -->
                 <div class="col-md-4">
-                    <div class="card h-100 hover-lift">
-                        <div class="card-body text-center p-4">
-                            <div class="rounded-circle bg-farm-brown text-white mx-auto mb-4" 
-                                 style="width: 80px; height: 80px; display: flex; align-items: center; justify-content: center;">
-                                <i class="fas fa-store fs-2"></i>
+                    <div class="card h-100 hover-lift shadow-sm">
+                        <div class="card-body p-4">
+                            <div class="text-center mb-4">
+                                <div class="rounded-circle bg-success bg-opacity-10 d-inline-flex align-items-center justify-content-center mb-3" 
+                                     style="width: 90px; height: 90px;">
+                                    <i class="fas fa-store text-success" style="font-size: 2.5rem;"></i>
+                                </div>
+                                <h3 class="h5 fw-bold">Self Pickup</h3>
                             </div>
-                            <h3 class="h4 fw-bold mb-3">Self Pickup</h3>
-                            <p class="text-secondary mb-4">
-                                Collect your order from our farm location.
-                                Available during business hours.
-                            </p>
-                            <div class="price-tag mb-3">
-                                <span class="fs-4 fw-bold text-farm-green">Free</span>
-                                <small class="d-block text-secondary">No extra charge</small>
+                            <div class="mb-4">
+                                <p class="small text-muted mb-3"><i class="far fa-clock text-success me-2"></i><strong>Pickup Time:</strong> Same Day (2hrs after order)</p>
+                                <p class="small text-muted mb-3"><i class="fas fa-map-pin text-success me-2"></i><strong>Location:</strong> Farm Office</p>
+                                <p class="small text-muted mb-3"><i class="fas fa-business-time text-success me-2"></i><strong>Hours:</strong> 8:00 AM - 6:00 PM</p>
                             </div>
-                            <button class="btn btn-farm-green">Select Option</button>
+                            <div class="bg-light p-3 rounded mb-4 text-center">
+                                <div class="text-success fs-4 fw-bold">FREE</div>
+                                <small class="text-secondary">No delivery charge</small>
+                            </div>
+                            <button class="btn btn-success btn-sm w-100">
+                                <i class="fas fa-check me-2"></i>Select This Option
+                            </button>
                         </div>
                     </div>
                 </div>
             </div>
 
-            <!-- Coverage Map -->
-            <div class="row align-items-center g-5 mb-5">
+            <!-- Coverage Map Section -->
+            <div class="row align-items-center g-5 mb-5 py-5 border-top border-bottom">
                 <div class="col-lg-6">
-                    <h2 class="h3 fw-bold mb-4">Delivery Coverage Area</h2>
-                    <p class="text-secondary mb-4">
-                        We currently deliver to the following areas in Siaya County:
-                    </p>
-                    <div class="row g-4">
+                    <div>
+                        <h2 class="h3 fw-bold mb-2">Our Delivery Coverage Area</h2>
+                        <p class="text-secondary fs-5 mb-4">
+                            Serving customers across Siaya County with reliable and fast delivery services. Check if your location is covered below.
+                        </p>
+                        <div class="bg-light p-4 rounded-3 mb-4">
+                            <p class="mb-0"><i class="fas fa-info-circle text-farm-green me-2"></i>
+                                <strong>Not seeing your area?</strong> Contact us to arrange special delivery.
+                            </p>
+                        </div>
+                    </div>
+                    <div class="row g-3">
                         <div class="col-sm-6">
-                            <div class="d-flex align-items-center mb-3">
-                                <i class="fas fa-check-circle text-farm-green fs-5 me-2"></i>
-                                <span>Siaya Town</span>
+                            <div class="d-flex align-items-start mb-3">
+                                <i class="fas fa-map-pin text-farm-green mt-1 me-3" style="font-size: 1.2rem;"></i>
+                                <div>
+                                    <strong class="d-block">Siaya Town</strong>
+                                    <small class="text-secondary">Central hub - All deliveries</small>
+                                </div>
                             </div>
-                            <div class="d-flex align-items-center mb-3">
-                                <i class="fas fa-check-circle text-farm-green fs-5 me-2"></i>
-                                <span>Ugunja</span>
+                            <div class="d-flex align-items-start mb-3">
+                                <i class="fas fa-map-pin text-farm-green mt-1 me-3" style="font-size: 1.2rem;"></i>
+                                <div>
+                                    <strong class="d-block">Ugunja</strong>
+                                    <small class="text-secondary">Standard & Express</small>
+                                </div>
                             </div>
-                            <div class="d-flex align-items-center mb-3">
-                                <i class="fas fa-check-circle text-farm-green fs-5 me-2"></i>
-                                <span>Ukwala</span>
+                            <div class="d-flex align-items-start">
+                                <i class="fas fa-map-pin text-farm-green mt-1 me-3" style="font-size: 1.2rem;"></i>
+                                <div>
+                                    <strong class="d-block">Ukwala</strong>
+                                    <small class="text-secondary">Standard delivery</small>
+                                </div>
                             </div>
                         </div>
                         <div class="col-sm-6">
-                            <div class="d-flex align-items-center mb-3">
-                                <i class="fas fa-check-circle text-farm-green fs-5 me-2"></i>
-                                <span>Yala</span>
+                            <div class="d-flex align-items-start mb-3">
+                                <i class="fas fa-map-pin text-farm-green mt-1 me-3" style="font-size: 1.2rem;"></i>
+                                <div>
+                                    <strong class="d-block">Yala</strong>
+                                    <small class="text-secondary">Standard delivery</small>
+                                </div>
                             </div>
-                            <div class="d-flex align-items-center mb-3">
-                                <i class="fas fa-check-circle text-farm-green fs-5 me-2"></i>
-                                <span>Bondo</span>
+                            <div class="d-flex align-items-start mb-3">
+                                <i class="fas fa-map-pin text-farm-green mt-1 me-3" style="font-size: 1.2rem;"></i>
+                                <div>
+                                    <strong class="d-block">Bondo</strong>
+                                    <small class="text-secondary">Standard delivery</small>
+                                </div>
                             </div>
-                            <div class="d-flex align-items-center mb-3">
-                                <i class="fas fa-check-circle text-farm-green fs-5 me-2"></i>
-                                <span>Rarieda</span>
+                            <div class="d-flex align-items-start">
+                                <i class="fas fa-map-pin text-farm-green mt-1 me-3" style="font-size: 1.2rem;"></i>
+                                <div>
+                                    <strong class="d-block">Rarieda</strong>
+                                    <small class="text-secondary">Standard delivery</small>
+                                </div>
                             </div>
                         </div>
                     </div>
@@ -212,6 +316,46 @@
                     </div>
                 </div>
             </div>
+
+            <!-- Nyandiwa Farm Image Showcase -->
+            <section class="py-5 mb-5">
+                <div class="row align-items-center g-5">
+                    <div class="col-lg-6">
+                        <h2 class="h3 fw-bold mb-4">Experience Nyandiwa Smart Poultry</h2>
+                        <p class="text-secondary mb-3 lh-lg">
+                            Visit our modern farm facility to see how we maintain the highest standards 
+                            in poultry farming. Our commitment to quality is visible in every aspect of our operations.
+                        </p>
+                        <div class="d-flex gap-4 mb-4">
+                            <div>
+                                <h5 class="fw-bold text-farm-green mb-2">Modern Facilities</h5>
+                                <p class="text-secondary small">State-of-the-art poultry houses with optimal conditions</p>
+                            </div>
+                            <div>
+                                <h5 class="fw-bold text-farm-green mb-2">Quality Standards</h5>
+                                <p class="text-secondary small">Strict hygiene and health protocols maintained daily</p>
+                            </div>
+                        </div>
+                        <a href="{% url 'about' %}" class="btn btn-farm-green">
+                            <i class="fas fa-info-circle me-2"></i>Learn More About Us
+                        </a>
+                    </div>
+                    <div class="col-lg-6">
+                        <div class="position-relative">
+                            <img src="{% static 'assets/images/image.png' %}" 
+                                 alt="Nyandiwa Smart Poultry Farm" 
+                                 class="img-fluid rounded-4 shadow-lg border border-3 border-farm-green"
+                                 style="min-height: 400px; object-fit: cover;">
+                            <div class="position-absolute bottom-0 start-0 end-0 bg-gradient p-4 rounded-bottom-4 text-white">
+                                <div class="d-flex align-items-center">
+                                    <i class="fas fa-star text-farm-yellow me-2" style="font-size: 1.5rem;"></i>
+                                    <span class="fw-bold">Premium Quality Eggs from Siaya</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
 
             <!-- Delivery Process -->
             <section class="mb-5">

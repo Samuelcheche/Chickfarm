@@ -1,0 +1,617 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    {% load static %}
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Orders Management - Nyandiwa Smart Poultry</title>
+
+    <link rel="icon" type="image/x-icon" href="{% static 'assets/images/image.png' %}">
+
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
+    <link href="{% static 'css/custom.css' %}" rel="stylesheet">
+
+    <style>
+        :root {
+            --farm-green: #2d5016;
+            --farm-yellow: #ffc107;
+            --farm-brown: #8b5a2b;
+        }
+
+        body {
+            background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
+            min-height: 100vh;
+        }
+
+        .navbar-farm {
+            background: linear-gradient(135deg, var(--farm-green) 0%, #1a3a0a 100%);
+            box-shadow: 0 2px 12px rgba(0, 0, 0, 0.15);
+        }
+
+        .page-header {
+            background: linear-gradient(135deg, var(--farm-green) 0%, #1a3a0a 100%);
+            color: white;
+            padding: 3rem 0;
+            margin-bottom: 2rem;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+        }
+
+        .page-header h1 {
+            font-weight: 700;
+            font-size: 2.5rem;
+            margin-bottom: 0.5rem;
+        }
+
+        .page-header p {
+            font-size: 1.1rem;
+            opacity: 0.9;
+        }
+
+        .orders-table {
+            background: white;
+            border-radius: 12px;
+            box-shadow: 0 6px 20px rgba(0, 0, 0, 0.1);
+            overflow: hidden;
+        }
+
+        .table {
+            margin-bottom: 0;
+            font-size: 0.95rem;
+        }
+
+        .table thead {
+            background: linear-gradient(135deg, var(--farm-green) 0%, #1a3a0a 100%);
+            color: white;
+            font-weight: 600;
+        }
+
+        .table thead th {
+            border: none;
+            padding: 1.2rem 0.8rem;
+            letter-spacing: 0.5px;
+            vertical-align: middle;
+        }
+
+        .table tbody tr {
+            border-bottom: 1px solid #e9ecef;
+            transition: all 0.3s ease;
+        }
+
+        .table tbody tr:hover {
+            background-color: #f8f9fa;
+            box-shadow: inset 0 2px 4px rgba(0, 0, 0, 0.05);
+        }
+
+        .table tbody td {
+            padding: 1rem 0.8rem;
+            vertical-align: middle;
+        }
+
+        .order-code {
+            font-weight: 600;
+            color: var(--farm-green);
+            font-family: 'Courier New', monospace;
+        }
+
+        .customer-name {
+            font-weight: 500;
+            color: var(--text-dark);
+        }
+
+        .customer-email {
+            font-size: 0.85rem;
+            color: #6c757d;
+        }
+
+        .product-name {
+            color: #495057;
+            font-weight: 500;
+        }
+
+        .status-badge {
+            padding: 0.5rem 0.8rem;
+            border-radius: 20px;
+            font-size: 0.85rem;
+            font-weight: 600;
+            display: inline-block;
+        }
+
+        .status-processing {
+            background: #fff3cd;
+            color: #856404;
+        }
+
+        .status-in_transit {
+            background: #cfe2ff;
+            color: #084298;
+        }
+
+        .status-delivered {
+            background: #d1e7dd;
+            color: #0f5132;
+        }
+
+        .status-cancelled {
+            background: #f8d7da;
+            color: #842029;
+        }
+
+        .payment-badge {
+            padding: 0.5rem 0.8rem;
+            border-radius: 20px;
+            font-size: 0.85rem;
+            font-weight: 600;
+            display: inline-block;
+        }
+
+        .payment-pending {
+            background: #fff3cd;
+            color: #856404;
+        }
+
+        .payment-completed {
+            background: #d1e7dd;
+            color: #0f5132;
+        }
+
+        .payment-failed {
+            background: #f8d7da;
+            color: #842029;
+        }
+
+        .action-buttons {
+            white-space: nowrap;
+            display: flex;
+            gap: 0.5rem;
+            justify-content: center;
+        }
+
+        .btn-sm {
+            padding: 0.4rem 0.7rem;
+            font-size: 0.85rem;
+            font-weight: 500;
+        }
+
+        .btn-edit {
+            background: #007bff;
+            border: none;
+            color: white;
+            transition: all 0.3s ease;
+        }
+
+        .btn-edit:hover {
+            background: #0056b3;
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(0, 123, 255, 0.3);
+        }
+
+        .btn-delete {
+            background: #dc3545;
+            border: none;
+            color: white;
+            transition: all 0.3s ease;
+        }
+
+        .btn-delete:hover {
+            background: #c82333;
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(220, 53, 69, 0.3);
+        }
+
+        .btn-view {
+            background: var(--farm-green);
+            border: none;
+            color: white;
+            transition: all 0.3s ease;
+        }
+
+        .btn-view:hover {
+            background: #1a3a0a;
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(45, 80, 22, 0.3);
+        }
+
+        .filters-section {
+            background: white;
+            padding: 1.5rem;
+            border-radius: 12px;
+            margin-bottom: 2rem;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
+        }
+
+        .filter-label {
+            font-weight: 600;
+            font-size: 0.95rem;
+            color: var(--farm-green);
+            margin-bottom: 0.5rem;
+        }
+
+        .form-control, .form-select {
+            border-radius: 8px;
+            border: 1px solid #ddd;
+            padding: 0.6rem 0.8rem;
+            font-size: 0.95rem;
+            transition: all 0.3s ease;
+        }
+
+        .form-control:focus, .form-select:focus {
+            border-color: var(--farm-green);
+            box-shadow: 0 0 0 0.2rem rgba(45, 80, 22, 0.25);
+        }
+
+        .btn-farm-green {
+            background: var(--farm-green);
+            color: white;
+            border: none;
+            font-weight: 600;
+            transition: all 0.3s ease;
+        }
+
+        .btn-farm-green:hover {
+            background: #1a3a0a;
+            transform: translateY(-2px);
+            box-shadow: 0 4px 15px rgba(45, 80, 22, 0.3);
+            color: white;
+        }
+
+        .btn-farm-yellow {
+            background: var(--farm-yellow);
+            color: var(--farm-green);
+            border: none;
+            font-weight: 600;
+            transition: all 0.3s ease;
+        }
+
+        .btn-farm-yellow:hover {
+            background: #e0a800;
+            transform: translateY(-2px);
+            box-shadow: 0 4px 15px rgba(255, 193, 7, 0.3);
+            color: var(--farm-green);
+        }
+
+        .stats-row {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 1.5rem;
+            margin-bottom: 2rem;
+        }
+
+        .stat-card {
+            background: white;
+            padding: 1.5rem;
+            border-radius: 12px;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
+            text-align: center;
+            border-left: 4px solid var(--farm-green);
+            transition: all 0.3s ease;
+        }
+
+        .stat-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 6px 20px rgba(0, 0, 0, 0.1);
+        }
+
+        .stat-number {
+            font-size: 2rem;
+            font-weight: 700;
+            color: var(--farm-green);
+            margin-bottom: 0.5rem;
+        }
+
+        .stat-label {
+            font-size: 0.95rem;
+            color: #6c757d;
+            font-weight: 500;
+        }
+
+        .empty-state {
+            text-align: center;
+            padding: 3rem;
+            color: #6c757d;
+        }
+
+        .empty-state i {
+            font-size: 3rem;
+            color: #ddd;
+            margin-bottom: 1rem;
+        }
+
+        .nav-link-modern {
+            position: relative;
+            transition: all 0.3s ease;
+            color: white !important;
+        }
+
+        .dropdown-menu {
+            border: none;
+            border-radius: 8px;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.15);
+        }
+
+        .dropdown-menu .dropdown-item {
+            transition: all 0.3s ease;
+        }
+
+        .dropdown-menu .dropdown-item:hover {
+            background: #f8f9fa;
+            color: var(--farm-green);
+            padding-left: 1.5rem;
+        }
+
+        .dropdown-toggle::after {
+            display: none;
+        }
+
+        .modal-content {
+            border: none;
+            border-radius: 12px;
+            box-shadow: 0 6px 20px rgba(0, 0, 0, 0.15);
+        }
+
+        .modal-header {
+            background: linear-gradient(135deg, var(--farm-green) 0%, #1a3a0a 100%);
+            color: white;
+            border: none;
+        }
+
+        .modal-header .btn-close {
+            filter: brightness(0) invert(1);
+        }
+
+        .modal-body {
+            padding: 2rem;
+        }
+
+        .modal-footer {
+            border-top: 1px solid #e9ecef;
+        }
+
+        @media (max-width: 768px) {
+            .page-header h1 {
+                font-size: 1.8rem;
+            }
+
+            .table {
+                font-size: 0.85rem;
+            }
+
+            .table thead th {
+                padding: 0.8rem 0.5rem;
+            }
+
+            .table tbody td {
+                padding: 0.8rem 0.5rem;
+            }
+
+            .action-buttons {
+                flex-direction: column;
+                gap: 0.3rem;
+            }
+
+            .btn-sm {
+                width: 100%;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Navigation -->
+    <nav class="navbar navbar-expand-lg navbar-dark navbar-farm sticky-top">
+        <div class="container-fluid px-lg-5">
+            <a class="navbar-brand d-flex align-items-center fw-bold" href="{% url 'index' %}">
+                <div class="brand-icon-wrapper me-2">
+                    <i class="fas fa-egg"></i>
+                </div>
+                <span>Nyandiwa Smart Poultry</span>
+            </a>
+
+            <button class="navbar-toggler border-0" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav ms-auto align-items-center gap-3">
+                    <li class="nav-item">
+                        <a class="nav-link nav-link-modern" href="{% url 'index' %}">
+                            <i class="fas fa-home me-2"></i>Home
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link nav-link-modern active" href="{% url 'show_orders' %}">
+                            <i class="fas fa-list me-2"></i>All Orders
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link nav-link-modern" href="{% url 'dashboard' %}">
+                            <i class="fas fa-chart-line me-2"></i>Dashboard
+                        </a>
+                    </li>
+                    <li class="nav-item border-start ps-3 ms-2">
+                        <div class="dropdown">
+                            <button class="btn btn-nav-primary btn-sm dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false">
+                                <i class="fas fa-user-circle me-2"></i>{{ user.first_name|default:user.username }}
+                            </button>
+                            <ul class="dropdown-menu dropdown-menu-end">
+                                <li><span class="dropdown-header">{{ user.email }}</span></li>
+                                <li><hr class="dropdown-divider"></li>
+                                <li><a class="dropdown-item" href="{% url 'orders' %}">
+                                    <i class="fas fa-plus-circle me-2"></i>Create Order
+                                </a></li>
+                                <li><hr class="dropdown-divider"></li>
+                                <li><a class="dropdown-item text-danger" href="{% url 'logout' %}">
+                                    <i class="fas fa-sign-out-alt me-2"></i>Logout
+                                </a></li>
+                            </ul>
+                        </div>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Messages -->
+    {% if messages %}
+    <div class="container mt-4">
+        {% for message in messages %}
+        <div class="alert alert-{{ message.tags }} alert-dismissible fade show" role="alert">
+            <i class="fas fa-{% if message.tags == 'success' %}check-circle{% elif message.tags == 'error' %}exclamation-circle{% else %}info-circle{% endif %} me-2"></i>
+            {{ message }}
+            <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+        </div>
+        {% endfor %}
+    </div>
+    {% endif %}
+
+    <!-- Page Header -->
+    <div class="page-header">
+        <div class="container">
+            <h1><i class="fas fa-shopping-cart me-3"></i>Orders Management</h1>
+            <p>View, edit, and manage all customer orders</p>
+        </div>
+    </div>
+
+    <!-- Main Content -->
+    <main class="container mb-5">
+        <!-- Statistics -->
+        {% if all_orders %}
+        <div class="stats-row">
+            <div class="stat-card">
+                <div class="stat-number">{{ all_orders|length }}</div>
+                <div class="stat-label">Total Orders</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-number">Ksh {{ total_revenue|floatformat:0|default:"0" }}</div>
+                <div class="stat-label">Total Revenue</div>
+            </div>
+        </div>
+        {% endif %}
+
+        <!-- Error Message -->
+        {% if db_error %}
+        <div class="alert alert-danger" role="alert">
+            <i class="fas fa-exclamation-triangle me-2"></i>
+            <strong>Error:</strong> {{ db_error }}
+        </div>
+        {% endif %}
+
+        <!-- Orders Table -->
+        {% if all_orders %}
+        <div class="orders-table">
+            <div style="overflow-x: auto;">
+                <table class="table table-hover">
+                    <thead>
+                        <tr>
+                            <th><i class="fas fa-hashtag me-2"></i>Order Code</th>
+                            <th><i class="fas fa-user me-2"></i>Customer</th>
+                            <th><i class="fas fa-envelope me-2"></i>Email</th>
+                            <th><i class="fas fa-phone me-2"></i>Phone</th>
+                            <th><i class="fas fa-box me-2"></i>Product</th>
+                            <th><i class="fas fa-archive me-2"></i>Trays</th>
+                            <th><i class="fas fa-money-bill me-2"></i>Amount</th>
+                            <th><i class="fas fa-truck me-2"></i>Status</th>
+                            <th><i class="fas fa-credit-card me-2"></i>Payment</th>
+                            <th><i class="fas fa-calendar me-2"></i>Date</th>
+                            <th><i class="fas fa-cogs me-2"></i>Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for ord in all_orders %}
+                        <tr>
+                            <td>
+                                <span class="order-code">{{ ord.order_code }}</span>
+                            </td>
+                            <td>
+                                <div class="customer-name">{{ ord.customer.name }} {{ ord.customer.surname }}</div>
+                                <div class="customer-email">ID: {{ ord.customer.id }}</div>
+                            </td>
+                            <td>
+                                <a href="mailto:{{ ord.customer.email }}" class="text-decoration-none">
+                                    {{ ord.customer.email }}
+                                </a>
+                            </td>
+                            <td>
+                                <a href="tel:{{ ord.customer.phone }}" class="text-decoration-none">
+                                    {{ ord.customer.phone }}
+                                </a>
+                            </td>
+                            <td>
+                                <span class="product-name">
+                                    {{ ord.product.name|default:"N/A" }}
+                                </span>
+                            </td>
+                            <td>
+                                <span class="fw-bold">{{ ord.number_of_trays }}</span>
+                            </td>
+                            <td>
+                                <span class="fw-bold text-success">Ksh {{ ord.amount|floatformat:0 }}</span>
+                            </td>
+                            <td>
+                                <span class="status-badge status-{{ ord.status }}">
+                                    {{ ord.get_status_display }}
+                                </span>
+                            </td>
+                            <td>
+                                <span class="payment-badge payment-{{ ord.payment_status }}">
+                                    {{ ord.get_payment_status_display }}
+                                </span>
+                            </td>
+                            <td>
+                                <small class="text-muted">{{ ord.order_date|date:"M d, Y" }}</small>
+                            </td>
+                            <td>
+                                <div class="action-buttons">
+                                    <a href="{% url 'edit_order' ord.id %}" class="btn btn-edit btn-sm" title="Edit Order">
+                                        <i class="fas fa-edit"></i> Edit
+                                    </a>
+                                    <form method="POST" action="{% url 'delete_order' ord.id %}" style="display:inline;" onsubmit="return confirm('Are you sure you want to delete order {{ ord.order_code }}? This action cannot be undone.');">
+                                        {% csrf_token %}
+                                        <button type="submit" class="btn btn-delete btn-sm" title="Delete Order">
+                                            <i class="fas fa-trash"></i> Delete
+                                        </button>
+                                    </form>
+                                </div>
+                            </td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+        {% else %}
+        <div class="orders-table">
+            <div class="empty-state">
+                <i class="fas fa-inbox"></i>
+                <h5 class="mt-3">No Orders Found</h5>
+                <p>There are no orders in the system yet.</p>
+                <a href="{% url 'orders' %}" class="btn btn-farm-green mt-3">
+                    <i class="fas fa-plus-circle me-2"></i>Create New Order
+                </a>
+            </div>
+        </div>
+        {% endif %}
+    </main>
+
+    <!-- Delete Confirmation Modal -->
+    <div class="modal fade" id="deleteConfirmModal" tabindex="-1">
+        <div class="modal-dialog modal-sm">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">Delete Order</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                </div>
+                <div class="modal-body">
+                    <p class="text-danger"><i class="fas fa-warning me-2"></i>For safety, use the delete button in the table. This action cannot be undone.</p>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Scripts -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/js/all.min.js"></script>
+</body>
+</html>

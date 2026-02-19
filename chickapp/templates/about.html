@@ -48,20 +48,49 @@
                             <i class="fas fa-truck me-2"></i>Delivery
                         </a>
                     </li>
+                    {% if user.is_authenticated %}
+                    <li class="nav-item">
+                        <a class="nav-link nav-link-modern" href="{% url 'orders' %}">
+                            <i class="fas fa-shopping-bag me-2"></i>My Orders
+                        </a>
+                    </li>
+                    {% endif %}
                     <li class="nav-item">
                         <a class="nav-link nav-link-modern active" href="{% url 'about' %}">
                             <i class="fas fa-info-circle me-2"></i>About
                         </a>
                     </li>
                     <li class="nav-item border-start ps-3 ms-2">
+                        {% if user.is_authenticated %}
+                        <div class="dropdown">
+                            <button class="btn btn-nav-primary btn-sm dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false">
+                                <i class="fas fa-user-circle me-2"></i>{{ user.first_name|default:user.username }}
+                            </button>
+                            <ul class="dropdown-menu dropdown-menu-end">
+                                <li><span class="dropdown-header">{{ user.email }}</span></li>
+                                <li><hr class="dropdown-divider"></li>
+                                <li><a class="dropdown-item" href="{% url 'orders' %}">
+                                    <i class="fas fa-shopping-bag me-2"></i>My Orders
+                                </a></li>
+                                {% if user.is_superuser or user.is_staff %}
+                                <li><a class="dropdown-item" href="{% url 'dashboard' %}">
+                                    <i class="fas fa-chart-line me-2"></i>Dashboard
+                                </a></li>
+                                {% endif %}
+                                <li><hr class="dropdown-divider"></li>
+                                <li><a class="dropdown-item text-danger" href="{% url 'logout' %}">
+                                    <i class="fas fa-sign-out-alt me-2"></i>Logout
+                                </a></li>
+                            </ul>
+                        </div>
+                        {% else %}
                         <button class="btn btn-nav-primary btn-sm" data-bs-toggle="modal" data-bs-target="#loginModal">
                             <i class="fas fa-sign-in-alt me-2"></i>Login
                         </button>
-                    </li>
-                    <li class="nav-item">
                         <button class="btn btn-nav-secondary btn-sm" data-bs-toggle="modal" data-bs-target="#registerModal">
                             <i class="fas fa-user-plus me-2"></i>Register
                         </button>
+                        {% endif %}
                     </li>
                 </ul>
             </div>
@@ -80,138 +109,218 @@
         </div>
     </div>
 
+    <!-- Hero Section with Clear Header -->
+    <div class="bg-farm-green text-white py-5 position-relative overflow-hidden">
+        <div class="position-absolute top-0 start-0 opacity-5" style="font-size: 20rem; z-index: 0; margin-left: -50px; color: rgba(255,193,7,0.1);">
+            <i class="fas fa-leaf"></i>
+        </div>
+        <div class="container position-relative" style="z-index: 1;">
+            <div class="row align-items-center">
+                <div class="col-lg-8">
+                    <span class="badge bg-farm-yellow text-dark mb-3" style="font-size: 0.9rem; padding: 0.6rem 1rem; font-weight: 700;">
+                        <i class="fas fa-heart me-2"></i>OUR MISSION
+                    </span>
+                    <h1 class="display-4 fw-bold mb-3" style="font-weight: 800; letter-spacing: -0.5px; line-height: 1.2; text-shadow: 0 2px 4px rgba(0,0,0,0.2);">
+                        Committed to Fresh Quality & Community Value
+                    </h1>
+                    <p class="lead mb-4" style="font-size: 1.1rem; line-height: 1.6; color: #f0f0f0; font-weight: 500;">
+                        Nyandiwa Smart Poultry is a community-driven initiative dedicated to providing 
+                        fresh, high-quality eggs while supporting local agriculture and sustainable farming practices.
+                    </p>
+                    <div class="d-flex flex-wrap gap-4">
+                        <div class="d-flex align-items-center" style="font-weight: 500;">
+                            <i class="fas fa-hands-helping text-farm-yellow me-3" style="font-size: 1.5rem;"></i>
+                            <span>Community Focused</span>
+                        </div>
+                        <div class="d-flex align-items-center" style="font-weight: 500;">
+                            <i class="fas fa-leaf text-farm-yellow me-3" style="font-size: 1.5rem;"></i>
+                            <span>Sustainable Farming</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
     <!-- Main Content -->
     <main class="py-5">
         <div class="container">
-            <!-- About Header -->
-            <div class="text-center mb-5">
-                <h1 class="display-5 fw-bold text-dark mb-3">Our Story</h1>
-                <p class="text-secondary mx-auto" style="max-width: 42rem;">
-                    Nyandiwa Smart Poultry Connect is more than just a poultry farm. We're a 
-                    community-driven initiative committed to providing fresh, quality eggs while 
-                    supporting local agriculture.
-                </p>
+            <!-- Mission & Vision Section -->
+            <div class="mb-5">
+                <h2 class="h3 fw-bold mb-4 text-center">Our Core Values</h2>
+                <div class="row g-4">
+                    <!-- Mission -->
+                    <div class="col-lg-6">
+                        <div class="card h-100 border-0 shadow-sm hover-lift">
+                            <div class="card-body p-5">
+                                <div class="d-inline-flex align-items-center justify-content-center rounded-circle bg-farm-green bg-opacity-10 p-4 mb-4" style="width: 80px; height: 80px;">
+                                    <i class="fas fa-bullseye text-farm-green" style="font-size: 2rem;"></i>
+                                </div>
+                                <h3 class="h5 fw-bold mb-3">Our Mission</h3>
+                                <p class="text-secondary mb-0 lh-lg">
+                                    To <strong>revolutionize poultry farming</strong> in Siaya County through innovative technology 
+                                    and <strong>sustainable practices</strong>, while providing fresh, high-quality eggs to our 
+                                    community at fair and competitive prices.
+                                </p>
+                            </div>
+                        </div>
+                    </div>
+                    <!-- Vision -->
+                    <div class="col-lg-6">
+                        <div class="card h-100 border-0 shadow-sm hover-lift">
+                            <div class="card-body p-5">
+                                <div class="d-inline-flex align-items-center justify-content-center rounded-circle bg-farm-yellow bg-opacity-10 p-4 mb-4" style="width: 80px; height: 80px;">
+                                    <i class="fas fa-eye text-farm-yellow" style="font-size: 2rem;"></i>
+                                </div>
+                                <h3 class="h5 fw-bold mb-3">Our Vision</h3>
+                                <p class="text-secondary mb-0 lh-lg">
+                                    To become the <strong>leading smart poultry farm in Kenya</strong>, setting industry 
+                                    standards for quality, efficiency, and excellent customer service while championing 
+                                    <strong>sustainable agricultural practices</strong>.
+                                </p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
             </div>
 
-            <!-- Mission & Vision -->
-            <div class="row g-4 mb-5">
-                <div class="col-md-6">
-                    <div class="card h-100 border-0 shadow-sm">
-                        <div class="card-body p-4">
-                            <div class="d-flex align-items-center mb-4">
-                                <div class="rounded-circle bg-farm-green text-white p-3 me-3">
-                                    <i class="fas fa-bullseye"></i>
+            <!-- Why Choose Us Section -->
+            <section class="py-5 mb-5 bg-light rounded-4">
+                <div class="container">
+                    <h2 class="h3 fw-bold text-center mb-5">Why Choose Nyandiwa Smart Poultry?</h2>
+                    <div class="row g-4">
+                        <div class="col-md-4">
+                            <div class="text-center">
+                                <div class="d-inline-flex align-items-center justify-content-center rounded-circle bg-farm-green bg-opacity-10 p-4 mb-3" style="width: 100px; height: 100px;">
+                                    <i class="fas fa-heart text-farm-green" style="font-size: 2.5rem;"></i>
                                 </div>
-                                <h2 class="h4 fw-bold mb-0">Our Mission</h2>
+                                <h4 class="fw-bold mb-3">100% Fresh & Quality</h4>
+                                <p class="text-secondary lh-lg">
+                                    All our eggs are collected daily and delivered fresh. We maintain strict quality standards 
+                                    to ensure the best for our customers.
+                                </p>
                             </div>
-                            <p class="text-secondary mb-0">
-                                To revolutionize poultry farming in Siaya County through smart technology 
-                                and sustainable practices, while providing fresh, high-quality eggs to our 
-                                community at fair prices.
-                            </p>
+                        </div>
+                        <div class="col-md-4">
+                            <div class="text-center">
+                                <div class="d-inline-flex align-items-center justify-content-center rounded-circle bg-farm-yellow bg-opacity-10 p-4 mb-3" style="width: 100px; height: 100px;">
+                                    <i class="fas fa-leaf text-farm-yellow" style="font-size: 2.5rem;"></i>
+                                </div>
+                                <h4 class="fw-bold mb-3">Sustainable Farming</h4>
+                                <p class="text-secondary lh-lg">
+                                    We use eco-friendly practices and ensure our hens are treated humanely 
+                                    in a clean, healthy environment.
+                                </p>
+                            </div>
+                        </div>
+                        <div class="col-md-4">
+                            <div class="text-center">
+                                <div class="d-inline-flex align-items-center justify-content-center rounded-circle bg-success bg-opacity-10 p-4 mb-3" style="width: 100px; height: 100px;">
+                                    <i class="fas fa-rocket text-success" style="font-size: 2.5rem;"></i>
+                                </div>
+                                <h4 class="fw-bold mb-3">Fast & Reliable</h4>
+                                <p class="text-secondary lh-lg">
+                                    Order online and get your eggs delivered quickly. We offer multiple delivery options 
+                                    with flexible scheduling.
+                                </p>
+                            </div>
                         </div>
                     </div>
                 </div>
-                <div class="col-md-6">
-                    <div class="card h-100 border-0 shadow-sm">
-                        <div class="card-body p-4">
-                            <div class="d-flex align-items-center mb-4">
-                                <div class="rounded-circle bg-farm-yellow text-dark p-3 me-3">
-                                    <i class="fas fa-eye"></i>
-                                </div>
-                                <h2 class="h4 fw-bold mb-0">Our Vision</h2>
-                            </div>
-                            <p class="text-secondary mb-0">
-                                To become the leading smart poultry farm in Kenya, setting industry 
-                                standards for quality, efficiency, and customer service while promoting 
-                                sustainable agricultural practices.
-                            </p>
-                        </div>
-                    </div>
-                </div>
-            </div>
+            </section>
 
             <!-- Our Journey -->
             <section class="mb-5">
-                <h2 class="h3 fw-bold text-center mb-5">Our Journey</h2>
+                <h2 class="h3 fw-bold text-center mb-5">Our Journey & Growth</h2>
                 <div class="row">
                     <div class="col-lg-6">
-                        <div class="timeline position-relative ps-4 border-start border-farm-green">
+                        <div class="timeline position-relative ps-4 border-start border-2" style="border-color: #2d5016;">
                             <!-- 2020 -->
-                            <div class="timeline-item mb-4">
-                                <span class="timeline-date bg-farm-green text-white px-3 py-1 rounded position-absolute start-0 translate-middle-x">
-                                    2020
+                            <div class="timeline-item mb-5">
+                                <span class="timeline-date badge bg-farm-green px-3 py-2 position-absolute start-0 translate-middle-x">
+                                    <strong>2020</strong>
                                 </span>
-                                <div class="card border-0 shadow-sm">
+                                <div class="card border-0 shadow-sm ms-2">
                                     <div class="card-body">
-                                        <h3 class="h5 fw-bold mb-3">Foundation</h3>
+                                        <h4 class="fw-bold mb-2 text-farm-green">Foundation</h4>
                                         <p class="text-secondary mb-0">
-                                            Started as a small family-owned poultry farm with just 100 chickens 
-                                            in Siaya County.
+                                            <i class="fas fa-egg text-farm-yellow me-2"></i>
+                                            Started as a small family farm with 100 chickens in Siaya County.
                                         </p>
                                     </div>
                                 </div>
                             </div>
 
                             <!-- 2021 -->
-                            <div class="timeline-item mb-4">
-                                <span class="timeline-date bg-farm-green text-white px-3 py-1 rounded position-absolute start-0 translate-middle-x">
-                                    2021
+                            <div class="timeline-item mb-5">
+                                <span class="timeline-date badge bg-farm-green px-3 py-2 position-absolute start-0 translate-middle-x">
+                                    <strong>2021</strong>
                                 </span>
-                                <div class="card border-0 shadow-sm">
+                                <div class="card border-0 shadow-sm ms-2">
                                     <div class="card-body">
-                                        <h3 class="h5 fw-bold mb-3">Expansion</h3>
+                                        <h4 class="fw-bold mb-2 text-farm-green">Expansion</h4>
                                         <p class="text-secondary mb-0">
-                                            Expanded operations to 500 chickens and introduced modern 
-                                            poultry management systems.
+                                            <i class="fas fa-chart-line text-farm-yellow me-2"></i>
+                                            Grew to 500 chickens and introduced smart poultry management systems.
                                         </p>
                                     </div>
                                 </div>
                             </div>
 
                             <!-- 2022 -->
-                            <div class="timeline-item mb-4">
-                                <span class="timeline-date bg-farm-green text-white px-3 py-1 rounded position-absolute start-0 translate-middle-x">
-                                    2022
+                            <div class="timeline-item mb-5">
+                                <span class="timeline-date badge bg-farm-green px-3 py-2 position-absolute start-0 translate-middle-x">
+                                    <strong>2022</strong>
                                 </span>
-                                <div class="card border-0 shadow-sm">
+                                <div class="card border-0 shadow-sm ms-2">
                                     <div class="card-body">
-                                        <h3 class="h5 fw-bold mb-3">Technology Integration</h3>
+                                        <h4 class="fw-bold mb-2 text-farm-green">Digital Innovation</h4>
                                         <p class="text-secondary mb-0">
-                                            Implemented smart monitoring systems and launched our online 
-                                            ordering platform.
+                                            <i class="fas fa-laptop text-farm-yellow me-2"></i>
+                                            Launched online ordering platform and smart delivery tracking system.
                                         </p>
                                     </div>
                                 </div>
                             </div>
 
-                            <!-- 2023 -->
+                            <!-- 2024 -->
                             <div class="timeline-item">
-                                <span class="timeline-date bg-farm-green text-white px-3 py-1 rounded position-absolute start-0 translate-middle-x">
-                                    2023
+                                <span class="timeline-date badge bg-farm-green px-3 py-2 position-absolute start-0 translate-middle-x">
+                                    <strong>2024</strong>
                                 </span>
-                                <div class="card border-0 shadow-sm">
+                                <div class="card border-0 shadow-sm ms-2">
                                     <div class="card-body">
-                                        <h3 class="h5 fw-bold mb-3">Community Impact</h3>
+                                        <h4 class="fw-bold mb-2 text-farm-green">Community Leadership</h4>
                                         <p class="text-secondary mb-0">
-                                            Established partnerships with local businesses and started 
-                                            our community outreach programs.
+                                            <i class="fas fa-hands-helping text-farm-yellow me-2"></i>
+                                            Became a trusted local brand with community partnerships & outreach.
                                         </p>
                                     </div>
                                 </div>
                             </div>
                         </div>
                     </div>
-                    <div class="col-lg-6">
-                        <img src="https://images.unsplash.com/photo-1548550023-2bdb3c5beed7?ixlib=rb-1.2.1&auto=format&fit=crop&w=800&q=60" 
-                             alt="Our Farm" class="img-fluid rounded-4 shadow-sm">
+                    <div class="col-lg-6 d-flex align-items-center">
+                        <div>
+                            <img src="{% static 'assets/images/image.png' %}" 
+                                 alt="Nyandiwa Smart Poultry Farm" 
+                                 class="img-fluid rounded-4 shadow-lg border border-3 border-farm-green" 
+                                 style="min-height: 450px; object-fit: cover; width: 100%;">
+                            <div class="mt-4 bg-farm-green text-white p-4 rounded-3">
+                                <h5 class="fw-bold mb-3"><i class="fas fa-leaf me-2"></i>Our Growth Story</h5>
+                                <p class="mb-0">
+                                    From a small family farm, we've grown into a trusted supplier serving hundreds of customers 
+                                    across Siaya County with fresh eggs and exceptional service.
+                                </p>
+                            </div>
+                        </div>
                     </div>
                 </div>
             </section>
 
             <!-- Our Team -->
             <section class="mb-5">
-                <h2 class="h3 fw-bold text-center mb-5">Meet Our Team</h2>
+                <h2 class="h3 fw-bold text-center mb-5">Meet Our Dedicated Team</h2>
                 <div class="row g-4">
                     <!-- Team Member 1 -->
                     <div class="col-md-3">

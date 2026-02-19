@@ -1,0 +1,465 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    {% load static %}
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Edit Order - Nyandiwa Smart Poultry</title>
+
+    <link rel="icon" type="image/x-icon" href="{% static 'assets/images/image.png' %}">
+
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
+    <link href="{% static 'css/custom.css' %}" rel="stylesheet">
+
+    <style>
+        :root {
+            --farm-green: #2d5016;
+            --farm-yellow: #ffc107;
+            --farm-brown: #8b5a2b;
+        }
+
+        body {
+            background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
+            min-height: 100vh;
+        }
+
+        .navbar-farm {
+            background: linear-gradient(135deg, var(--farm-green) 0%, #1a3a0a 100%);
+            box-shadow: 0 2px 12px rgba(0, 0, 0, 0.15);
+        }
+
+        .page-header {
+            background: linear-gradient(135deg, var(--farm-green) 0%, #1a3a0a 100%);
+            color: white;
+            padding: 2rem 0;
+            margin-bottom: 2rem;
+        }
+
+        .page-header h1 {
+            font-weight: 700;
+            font-size: 2.2rem;
+        }
+
+        .form-card {
+            background: white;
+            border-radius: 12px;
+            box-shadow: 0 6px 20px rgba(0, 0, 0, 0.1);
+            padding: 2rem;
+            margin-bottom: 2rem;
+        }
+
+        .form-section-title {
+            font-size: 1.1rem;
+            font-weight: 600;
+            color: var(--farm-green);
+            margin-bottom: 1.5rem;
+            padding-bottom: 0.8rem;
+            border-bottom: 2px solid var(--farm-yellow);
+        }
+
+        .form-label {
+            font-weight: 600;
+            color: #333;
+            margin-bottom: 0.5rem;
+            font-size: 0.95rem;
+        }
+
+        .form-control, .form-select {
+            border-radius: 8px;
+            border: 1px solid #ddd;
+            padding: 0.8rem;
+            font-size: 0.95rem;
+            transition: all 0.3s ease;
+        }
+
+        .form-control:focus, .form-select:focus {
+            border-color: var(--farm-green);
+            box-shadow: 0 0 0 0.2rem rgba(45, 80, 22, 0.25);
+        }
+
+        .form-group {
+            margin-bottom: 1.5rem;
+        }
+
+        .form-row {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 1.5rem;
+            margin-bottom: 1.5rem;
+        }
+
+        .btn-farm-green {
+            background: var(--farm-green);
+            color: white;
+            border: none;
+            font-weight: 600;
+            padding: 0.8rem 2rem;
+            border-radius: 8px;
+            transition: all 0.3s ease;
+        }
+
+        .btn-farm-green:hover {
+            background: #1a3a0a;
+            transform: translateY(-2px);
+            box-shadow: 0 4px 15px rgba(45, 80, 22, 0.3);
+            color: white;
+        }
+
+        .btn-secondary-custom {
+            background: #6c757d;
+            color: white;
+            border: none;
+            font-weight: 600;
+            padding: 0.8rem 2rem;
+            border-radius: 8px;
+            transition: all 0.3s ease;
+        }
+
+        .btn-secondary-custom:hover {
+            background: #5a6268;
+            transform: translateY(-2px);
+            box-shadow: 0 4px 15px rgba(108, 117, 125, 0.3);
+            color: white;
+        }
+
+        .button-group {
+            display: flex;
+            gap: 1rem;
+            margin-top: 2rem;
+            padding-top: 2rem;
+            border-top: 1px solid #e9ecef;
+        }
+
+        .customer-info-card {
+            background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%);
+            border-left: 4px solid var(--farm-green);
+            padding: 1.5rem;
+            border-radius: 8px;
+            margin-bottom: 2rem;
+        }
+
+        .customer-info-label {
+            font-size: 0.85rem;
+            color: #6c757d;
+            margin-bottom: 0.3rem;
+        }
+
+        .customer-info-value {
+            font-size: 1rem;
+            font-weight: 600;
+            color: #333;
+        }
+
+        .order-info-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 1rem;
+            margin-bottom: 1.5rem;
+        }
+
+        .info-box {
+            padding: 1rem;
+            background: #f8f9fa;
+            border-radius: 8px;
+            border-left: 3px solid var(--farm-yellow);
+        }
+
+        .info-box label {
+            font-size: 0.85rem;
+            color: #6c757d;
+            margin-bottom: 0.3rem;
+        }
+
+        .info-box-value {
+            font-weight: 600;
+            color: #333;
+        }
+
+        .nav-link-modern {
+            position: relative;
+            transition: all 0.3s ease;
+            color: white !important;
+        }
+
+        .dropdown-menu {
+            border: none;
+            border-radius: 8px;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.15);
+        }
+
+        .dropdown-menu .dropdown-item:hover {
+            background: #f8f9fa;
+            color: var(--farm-green);
+        }
+
+        @media (max-width: 768px) {
+            .page-header h1 {
+                font-size: 1.5rem;
+            }
+
+            .form-card {
+                padding: 1rem;
+            }
+
+            .button-group {
+                flex-direction: column;
+            }
+
+            .button-group button, .button-group a {
+                width: 100%;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Navigation -->
+    <nav class="navbar navbar-expand-lg navbar-dark navbar-farm sticky-top">
+        <div class="container-fluid px-lg-5">
+            <a class="navbar-brand d-flex align-items-center fw-bold" href="{% url 'index' %}">
+                <div class="brand-icon-wrapper me-2">
+                    <i class="fas fa-egg"></i>
+                </div>
+                <span>Nyandiwa Smart Poultry</span>
+            </a>
+
+            <button class="navbar-toggler border-0" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav ms-auto align-items-center gap-3">
+                    <li class="nav-item">
+                        <a class="nav-link nav-link-modern" href="{% url 'index' %}">
+                            <i class="fas fa-home me-2"></i>Home
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link nav-link-modern" href="{% url 'show_orders' %}">
+                            <i class="fas fa-list me-2"></i>All Orders
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link nav-link-modern" href="{% url 'dashboard' %}">
+                            <i class="fas fa-chart-line me-2"></i>Dashboard
+                        </a>
+                    </li>
+                    <li class="nav-item border-start ps-3 ms-2">
+                        <div class="dropdown">
+                            <button class="btn btn-nav-primary btn-sm dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false">
+                                <i class="fas fa-user-circle me-2"></i>{{ user.first_name|default:user.username }}
+                            </button>
+                            <ul class="dropdown-menu dropdown-menu-end">
+                                <li><span class="dropdown-header">{{ user.email }}</span></li>
+                                <li><hr class="dropdown-divider"></li>
+                                <li><a class="dropdown-item text-danger" href="{% url 'logout' %}">
+                                    <i class="fas fa-sign-out-alt me-2"></i>Logout
+                                </a></li>
+                            </ul>
+                        </div>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Page Header -->
+    <div class="page-header">
+        <div class="container">
+            <h1><i class="fas fa-edit me-3"></i>Edit Order</h1>
+            <p>Order Code: <strong>{{ order_obj.order_code }}</strong></p>
+        </div>
+    </div>
+
+    <!-- Main Content -->
+    <main class="container mb-5">
+        <div class="form-card">
+            <!-- Customer Information (Read-only) -->
+            <div class="customer-info-card">
+                <div class="row">
+                    <div class="col-md-3">
+                        <div class="customer-info-label"><i class="fas fa-user me-2"></i>Customer Name</div>
+                        <div class="customer-info-value">{{ order_obj.customer.name }} {{ order_obj.customer.surname }}</div>
+                    </div>
+                    <div class="col-md-3">
+                        <div class="customer-info-label"><i class="fas fa-envelope me-2"></i>Email Address</div>
+                        <div class="customer-info-value">{{ order_obj.customer.email }}</div>
+                    </div>
+                    <div class="col-md-3">
+                        <div class="customer-info-label"><i class="fas fa-phone me-2"></i>Phone Number</div>
+                        <div class="customer-info-value">{{ order_obj.customer.phone }}</div>
+                    </div>
+                    <div class="col-md-3">
+                        <div class="customer-info-label"><i class="fas fa-map-marker-alt me-2"></i>Location</div>
+                        <div class="customer-info-value">{{ order_obj.customer.location }}</div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Order Information (Editable) -->
+            <form method="POST" class="order-form">
+                {% csrf_token %}
+
+                <!-- Order Details Section -->
+                <div class="form-section-title">
+                    <i class="fas fa-info-circle me-2"></i>Order Details
+                </div>
+
+                <div class="order-info-grid">
+                    <div class="info-box">
+                        <label>Order Code</label>
+                        <div class="info-box-value">{{ order_obj.order_code }}</div>
+                    </div>
+                    <div class="info-box">
+                        <label>Product</label>
+                        <div class="info-box-value">{{ order_obj.product.name|default:"N/A" }}</div>
+                    </div>
+                    <div class="info-box">
+                        <label>Unit Price</label>
+                        <div class="info-box-value">Ksh {{ order_obj.product.price|floatformat:0|default:"N/A" }}</div>
+                    </div>
+                    <div class="info-box">
+                        <label>Order Date</label>
+                        <div class="info-box-value">{{ order_obj.order_date|date:"M d, Y" }}</div>
+                    </div>
+                </div>
+
+                <!-- Editable Fields -->
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="number_of_trays" class="form-label">
+                            <i class="fas fa-archive me-2"></i>Number of Trays
+                        </label>
+                        <input type="number" id="number_of_trays" name="number_of_trays" class="form-control" 
+                               value="{{ order_obj.number_of_trays }}" min="1" required
+                               onchange="updateAmount()">
+                    </div>
+                </div>
+
+                <div class="form-row">
+                    <div class="info-box">
+                        <label>Total Amount</label>
+                        <div class="info-box-value">Ksh <span id="totalAmount">{{ order_obj.amount|floatformat:0 }}</span></div>
+                    </div>
+                </div>
+
+                <!-- Status Section -->
+                <div class="form-section-title">
+                    <i class="fas fa-truck me-2"></i>Status & Payment
+                </div>
+
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="status" class="form-label">
+                            <i class="fas fa-flag me-2"></i>Order Status
+                        </label>
+                        <select id="status" name="status" class="form-select" required>
+                            {% for value, label in status_choices %}
+                            <option value="{{ value }}" {% if order_obj.status == value %}selected{% endif %}>
+                                {{ label }}
+                            </option>
+                            {% endfor %}
+                        </select>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="payment_status" class="form-label">
+                            <i class="fas fa-credit-card me-2"></i>Payment Status
+                        </label>
+                        <select id="payment_status" name="payment_status" class="form-select" required>
+                            {% for value, label in payment_status_choices %}
+                            <option value="{{ value }}" {% if order_obj.payment_status == value %}selected{% endif %}>
+                                {{ label }}
+                            </option>
+                            {% endfor %}
+                        </select>
+                    </div>
+                </div>
+
+                <!-- Payment Details Section -->
+                <div class="form-section-title">
+                    <i class="fas fa-wallet me-2"></i>Payment Details
+                </div>
+
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="payment_method" class="form-label">
+                            <i class="fas fa-money-bill-alt me-2"></i>Payment Method
+                        </label>
+                        <select id="payment_method" name="payment_method" class="form-select">
+                            <option value="">-- Select Method --</option>
+                            {% for value, label in payment_method_choices %}
+                            <option value="{{ value }}" {% if order_obj.payment_method == value %}selected{% endif %}>
+                                {{ label }}
+                            </option>
+                            {% endfor %}
+                        </select>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="payment_phone" class="form-label">
+                            <i class="fas fa-phone me-2"></i>Payment Phone Number
+                        </label>
+                        <input type="text" id="payment_phone" name="payment_phone" class="form-control" 
+                               value="{{ order_obj.payment_phone }}" placeholder="e.g. +254707123456">
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label for="payment_reference" class="form-label">
+                        <i class="fas fa-receipt me-2"></i>Payment Reference / Receipt Number
+                    </label>
+                    <input type="text" id="payment_reference" name="payment_reference" class="form-control" 
+                           value="{{ order_obj.payment_reference }}" placeholder="e.g. MIG254XYZ123ABC">
+                </div>
+
+                <!-- Additional Notes Section -->
+                <div class="form-section-title">
+                    <i class="fas fa-comment-dots me-2"></i>Additional Notes
+                </div>
+
+                <div class="form-group">
+                    <label for="message" class="form-label">Order Notes / Comments</label>
+                    <textarea id="message" name="message" class="form-control" rows="4" 
+                              placeholder="Add any notes about this order...">{{ order_obj.message }}</textarea>
+                </div>
+
+                <!-- Form Actions -->
+                <div class="button-group">
+                    <button type="submit" class="btn btn-farm-green">
+                        <i class="fas fa-save me-2"></i>Save Changes
+                    </button>
+                    <a href="{% url 'show_orders' %}" class="btn btn-secondary-custom">
+                        <i class="fas fa-arrow-left me-2"></i>Back to Orders
+                    </a>
+                </div>
+            </form>
+        </div>
+    </main>
+
+    <!-- Scripts -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/js/all.min.js"></script>
+
+    <script>
+        const unitPrice = parseFloat('{{ order_obj.product.price|default:0 }}') || 0;
+
+        function updateAmount() {
+            const traysInput = document.getElementById('number_of_trays');
+            if (!traysInput) return;
+            
+            const trays = parseInt(traysInput.value) || 0;
+            const totalAmount = trays * unitPrice;
+            const totalAmountElement = document.getElementById('totalAmount');
+            if (totalAmountElement) {
+                totalAmountElement.textContent = Math.round(totalAmount).toLocaleString();
+            }
+        }
+
+        // Initialize on page load
+        document.addEventListener('DOMContentLoaded', function() {
+            updateAmount();
+        });
+    </script>
+</body>
+</html>

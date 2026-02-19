@@ -1,4 +1,4 @@
-from django.contrib.auth import authenticate, login
+from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.hashers import make_password
 from django.contrib.auth.models import User
 from django.shortcuts import render, redirect, get_object_or_404
@@ -8,6 +8,10 @@ from django.db.utils import OperationalError
 from django.http import JsonResponse
 from django.views.decorators.http import require_http_methods
 from django.views.decorators.csrf import csrf_exempt
+from django.contrib.auth.decorators import login_required
+from django.db.models import Count, Sum, Q
+from datetime import timedelta
+from django.utils import timezone
 import json
 import logging
 from chickapp.mpesa import initiate_mpesa_payment
@@ -30,25 +34,125 @@ def delivery(request):
     return render(request, 'delivery.html')
 
 def dashboard(request):
+    """Admin dashboard with orders, stats, and analytics"""
+    if not request.user.is_authenticated:
+        return redirect('login')
+    
+    # Redirect non-admin users to products page
+    if not request.user.is_superuser and not request.user.is_staff:
+        return redirect('products')
+    
     recent_orders = []
     db_error = None
+    total_orders = 0
+    total_revenue = 0
+    processing_orders = 0
+    delivered_orders = 0
 
     try:
+        # Fetch recent orders
         recent_orders = list(
             order.objects.select_related('customer', 'product').order_by('-order_date')[:5]
         )
+        
+        # Get statistics
+        total_orders = order.objects.filter(status=order.STATUS_DELIVERED).count()
+        
+        # Calculate revenue from delivered orders only
+        revenue_data = order.objects.filter(
+            status=order.STATUS_DELIVERED
+        ).aggregate(total=Sum('amount'))
+        total_revenue = revenue_data['total'] or 0
+        
+        # Get processing orders
+        processing_orders = order.objects.filter(
+            status=order.STATUS_PROCESSING
+        ).count()
+        
+        # Get delivered orders
+        delivered_orders = order.objects.filter(
+            status=order.STATUS_DELIVERED
+        ).count()
+        
+        # Calculate percentage change (last 7 days vs previous 7 days)
+        today = timezone.now()
+        week_ago = today - timedelta(days=7)
+        two_weeks_ago = today - timedelta(days=14)
+        
+        current_week_orders = order.objects.filter(
+            order_date__gte=week_ago,
+            status=order.STATUS_DELIVERED
+        ).count()
+        
+        previous_week_orders = order.objects.filter(
+            order_date__gte=two_weeks_ago,
+            order_date__lt=week_ago,
+            status=order.STATUS_DELIVERED
+        ).count()
+        
+        order_growth = 0
+        if previous_week_orders > 0:
+            order_growth = round(((current_week_orders - previous_week_orders) / previous_week_orders) * 100, 1)
+        
+        # Calculate revenue growth
+        current_week_revenue = order.objects.filter(
+            order_date__gte=week_ago,
+            status=order.STATUS_DELIVERED
+        ).aggregate(total=Sum('amount'))['total'] or 0
+        
+        previous_week_revenue = order.objects.filter(
+            order_date__gte=two_weeks_ago,
+            order_date__lt=week_ago,
+            status=order.STATUS_DELIVERED
+        ).aggregate(total=Sum('amount'))['total'] or 0
+        
+        revenue_growth = 0
+        if previous_week_revenue > 0:
+            revenue_growth = round(((current_week_revenue - previous_week_revenue) / previous_week_revenue) * 100, 1)
+        
     except OperationalError:
         db_error = 'Order data is unavailable. Run migrations to create required tables.'
+    except Exception as e:
+        logger.error(f"Dashboard error: {str(e)}")
+        db_error = f'An error occurred loading dashboard data: {str(e)}'
 
     return render(request, 'dashboard.html', {
         'recent_orders': recent_orders,
         'db_error': db_error,
+        'total_orders': total_orders,
+        'total_revenue': total_revenue,
+        'processing_orders': processing_orders,
+        'delivered_orders': delivered_orders,
+        'order_growth': order_growth,
+        'revenue_growth': revenue_growth,
     })
 
 def products(request):
-    return render(request, 'products.html')
+    """Display available products for purchase - requires authentication"""
+    if not request.user.is_authenticated:
+        return redirect('login')
+    
+    all_products = []
+    db_error = None
+    
+    try:
+        all_products = product.objects.filter(is_active=True)
+    except OperationalError:
+        db_error = 'Products are temporarily unavailable. Please try again later.'
+    except Exception as e:
+        logger.error(f"Products view error: {str(e)}")
+        db_error = f'An error occurred loading products: {str(e)}'
+    
+    return render(request, 'products.html', {
+        'all_products': all_products,
+        'db_error': db_error,
+    })
 
 def orders(request):
+    """Orders management view - requires authentication"""
+    if not request.user.is_authenticated:
+        return redirect('login')
+    
     db_error = None
     all_orders = []
     all_customers = []
@@ -149,7 +253,7 @@ def register(request):
         email = request.POST.get('email', '').strip().lower()
         password = request.POST.get('password', '')
         confirm_password = request.POST.get('confirm_password', '')
-        terms_agreed = request.POST.get('terms', False)
+        terms_agreed = request.POST.get('terms') == 'on' or request.POST.get('terms') == True
 
         # Validate inputs
         validation_errors = []
@@ -178,12 +282,12 @@ def register(request):
         if validation_errors:
             for error in validation_errors:
                 messages.error(request, error)
-            return render(request, 'register_new.html', {'fullname': fullname, 'email': email})
+            return render(request, 'register.html', {'fullname': fullname, 'email': email})
 
         # Check if user already exists
         if User.objects.filter(username=email).exists() or User.objects.filter(email=email).exists():
             messages.error(request, 'An account with this email already exists. Please login or use a different email.')
-            return render(request, 'register_new.html', {'fullname': fullname, 'email': email})
+            return render(request, 'register.html', {'fullname': fullname, 'email': email})
 
         try:
             # Create new user
@@ -209,9 +313,9 @@ def register(request):
         except Exception as e:
             logger.error(f'Registration error: {str(e)}')
             messages.error(request, 'An unexpected error occurred during registration. Please try again.')
-            return render(request, 'register_new.html', {'fullname': fullname, 'email': email})
+            return render(request, 'register.html', {'fullname': fullname, 'email': email})
 
-    return render(request, 'register_new.html')
+    return render(request, 'register.html')
 
    
 def login_user(request):
@@ -227,12 +331,12 @@ def login_user(request):
         # Validate inputs
         if not email or not password:
             messages.error(request, 'Email and password are required')
-            return render(request, 'login_new.html', {'email': email})
+            return render(request, 'login.html', {'email': email})
 
         # Check email format
         if '@' not in email:
             messages.error(request, 'Please enter a valid email address')
-            return render(request, 'login_new.html', {'email': email})
+            return render(request, 'login.html', {'email': email})
 
         # Authenticate user
         user = authenticate(request, username=email, password=password)
@@ -256,9 +360,17 @@ def login_user(request):
                 return redirect(next_page)
         else:
             messages.error(request, 'Invalid email or password. Please check and try again.')
-            return render(request, 'login_new.html', {'email': email})
+            return render(request, 'login.html', {'email': email})
 
-    return render(request, 'login_new.html')
+    return render(request, 'login.html')
+
+
+@login_required(login_url='login')
+def logout_user(request):
+    """Log out the current user"""
+    logout(request)
+    messages.success(request, 'You have been logged out successfully!')
+    return redirect('index')
 
 
 @require_http_methods(["POST"])
@@ -588,4 +700,120 @@ def check_payment_status(request):
             'success': False,
             'message': 'Failed to check payment status'
         }, status=500)
+
+
+def show_orders(request):
+    """Admin view to display all orders with edit and delete functionality"""
+    if not request.user.is_authenticated:
+        return redirect('login')
+    
+    # Check if user is admin
+    if not request.user.is_superuser and not request.user.is_staff:
+        messages.error(request, 'You do not have permission to access this page.')
+        return redirect('products')
+    
+    db_error = None
+    all_orders = []
+    total_revenue = 0
+    
+    try:
+        all_orders = list(
+            order.objects.select_related('customer', 'product')
+            .order_by('-order_date')
+        )
+        
+        # Calculate total revenue from all orders
+        revenue_data = order.objects.aggregate(total=Sum('amount'))
+        total_revenue = revenue_data['total'] or 0
+        
+    except OperationalError:
+        db_error = 'Order data is unavailable. Please try again later.'
+    except Exception as e:
+        logger.error(f"Show orders error: {str(e)}")
+        db_error = f'An error occurred: {str(e)}'
+    
+    context = {
+        'all_orders': all_orders,
+        'db_error': db_error,
+        'total_revenue': total_revenue,
+        'status_choices': order.STATUS_CHOICES,
+        'payment_method_choices': order.PAYMENT_METHOD_CHOICES,
+        'payment_status_choices': order.PAYMENT_STATUS_CHOICES,
+    }
+    
+    return render(request, 'show.html', context)
+
+
+def edit_order(request, order_id):
+    """Edit order details - admin only"""
+    if not request.user.is_authenticated:
+        return redirect('login')
+    
+    # Check if user is admin
+    if not request.user.is_superuser and not request.user.is_staff:
+        messages.error(request, 'You do not have permission to access this page.')
+        return redirect('products')
+    
+    try:
+        order_obj = get_object_or_404(order, pk=order_id)
+    except:
+        messages.error(request, 'Order not found.')
+        return redirect('show_orders')
+    
+    if request.method == 'POST':
+        # Update order details
+        try:
+            order_obj.number_of_trays = int(request.POST.get('number_of_trays', order_obj.number_of_trays))
+            order_obj.status = request.POST.get('status', order_obj.status)
+            order_obj.payment_method = request.POST.get('payment_method', order_obj.payment_method)
+            order_obj.payment_status = request.POST.get('payment_status', order_obj.payment_status)
+            order_obj.payment_phone = request.POST.get('payment_phone', order_obj.payment_phone)
+            order_obj.payment_reference = request.POST.get('payment_reference', order_obj.payment_reference)
+            order_obj.message = request.POST.get('message', order_obj.message)
+            
+            # Recalculate amount if trays changed
+            if order_obj.product:
+                order_obj.amount = order_obj.product.price * order_obj.number_of_trays
+            
+            order_obj.save()
+            messages.success(request, 'Order updated successfully.')
+            return redirect('show_orders')
+        except ValueError:
+            messages.error(request, 'Invalid number of trays.')
+            return redirect('show_orders')
+        except Exception as e:
+            logger.error(f"Edit order error: {str(e)}")
+            messages.error(request, f'An error occurred: {str(e)}')
+            return redirect('show_orders')
+    
+    context = {
+        'order_obj': order_obj,
+        'status_choices': order.STATUS_CHOICES,
+        'payment_method_choices': order.PAYMENT_METHOD_CHOICES,
+        'payment_status_choices': order.PAYMENT_STATUS_CHOICES,
+    }
+    
+    return render(request, 'edit_order.html', context)
+
+
+def delete_order(request, order_id):
+    """Delete an order - admin only"""
+    if not request.user.is_authenticated:
+        return redirect('login')
+    
+    # Check if user is admin
+    if not request.user.is_superuser and not request.user.is_staff:
+        messages.error(request, 'You do not have permission to delete orders.')
+        return redirect('products')
+    
+    try:
+        order_obj = get_object_or_404(order, pk=order_id)
+        order_code = order_obj.order_code
+        order_obj.delete()
+        messages.success(request, f'Order {order_code} has been deleted successfully.')
+    except Exception as e:
+        logger.error(f"Delete order error: {str(e)}")
+        messages.error(request, f'Failed to delete order: {str(e)}')
+    
+    return redirect('show_orders')
 

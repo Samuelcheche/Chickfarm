@@ -207,6 +207,46 @@
             text-decoration: underline;
         }
 
+        .form-check {
+            padding: 0.75rem 1rem;
+            background: #f8f9fa;
+            border-radius: 10px;
+            border: 1.5px solid #e9ecef;
+            transition: all 0.3s ease;
+        }
+
+        .form-check:hover {
+            background: white;
+            border-color: var(--farm-green);
+        }
+
+        .form-check-input {
+            border: 2px solid #e9ecef;
+            border-radius: 5px;
+            width: 1.2rem;
+            height: 1.2rem;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .form-check-input:checked {
+            background-color: var(--farm-green);
+            border-color: var(--farm-green);
+        }
+
+        .form-check-input:focus {
+            border-color: var(--farm-green);
+            box-shadow: 0 0 0 0.3rem rgba(45, 80, 22, 0.15);
+        }
+
+        .form-check-label {
+            cursor: pointer;
+            margin-bottom: 0;
+            font-size: 0.95rem;
+            color: #2c3e50;
+            font-weight: 500;
+        }
+
         @media (max-width: 768px) {
             .register-header {
                 padding: 2rem 1.5rem;
@@ -290,6 +330,16 @@
                         <button class="btn toggle-password" type="button" onclick="togglePassword('confirm_password_input')">
                             <i id="toggle-icon-2" class="fas fa-eye"></i>
                         </button>
+                    </div>
+                </div>
+
+                <!-- Terms & Conditions -->
+                <div class="form-group">
+                    <div class="form-check">
+                        <input class="form-check-input" type="checkbox" id="terms" name="terms" required>
+                        <label class="form-check-label" for="terms">
+                            I agree to the <a href="#" style="color: var(--farm-green); text-decoration: none; font-weight: 600;">Terms & Conditions</a>
+                        </label>
                     </div>
                 </div>
 

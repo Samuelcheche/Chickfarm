@@ -715,3 +715,33 @@ footer a {
         display: none !important;
     }
 }
+/* Image Showcase Styles */
+.bg-gradient {
+    background: linear-gradient(180deg, rgba(255,255,255,0) 0%, rgba(45,80,22,0.9) 100%) !important;
+}
+
+.img-showcase {
+    position: relative;
+    overflow: hidden;
+    border-radius: 1rem;
+}
+
+.img-showcase img {
+    transition: transform 0.3s ease;
+}
+
+.img-showcase:hover img {
+    transform: scale(1.05);
+}
+
+/* Image Caption Styles */
+.image-caption {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    background: linear-gradient(180deg, rgba(0,0,0,0) 0%, rgba(0,0,0,0.7) 100%);
+    padding: 2rem;
+    color: white;
+    z-index: 10;
+}

@@ -44,8 +44,8 @@
                         </a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link nav-link-modern" href="{% url 'delivery' %}">
-                            <i class="fas fa-truck me-2"></i>Delivery
+                        <a class="nav-link nav-link-modern" href="{% url 'orders' %}">
+                            <i class="fas fa-shopping-bag me-2"></i>Orders
                         </a>
                     </li>
                     <li class="nav-item">
@@ -59,9 +59,25 @@
                         </a>
                     </li>
                     <li class="nav-item border-start ps-3 ms-2">
-                        <a href="{% url 'logout' %}" class="btn btn-nav-primary btn-sm">
-                            <i class="fas fa-sign-out-alt me-2"></i>Logout
-                        </a>
+                        <div class="dropdown">
+                            <button class="btn btn-nav-primary btn-sm dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false">
+                                <i class="fas fa-user-circle me-2"></i>{{ user.first_name|default:user.username }}
+                            </button>
+                            <ul class="dropdown-menu dropdown-menu-end">
+                                <li><span class="dropdown-header">{{ user.email }}</span></li>
+                                <li><hr class="dropdown-divider"></li>
+                                <li><a class="dropdown-item" href="{% url 'show_orders' %}">
+                                    <i class="fas fa-list me-2"></i>View All Orders
+                                </a></li>
+                                <li><a class="dropdown-item" href="{% url 'orders' %}">
+                                    <i class="fas fa-plus-circle me-2"></i>Create Order
+                                </a></li>
+                                <li><hr class="dropdown-divider"></li>
+                                <li><a class="dropdown-item text-danger" href="{% url 'logout' %}">
+                                    <i class="fas fa-sign-out-alt me-2"></i>Logout
+                                </a></li>
+                            </ul>
+                        </div>
                     </li>
                 </ul>
             </div>
@@ -97,11 +113,11 @@
                                 <div class="rounded-circle bg-farm-green bg-opacity-10 p-3">
                                     <i class="fas fa-shopping-cart text-farm-green"></i>
                                 </div>
-                                <span class="badge bg-success">+12.5%</span>
+                                <span class="badge {% if order_growth >= 0 %}bg-success{% else %}bg-danger{% endif %}">{{ order_growth|floatformat:1 }}%</span>
                             </div>
                             <h6 class="fw-bold mb-1">Total Orders</h6>
-                            <h3 class="fw-bold mb-0">156</h3>
-                            <small class="text-secondary">Last 30 days</small>
+                            <h3 class="fw-bold mb-0">{{ total_orders }}</h3>
+                            <small class="text-secondary">Delivered orders</small>
                         </div>
                     </div>
                 </div>
@@ -114,11 +130,11 @@
                                 <div class="rounded-circle bg-farm-yellow bg-opacity-10 p-3">
                                     <i class="fas fa-money-bill-wave text-farm-yellow"></i>
                                 </div>
-                                <span class="badge bg-success">+8.4%</span>
+                                <span class="badge {% if revenue_growth >= 0 %}bg-success{% else %}bg-danger{% endif %}">{{ revenue_growth|floatformat:1 }}%</span>
                             </div>
                             <h6 class="fw-bold mb-1">Revenue</h6>
-                            <h3 class="fw-bold mb-0">KSh 45,290</h3>
-                            <small class="text-secondary">Last 30 days</small>
+                            <h3 class="fw-bold mb-0">KSh {{ total_revenue|floatformat:0 }}</h3>
+                            <small class="text-secondary">Total earnings</small>
                         </div>
                     </div>
                 </div>
@@ -131,28 +147,28 @@
                                 <div class="rounded-circle bg-primary bg-opacity-10 p-3">
                                     <i class="fas fa-clock text-primary"></i>
                                 </div>
-                                <span class="badge bg-warning">5 Pending</span>
+                                <span class="badge bg-warning">{{ processing_orders }} Processing</span>
                             </div>
                             <h6 class="fw-bold mb-1">Active Orders</h6>
-                            <h3 class="fw-bold mb-0">12</h3>
+                            <h3 class="fw-bold mb-0">{{ processing_orders }}</h3>
                             <small class="text-secondary">Currently processing</small>
                         </div>
                     </div>
                 </div>
 
-                <!-- Customer Rating -->
+                <!-- Delivered Orders -->
                 <div class="col-md-3">
                     <div class="card stat-card">
                         <div class="card-body">
                             <div class="d-flex justify-content-between align-items-center mb-3">
-                                <div class="rounded-circle bg-warning bg-opacity-10 p-3">
-                                    <i class="fas fa-star text-warning"></i>
+                                <div class="rounded-circle bg-success bg-opacity-10 p-3">
+                                    <i class="fas fa-check-circle text-success"></i>
                                 </div>
-                                <span class="badge bg-success">+0.2</span>
+                                <span class="badge bg-success">{{ delivered_orders }}</span>
                             </div>
-                            <h6 class="fw-bold mb-1">Customer Rating</h6>
-                            <h3 class="fw-bold mb-0">4.8/5.0</h3>
-                            <small class="text-secondary">Based on 98 reviews</small>
+                            <h6 class="fw-bold mb-1">Delivered</h6>
+                            <h3 class="fw-bold mb-0">{{ delivered_orders }}</h3>
+                            <small class="text-secondary">Successfully delivered</small>
                         </div>
                     </div>
                 </div>
@@ -166,7 +182,9 @@
                         <div class="card-header bg-transparent py-3">
                             <div class="d-flex justify-content-between align-items-center">
                                 <h5 class="fw-bold mb-0">Recent Orders</h5>
-                                <a class="btn btn-sm btn-farm-green" href="{% url 'orders' %}">View All</a>
+                                <a class="btn btn-sm btn-farm-green" href="{% url 'show_orders' %}">
+                                    <i class="fas fa-list me-2"></i>View All Orders
+                                </a>
                             </div>
                         </div>
                         <div class="table-responsive">
