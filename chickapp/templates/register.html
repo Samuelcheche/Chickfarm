@@ -264,8 +264,13 @@
     <div class="register-card">
         <!-- Header -->
         <div class="register-header">
-            <h3><i class="fas fa-user-plus me-2"></i>Create Account</h3>
-            <p>Join Nyandiwa Smart Poultry today and get fresh eggs delivered</p>
+            <h3><i class="fas fa-egg me-2"></i>Welcome to Nyandiwa Smart Poultry</h3>
+            <p>Create your account and enjoy fresh, quality eggs delivered to your doorstep</p>
+            <div style="margin-top: 1rem; font-size: 0.9rem; color: #666;">
+                <div style="margin: 0.5rem 0;"><i class="fas fa-check text-success me-2"></i>Free delivery on first order</div>
+                <div style="margin: 0.5rem 0;"><i class="fas fa-check text-success me-2"></i>Real-time order tracking</div>
+                <div style="margin: 0.5rem 0;"><i class="fas fa-check text-success me-2"></i>Secure payments with M-Pesa</div>
+            </div>
         </div>
 
         <!-- Body -->
@@ -352,7 +357,8 @@
 
         <!-- Footer -->
         <div class="register-footer">
-            Already have an account? <a href="{% url 'login' %}">Login here</a>
+            <div>Already have an account? <a href="{% url 'login' %}">Login here</a></div>
+            <small><a href="{% url 'register' %}" style="color: #6c757d;">Explore as guest</a></small>
         </div>
     </div>
 </div>

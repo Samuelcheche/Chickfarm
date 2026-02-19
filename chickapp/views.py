@@ -21,6 +21,10 @@ logger = logging.getLogger(__name__)
 # Create your views here.
 def index(request):
     """Home page view with modern UI"""
+    # Redirect unauthenticated users to register page
+    if not request.user.is_authenticated:
+        return redirect('register')
+    
     context = {
         'page_title': 'Home - Nyandiwa Smart Poultry',
         'user_authenticated': request.user.is_authenticated,
@@ -246,7 +250,7 @@ def orders(request):
 def register(request):
     """User registration view with enhanced validation and modern UI"""
     if request.user.is_authenticated:
-        return redirect('index')
+        return redirect('products')
     
     if request.method == 'POST':
         fullname = request.POST.get('fullname', '').strip()
@@ -321,7 +325,7 @@ def register(request):
 def login_user(request):
     """User login view with enhanced validation and modern UI"""
     if request.user.is_authenticated:
-        return redirect('index')
+        return redirect('products')
     
     if request.method == "POST":
         email = request.POST.get('email', '').strip().lower()
