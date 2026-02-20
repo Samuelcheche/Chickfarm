@@ -18,6 +18,15 @@ from chickapp.mpesa import initiate_mpesa_payment
 
 logger = logging.getLogger(__name__)
 
+
+def _fit_to_max_length(value, model, field_name):
+    field = model._meta.get_field(field_name)
+    max_length = getattr(field, 'max_length', None)
+    text = (value or '').strip()
+    if max_length:
+        return text[:max_length]
+    return text
+
 # Create your views here.
 def index(request):
     """Home page view with modern UI"""
@@ -230,17 +239,20 @@ def orders(request):
                     return redirect('orders')
 
                 customer.objects.create(
-                    name=name,
-                    surname=surname,
+                    name=_fit_to_max_length(name, customer, 'name'),
+                    surname=_fit_to_max_length(surname, customer, 'surname'),
                     email=email,
-                    password=make_password(password),
-                    phone=phone,
-                    location=location,
-                    message=message,
+                    password=_fit_to_max_length(password, customer, 'password'),
+                    phone=_fit_to_max_length(phone, customer, 'phone'),
+                    location=_fit_to_max_length(location, customer, 'location'),
+                    message=_fit_to_max_length(message, customer, 'message'),
                 )
                 messages.success(request, 'Customer created successfully.')
             except OperationalError:
                 messages.error(request, 'Cannot create customer. Database tables are missing.')
+            except Exception as e:
+                logger.error(f"Create customer error: {str(e)}")
+                messages.error(request, 'Cannot create customer. Please ensure details are valid and try again.')
             return redirect('orders')
 
         if action != 'create_order':
@@ -441,6 +453,8 @@ def process_payment(request):
     Creates customer and order(s) with payment information.
     """
     try:
+        redirect_url = '/show-orders/' if request.user.is_authenticated and (request.user.is_superuser or request.user.is_staff) else '/orders/'
+
         # Get customer information
         customer_name = request.POST.get('customer_name', '').strip()
         customer_email = request.POST.get('customer_email', '').strip()
@@ -487,27 +501,36 @@ def process_payment(request):
         name_parts = customer_name.split(' ', 1)
         name = name_parts[0]
         surname = name_parts[1] if len(name_parts) > 1 else ''
+
+        normalized_name = _fit_to_max_length(name, customer, 'name')
+        normalized_surname = _fit_to_max_length(surname, customer, 'surname')
+        normalized_email = _fit_to_max_length(customer_email.lower(), customer, 'email')
+        normalized_phone = _fit_to_max_length(customer_phone, customer, 'phone')
+        normalized_location = _fit_to_max_length(customer_location, customer, 'location')
+        normalized_notes = _fit_to_max_length(order_notes, customer, 'message')
         
         # Find or create customer
         try:
-            cust = customer.objects.filter(email=customer_email).first()
+            cust = customer.objects.filter(email=normalized_email).first()
             if not cust:
                 # Create new customer with a default password
                 cust = customer.objects.create(
-                    name=name,
-                    surname=surname,
-                    email=customer_email,
-                    password=make_password('default123'),  # Default password
-                    phone=customer_phone,
-                    location=customer_location,
-                    message=order_notes
+                    name=normalized_name,
+                    surname=normalized_surname,
+                    email=normalized_email,
+                    password='default123',
+                    phone=normalized_phone,
+                    location=normalized_location,
+                    message=normalized_notes
                 )
             else:
                 # Update existing customer info
-                cust.phone = customer_phone
-                cust.location = customer_location
+                cust.name = normalized_name or cust.name
+                cust.surname = normalized_surname
+                cust.phone = normalized_phone
+                cust.location = normalized_location
                 if order_notes:
-                    cust.message = order_notes
+                    cust.message = normalized_notes
                 cust.save()
         except Exception as e:
             logger.error(f"Error creating/updating customer: {str(e)}")
@@ -577,6 +600,7 @@ def process_payment(request):
                 )
                 
                 if mpesa_result.get('success'):
+                    messages.success(request, f'✅ Order {first_order.order_code} placed successfully! STK push has been sent to your phone.')
                     # Save M-Pesa transaction details
                     first_order.mpesa_checkout_request_id = mpesa_result.get('checkout_request_id', '')
                     first_order.mpesa_merchant_request_id = mpesa_result.get('merchant_request_id', '')
@@ -589,9 +613,11 @@ def process_payment(request):
                         'order_code': first_order.order_code,
                         'total_amount': total_amount,
                         'payment_method': payment_method,
-                        'mpesa_sent': True
+                        'mpesa_sent': True,
+                        'redirect_url': redirect_url,
                     })
                 else:
+                    messages.success(request, f'✅ Order {first_order.order_code} placed successfully! Payment request failed, please complete payment manually.')
                     # M-Pesa failed, but order is created
                     logger.warning(f"M-Pesa STK Push failed: {mpesa_result.get('message')}")
                     return JsonResponse({
@@ -600,10 +626,12 @@ def process_payment(request):
                         'order_code': first_order.order_code,
                         'total_amount': total_amount,
                         'payment_method': payment_method,
-                        'mpesa_sent': False
+                        'mpesa_sent': False,
+                        'redirect_url': redirect_url,
                     })
                     
             except Exception as e:
+                messages.success(request, f'✅ Order {first_order.order_code} placed successfully! We could not initiate M-Pesa automatically.')
                 logger.error(f"M-Pesa initiation error: {str(e)}")
                 return JsonResponse({
                     'success': True,
@@ -611,16 +639,20 @@ def process_payment(request):
                     'order_code': first_order.order_code,
                     'total_amount': total_amount,
                     'payment_method': payment_method,
-                    'mpesa_sent': False
+                    'mpesa_sent': False,
+                    'redirect_url': redirect_url,
                 })
         
         # Return success response for non-M-Pesa payments
+        success_order_label = created_orders[0] if len(created_orders) == 1 else f"{len(created_orders)} orders"
+        messages.success(request, f'✅ Order {success_order_label} placed successfully! Thank you for your order.')
         return JsonResponse({
             'success': True,
             'message': 'Order(s) placed successfully!',
             'order_code': created_orders[0] if len(created_orders) == 1 else f"{len(created_orders)} orders",
             'total_amount': total_amount,
-            'payment_method': payment_method
+            'payment_method': payment_method,
+            'redirect_url': redirect_url,
         })
         
     except json.JSONDecodeError:

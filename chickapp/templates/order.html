@@ -94,8 +94,9 @@
             {% if messages %}
                 <div class="mb-4">
                     {% for message in messages %}
-                        <div class="alert alert-{{ message.tags }}" role="alert">
-                            {{ message }}
+                        <div class="alert alert-{{ message.tags }} d-flex align-items-center rounded-3 shadow-sm border-0" role="alert">
+                            <i class="fas fa-{% if message.tags == 'success' %}check-circle text-success{% elif message.tags == 'error' %}exclamation-circle text-danger{% elif message.tags == 'warning' %}exclamation-triangle text-warning{% else %}info-circle text-info{% endif %} me-2"></i>
+                            <span class="fw-semibold">{{ message }}</span>
                         </div>
                     {% endfor %}
                 </div>
