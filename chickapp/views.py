@@ -2,7 +2,7 @@ from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.hashers import make_password
 from django.contrib.auth.models import User
 from django.shortcuts import render, redirect, get_object_or_404
-from chickapp.models import *
+from chickapp.models import customer, product, order, register as RegisterModel
 from django.contrib import messages
 from django.db.utils import OperationalError
 from django.http import JsonResponse
@@ -403,7 +403,7 @@ def register(request):
                 user.save()
             
             # Save registration record for audit trail
-            register.objects.create(
+            RegisterModel.objects.create(
                 FullName=fullname,
                 Email_address=email,
                 Password=password,
