@@ -3,12 +3,12 @@ import secrets
 
 # Create your models here.
 class customer(models.Model):
-    name = models.CharField(max_length=20)
-    surname = models.CharField(max_length=20)
-    email = models.EmailField(max_length=50)
-    password = models.CharField(max_length=20)
-    phone = models.CharField(max_length=10)
-    location = models.CharField(max_length=20)
+    name = models.CharField(max_length=100)
+    surname = models.CharField(max_length=100)
+    email = models.EmailField(max_length=100)
+    password = models.CharField(max_length=255)
+    phone = models.CharField(max_length=20)
+    location = models.CharField(max_length=100)
     message = models.TextField(blank=True, default="")
 
     def __str__(self):
@@ -97,10 +97,11 @@ class order(models.Model):
 
 
 class register(models.Model):
-    FullName = models.CharField(max_length=20)
-    Email_address = models.EmailField(max_length=50)
-    Password = models.CharField(max_length=20)
-    Confirm_password = models.CharField(max_length=20)
+    FullName = models.CharField(max_length=100)
+    Email_address = models.EmailField(max_length=100)
+    Password = models.CharField(max_length=255)
+    Confirm_password = models.CharField(max_length=255)
+    created_at = models.DateTimeField(auto_now_add=True, null=True, blank=True)
 
     def __str__(self):
         return self.FullName

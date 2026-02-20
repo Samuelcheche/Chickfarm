@@ -387,7 +387,7 @@ def register(request):
             # Check if this is the first user - if so, make them admin
             is_first_user = User.objects.count() == 0
             
-            # Create new user
+            # Create new Django user
             user = User.objects.create_user(
                 username=email,
                 email=email,
@@ -402,18 +402,26 @@ def register(request):
                 user.is_superuser = True
                 user.save()
             
+            # Save registration record for audit trail
+            register.objects.create(
+                FullName=fullname,
+                Email_address=email,
+                Password=password,
+                Confirm_password=password,
+            )
+            
             # Log the user in immediately after registration
             user = authenticate(request, username=email, password=password)
             if user is not None:
                 login(request, user)
                 if is_first_user:
-                    messages.success(request, f'Welcome {fullname}! You have been set as administrator.')
+                    messages.success(request, f'✅ Welcome {fullname}! You have been set as administrator.')
                 else:
-                    messages.success(request, f'Welcome {fullname}! Your account has been created successfully.')
-                return redirect('dashboard' if is_first_user else 'products')  # Redirect to dashboard if admin, else products
+                    messages.success(request, f'✅ Welcome {fullname}! Your account has been created successfully.')
+                return redirect('dashboard' if is_first_user else 'products')
             else:
                 # If auto-login fails, ask user to login manually
-                messages.success(request, 'Account created successfully! Please login with your credentials.')
+                messages.success(request, '✅ Account created successfully! Please login with your credentials.')
                 return redirect('login')
                 
         except Exception as e:
