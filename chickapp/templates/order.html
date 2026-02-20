@@ -118,9 +118,9 @@
                         {% csrf_token %}
                         <input type="hidden" name="action" value="create_order">
                         <div class="col-md-4">
-                            <label class="form-label">Customer</label>
-                            <select class="form-select" name="customer" required>
-                                <option value="">Select customer</option>
+                            <label class="form-label">Existing Customer (Optional)</label>
+                            <select class="form-select" name="customer">
+                                <option value="">Enter customer details below</option>
                                 {% for customer in customers %}
                                     <option value="{{ customer.id }}">{{ customer.name }} {{ customer.surname }}</option>
                                 {% endfor %}
@@ -146,6 +146,33 @@
                                     <option value="{{ value }}">{{ label }}</option>
                                 {% endfor %}
                             </select>
+                        </div>
+                        <div class="col-12 mt-2">
+                            <h6 class="fw-bold mb-2">Customer Details (required only if no existing customer selected)</h6>
+                        </div>
+                        <div class="col-md-4">
+                            <label class="form-label">First Name</label>
+                            <input type="text" class="form-control" name="customer_name" placeholder="Enter first name">
+                        </div>
+                        <div class="col-md-4">
+                            <label class="form-label">Surname</label>
+                            <input type="text" class="form-control" name="customer_surname" placeholder="Enter surname">
+                        </div>
+                        <div class="col-md-4">
+                            <label class="form-label">Email</label>
+                            <input type="email" class="form-control" name="customer_email" placeholder="Enter email address">
+                        </div>
+                        <div class="col-md-4">
+                            <label class="form-label">Phone</label>
+                            <input type="text" class="form-control" name="customer_phone" placeholder="Enter phone number">
+                        </div>
+                        <div class="col-md-4">
+                            <label class="form-label">Location</label>
+                            <input type="text" class="form-control" name="customer_location" placeholder="Enter location">
+                        </div>
+                        <div class="col-md-4">
+                            <label class="form-label">Message (optional)</label>
+                            <input type="text" class="form-control" name="customer_message" placeholder="Any additional note">
                         </div>
                         <div class="col-12">
                             <button class="btn btn-farm-green" type="submit">

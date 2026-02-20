@@ -263,6 +263,12 @@ def orders(request):
         product_id = request.POST.get('product')
         trays_raw = request.POST.get('number_of_trays')
         status = request.POST.get('status', order.STATUS_PROCESSING)
+        customer_name = request.POST.get('customer_name', '').strip()
+        customer_surname = request.POST.get('customer_surname', '').strip()
+        customer_email = request.POST.get('customer_email', '').strip().lower()
+        customer_phone = request.POST.get('customer_phone', '').strip()
+        customer_location = request.POST.get('customer_location', '').strip()
+        customer_message = request.POST.get('customer_message', '').strip()
 
         try:
             trays = int(trays_raw)
@@ -274,7 +280,34 @@ def orders(request):
             return redirect('orders')
 
         try:
-            selected_customer = get_object_or_404(customer, pk=customer_id)
+            if customer_id:
+                selected_customer = get_object_or_404(customer, pk=customer_id)
+            else:
+                if not all([customer_name, customer_email, customer_phone, customer_location]):
+                    messages.error(request, 'Please select an existing customer or enter customer details (name, email, phone, location).')
+                    return redirect('orders')
+
+                selected_customer = customer.objects.filter(email=customer_email).first()
+
+                if selected_customer:
+                    selected_customer.name = _fit_to_max_length(customer_name, customer, 'name')
+                    selected_customer.surname = _fit_to_max_length(customer_surname, customer, 'surname')
+                    selected_customer.phone = _fit_to_max_length(customer_phone, customer, 'phone')
+                    selected_customer.location = _fit_to_max_length(customer_location, customer, 'location')
+                    if customer_message:
+                        selected_customer.message = _fit_to_max_length(customer_message, customer, 'message')
+                    selected_customer.save()
+                else:
+                    selected_customer = customer.objects.create(
+                        name=_fit_to_max_length(customer_name, customer, 'name'),
+                        surname=_fit_to_max_length(customer_surname, customer, 'surname'),
+                        email=_fit_to_max_length(customer_email, customer, 'email'),
+                        password='default123',
+                        phone=_fit_to_max_length(customer_phone, customer, 'phone'),
+                        location=_fit_to_max_length(customer_location, customer, 'location'),
+                        message=_fit_to_max_length(customer_message, customer, 'message'),
+                    )
+
             selected_product = get_object_or_404(product, pk=product_id)
 
             order.objects.create(
