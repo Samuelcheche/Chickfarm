@@ -44,7 +44,7 @@ def about(request):
     return render(request, 'about.html')
 
 def contact(request):
-    """Contact us page with contact form"""
+    """Contact us page with contact form that saves to database"""
     if request.method == 'POST':
         name = request.POST.get('name', '').strip()
         email = request.POST.get('email', '').strip().lower()
@@ -62,8 +62,8 @@ def contact(request):
             errors.append('Phone number is required')
         if not subject:
             errors.append('Subject is required')
-        if not message:
-            errors.append('Message is required')
+        if not message or len(message) < 10:
+            errors.append('Message is required and must be at least 10 characters')
         
         if errors:
             for error in errors:
@@ -77,9 +77,19 @@ def contact(request):
             })
         
         try:
-            # Log the contact message (you can extend this to send emails)
+            # Save the contact message to database
+            from chickapp.models import contact_message
+            contact_message.objects.create(
+                name=name,
+                email=email,
+                phone=phone,
+                subject=subject,
+                message=message
+            )
+            
+            # Log the contact message
             logger.info(f'Contact form submission: Name={name}, Email={email}, Phone={phone}, Subject={subject}')
-            messages.success(request, 'Thank you for your message! We will get back to you soon.')
+            messages.success(request, f'✅ Thank you {name}! We have received your message and will respond to {email} within 24 hours.')
             return redirect('contact')
         except Exception as e:
             logger.error(f'Contact form error: {str(e)}')
