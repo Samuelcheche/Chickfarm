@@ -43,6 +43,11 @@ INSTALLED_APPS = [
     'chickapp',
 ]
 
+AUTHENTICATION_BACKENDS = [
+    'chickapp.backends.UsernameOrEmailBackend',
+    'django.contrib.auth.backends.ModelBackend',
+]
+
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
     'whitenoise.middleware.WhiteNoiseMiddleware',  # Add WhiteNoise for static files

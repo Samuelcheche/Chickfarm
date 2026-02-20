@@ -34,6 +34,51 @@ def index(request):
 def about(request):
     return render(request, 'about.html')
 
+def contact(request):
+    """Contact us page with contact form"""
+    if request.method == 'POST':
+        name = request.POST.get('name', '').strip()
+        email = request.POST.get('email', '').strip().lower()
+        phone = request.POST.get('phone', '').strip()
+        subject = request.POST.get('subject', '').strip()
+        message = request.POST.get('message', '').strip()
+        
+        # Validate inputs
+        errors = []
+        if not name:
+            errors.append('Name is required')
+        if not email or '@' not in email:
+            errors.append('Valid email is required')
+        if not phone:
+            errors.append('Phone number is required')
+        if not subject:
+            errors.append('Subject is required')
+        if not message:
+            errors.append('Message is required')
+        
+        if errors:
+            for error in errors:
+                messages.error(request, error)
+            return render(request, 'contact.html', {
+                'name': name,
+                'email': email,
+                'phone': phone,
+                'subject': subject,
+                'message': message,
+            })
+        
+        try:
+            # Log the contact message (you can extend this to send emails)
+            logger.info(f'Contact form submission: Name={name}, Email={email}, Phone={phone}, Subject={subject}')
+            messages.success(request, 'Thank you for your message! We will get back to you soon.')
+            return redirect('contact')
+        except Exception as e:
+            logger.error(f'Contact form error: {str(e)}')
+            messages.error(request, 'An error occurred. Please try again later.')
+            return render(request, 'contact.html')
+    
+    return render(request, 'contact.html')
+
 def delivery(request):
     return render(request, 'delivery.html')
 
