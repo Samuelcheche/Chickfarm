@@ -310,13 +310,13 @@ def orders(request):
 
             selected_product = get_object_or_404(product, pk=product_id)
 
-            order.objects.create(
+            created_order = order.objects.create(
                 customer=selected_customer,
                 product=selected_product,
                 number_of_trays=trays,
                 status=status,
             )
-            messages.success(request, 'Order created successfully.')
+            messages.success(request, f'✅ Order {created_order.order_code} placed successfully! We have received your order.')
         except OperationalError:
             messages.error(request, 'Cannot create order. Database tables are missing.')
         return redirect('orders')
